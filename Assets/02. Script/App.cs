@@ -3,6 +3,7 @@ using DG.Tweening;
 
 public enum SceneName
 {
+    Developer,
     Title,
     Lobby,
     Game
