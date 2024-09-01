@@ -1,18 +1,46 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
-public class App : MonoBehaviour
+public enum SceneName
 {
-    // Start is called before the first frame update
-    void Start()
+    Title,
+    Lobby,
+    Game
+}
+
+public class App : Singleton<App>
+{
+    private readonly SoundManager sound;
+    private readonly UIManager ui;
+
+    private readonly SettingData setting;
+
+    #region Getter Setter
+    public partial class Manager
     {
-        
+        public static SoundManager Sound => instance.sound;
+        public static UIManager UI => instance.ui;
     }
 
-    // Update is called once per frame
-    void Update()
+    public partial class Data
     {
-        
+        public static SettingData Setting => instance.setting;
+    }
+    #endregion
+
+    private void Awake()
+    {
+        QualitySettings.vSyncCount = 1;
+        Application.targetFrameRate = 120;
+
+        DOTween.safeModeLogBehaviour = DG.Tweening.Core.Enums.SafeModeLogBehaviour.Error;
+
+        DontDestroyOnLoad(gameObject);
+    }
+
+    public static void LoadScene(SceneName sceneName)
+    {
+        DOTween.KillAll();
+        UnityEngine.SceneManagement.SceneManager.LoadScene((int)sceneName);
     }
 }
