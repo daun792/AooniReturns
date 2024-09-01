@@ -13,6 +13,7 @@ public class App : Singleton<App>
 {
     private readonly SoundManager sound;
     private readonly UIManager ui;
+    private readonly LobbyUIManager lobby;
 
     private readonly SettingData setting;
 
@@ -21,6 +22,7 @@ public class App : Singleton<App>
     {
         public static SoundManager Sound => instance.sound;
         public static UIManager UI => instance.ui;
+        public static LobbyUIManager Lobby => instance.lobby;
     }
 
     public partial class Data

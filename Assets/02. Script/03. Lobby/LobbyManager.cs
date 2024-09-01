@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class LobbyManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+
+    private void Start()
     {
-        
+        App.Manager.Sound.PlayBGM("BGM_Lobby");
     }
 
     // Update is called once per frame

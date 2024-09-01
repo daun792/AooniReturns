@@ -7,17 +7,16 @@ using DG.Tweening;
 public enum UIState
 {
     Normal,
-    Play,
-    Start,
-    Inventory,
+    CreateRoom,
+    JoinRoom,
+    Clan,
+    Shop,
+    Rank,
     Option,
-    End
 }
 
 public class UIManager : Manager
 {
-    [SerializeField] Image blackBlur;
-
     [HideInInspector]
     public UIState CurrState
         => UIStack.Count == 0 ? UIState.Normal : UIStack.Peek();
@@ -29,7 +28,7 @@ public class UIManager : Manager
     {
         base.Awake();
 
-        var UIs = GetComponentsInChildren<UIBase>();
+        var UIs = GetComponentsInChildren<UIBase>(true);
 
         UIDic = new(UIs.Length);
         UIStack = new();
@@ -40,7 +39,7 @@ public class UIManager : Manager
         }
     }
 
-    private void Start()
+    protected virtual void Start()
     {
         InitUIs();
     }
@@ -88,66 +87,6 @@ public class UIManager : Manager
         if (CurrState != _state) return;
 
         UIStack.Pop();
-    }
-    #endregion
-
-    #region Fade In / Out
-    public void FadeIn(Action _endEvent = null)
-    {
-        App.Manager.Sound.StopBGM();
-
-        if (blackBlur.color.a == 1f)
-        {
-            _endEvent?.Invoke();
-            return;
-        }
-
-        blackBlur.gameObject.SetActive(true);
-
-        blackBlur.DOKill();
-        blackBlur.DOFade(1f, 0.5f).SetEase(Ease.Linear)
-            .OnComplete(() =>
-            {
-                _endEvent?.Invoke();
-            });
-    }
-
-    public void FadeOut(Action _endEvent = null)
-    {
-        if (blackBlur.color.a == 0f)
-        {
-            _endEvent?.Invoke();
-            return;
-        }
-
-        blackBlur.DOFade(0f, 1f).SetEase(Ease.Linear)
-            .OnComplete(() =>
-            {
-                _endEvent?.Invoke();
-                blackBlur.gameObject.SetActive(false);
-            });
-    }
-
-    public void FadeInOut(Action _midEvent = null)
-    {
-        App.Manager.Sound.StopBGM();
-
-        if (blackBlur.color.a == 1f)
-        {
-            _midEvent?.Invoke();
-            FadeOut();
-            return;
-        }
-
-        blackBlur.gameObject.SetActive(true);
-
-        blackBlur.DOKill();
-        blackBlur.DOFade(1f, 0.5f).SetEase(Ease.Linear)
-           .OnComplete(() =>
-           {
-               _midEvent?.Invoke();
-               FadeOut();
-           });
     }
     #endregion
 }

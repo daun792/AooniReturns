@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "DefaultSettingData", menuName = "Scriptable Object/Default Setting Data")]
-public class SettingDefault : MonoBehaviour
+public class SettingDefault : ScriptableObject
 {
     [SerializeField] string path;
 
