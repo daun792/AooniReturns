@@ -15,7 +15,7 @@ EditorBuildSettings:
     path: Assets/01. Scene/01. Title.unity
     guid: c69620a881396a84b9802f16874e9166
   - enabled: 1
-    path: Assets/01. Scene/02. Lobby.unity
+    path: Assets/01. Scene/02. Notice.unity
     guid: ec4addf6bd277bd49b47c1cb19ad1788
   - enabled: 1
     path: Assets/01. Scene/03. Game.unity
