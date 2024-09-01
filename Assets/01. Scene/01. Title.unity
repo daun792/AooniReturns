@@ -1888,6 +1888,7 @@ GameObject:
   - component: {fileID: 426663542}
   - component: {fileID: 426663541}
   - component: {fileID: 426663540}
+  - component: {fileID: 426663544}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -1982,6 +1983,19 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &426663544
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 426663539}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 08d06364f184cf543ba600d2f441e2cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cafeBtn: {fileID: 589278750}
 --- !u!1 &434388632
 GameObject:
   m_ObjectHideFlags: 0
@@ -2930,6 +2944,7 @@ GameObject:
   - component: {fileID: 593852118}
   - component: {fileID: 593852120}
   - component: {fileID: 593852119}
+  - component: {fileID: 593852121}
   m_Layer: 5
   m_Name: Panel_Server
   m_TagString: Untagged
@@ -2994,6 +3009,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 593852117}
   m_CullTransparentMesh: 1
+--- !u!114 &593852121
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 593852117}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 487bf16420d188d45a9cbde4b505f6ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &638301686
 GameObject:
   m_ObjectHideFlags: 0
@@ -3690,11 +3717,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b0478a39358fe444b8b95bd071e4756, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cafeBtn: {fileID: 589278750}
-  loginBtn: {fileID: 989396377}
-  signUpBtn: {fileID: 247806735}
-  cancelBtn: {fileID: 1573311009}
-  signUpBack: {fileID: 2093478330}
 --- !u!4 &925807058
 Transform:
   m_ObjectHideFlags: 0
@@ -4058,6 +4080,7 @@ GameObject:
   - component: {fileID: 998790742}
   - component: {fileID: 998790744}
   - component: {fileID: 998790743}
+  - component: {fileID: 998790745}
   m_Layer: 5
   m_Name: Panel_Login
   m_TagString: Untagged
@@ -4125,6 +4148,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 998790741}
   m_CullTransparentMesh: 1
+--- !u!114 &998790745
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 998790741}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92747ce0014a23c49b91b6ba84564720, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  loginBtn: {fileID: 989396377}
+  signUpBtn: {fileID: 247806735}
 --- !u!1 &1092542092
 GameObject:
   m_ObjectHideFlags: 0
@@ -4471,7 +4508,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1130272141}
   - component: {fileID: 1130272143}
-  - component: {fileID: 1130272142}
   m_Layer: 5
   m_Name: Back_ID
   m_TagString: Untagged
@@ -4495,25 +4531,11 @@ RectTransform:
   - {fileID: 314288215}
   m_Father: {fileID: 1354000675}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 176, y: -18}
-  m_SizeDelta: {x: 352, y: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 352, y: 36}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1130272142
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1130272140}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_HorizontalFit: 2
-  m_VerticalFit: 2
 --- !u!114 &1130272143
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5468,7 +5490,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1598594940}
   - component: {fileID: 1598594942}
-  - component: {fileID: 1598594941}
   m_Layer: 5
   m_Name: Back_Password
   m_TagString: Untagged
@@ -5492,25 +5513,11 @@ RectTransform:
   - {fileID: 1905712237}
   m_Father: {fileID: 1354000675}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 176, y: -69}
-  m_SizeDelta: {x: 352, y: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 352, y: 36}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1598594941
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1598594939}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_HorizontalFit: 2
-  m_VerticalFit: 2
 --- !u!114 &1598594942
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7396,6 +7403,7 @@ GameObject:
   - component: {fileID: 2093478331}
   - component: {fileID: 2093478333}
   - component: {fileID: 2093478332}
+  - component: {fileID: 2093478334}
   m_Layer: 5
   m_Name: Panel_SignUp
   m_TagString: Untagged
@@ -7463,6 +7471,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2093478330}
   m_CullTransparentMesh: 1
+--- !u!114 &2093478334
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2093478330}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5af0c783093aa294bb992627860884f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cancelBtn: {fileID: 1573311009}
 --- !u!1 &2098979023
 GameObject:
   m_ObjectHideFlags: 0

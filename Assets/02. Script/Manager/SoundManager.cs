@@ -136,6 +136,11 @@ public class SoundManager : Manager
             return;
         }
 
+        if (bgmPlayer.isPlaying)
+        {
+            bgmPlayer.Stop();
+        }
+
         bgmPlayer.clip = clip;
 
         bgmPlayer.Play();

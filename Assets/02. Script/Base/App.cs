@@ -5,24 +5,27 @@ public enum SceneName
 {
     Developer,
     Title,
+    Notice,
     Lobby,
     Game
 }
 
 public class App : Singleton<App>
 {
-    private readonly SoundManager sound;
-    private readonly UIManager ui;
-    private readonly LobbyUIManager lobby;
+    private ViewManager view;
+    private UIManager ui;
 
-    private readonly SettingData setting;
+    private SoundManager sound;
+
+    private SettingData setting;
 
     #region Getter Setter
     public partial class Manager
     {
-        public static SoundManager Sound => instance.sound;
         public static UIManager UI => instance.ui;
-        public static LobbyUIManager Lobby => instance.lobby;
+        public static ViewManager View => instance.view;
+
+        public static SoundManager Sound => instance.sound;
     }
 
     public partial class Data
@@ -46,4 +49,70 @@ public class App : Singleton<App>
         DOTween.KillAll();
         UnityEngine.SceneManagement.SceneManager.LoadScene((int)sceneName);
     }
+
+
+    #region Get View As T
+    public static T ViewManagerAs<T>(object manager) where T : MonoBehaviour
+    {
+        if (manager == null || manager is not T)
+        {
+            return null;
+        }
+
+        return manager as T;
+    }
+
+    public static T GetViewAs<T>() where T : MonoBehaviour
+    {
+        return ViewManagerAs<T>(Manager.View);
+    }
+
+    public static T GetUIAs<T>() where T : MonoBehaviour
+    {
+        return ViewManagerAs<T>(Manager.UI);
+    }
+    #endregion
+
+    #region  Get ViewManager
+    public static DeveloperManager GetDeveloperManager()
+    {
+        return GetViewAs<DeveloperManager>();
+    }
+
+    public static TitleManager GetTitleManager()
+    {
+        return GetViewAs<TitleManager>();
+    }
+
+    public static LobbyManager GetLobbyManager()
+    {
+        return GetViewAs<LobbyManager>();
+    }
+
+    public partial class View
+    {
+        public static DeveloperManager Developer { get => GetDeveloperManager(); }
+        public static TitleManager Title { get => GetTitleManager(); }
+        public static LobbyManager Lobby { get => GetLobbyManager(); }
+    }
+    #endregion
+
+    #region  Get UIManager
+    public static TitleUIManager GetTitleUIManager()
+    {
+        return GetUIAs<TitleUIManager>();
+    }
+
+    public static LobbyUIManager GetLobbyUIManager()
+    {
+        return GetUIAs<LobbyUIManager>();
+    }
+
+    public class UI
+    {
+        public static TitleUIManager Title { get => GetTitleUIManager(); }
+        public static LobbyUIManager Lobby { get => GetLobbyUIManager(); }
+    }
+    #endregion
+
 }

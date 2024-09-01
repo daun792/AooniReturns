@@ -2,6 +2,7 @@ using System.Linq;
 using System.Reflection;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public abstract class ManagerBase : MonoBehaviour
 {
@@ -15,17 +16,22 @@ public abstract class ManagerBase : MonoBehaviour
 
     protected abstract void Awake();
 
-    internal static void SetFieldValue(MonoBehaviour manager)
+    internal static void SetFieldValue(Type type, MonoBehaviour manager)
     {
-        var fields = AppFieldInfo.Where(field => field.FieldType.Equals(manager.GetType()));
+        var fields = AppFieldInfo.Where(field => field.FieldType.IsAssignableFrom(type));
         if (fields == null || fields.Count() != 1)
         {
-            Debug.LogError($"ERROR: Unresolved manager found. Type: {manager.GetType().Name}");
+            Debug.LogError($"Unresolved manager found. Type: {type.Name}");
             return;
         }
 
         var targetField = fields.ElementAt(0);
         targetField.SetValue(App.instance, manager);
+    }
+
+    internal static void SetFieldValue(MonoBehaviour manager)
+    {
+        SetFieldValue(manager.GetType(), manager);
     }
 }
 
@@ -51,4 +57,9 @@ public class Data : ManagerBase
 public class Manager : ManagerBase
 {
     protected override void Awake() => SetFieldValue(this);
+}
+
+public class ViewManager : MonoBehaviour
+{
+    protected virtual void Awake() => ManagerBase.SetFieldValue(typeof(ViewManager), this);
 }

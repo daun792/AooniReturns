@@ -6,7 +6,7 @@ public class LobbyManager : MonoBehaviour
 {
 
     private void Start()
-    {
+    { 
         App.Manager.Sound.PlayBGM("BGM_Lobby");
     }
 

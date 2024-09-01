@@ -7,6 +7,7 @@ using DG.Tweening;
 public enum UIState
 {
     Normal,
+    SignUp,
     CreateRoom,
     JoinRoom,
     Clan,
@@ -15,7 +16,7 @@ public enum UIState
     Option,
 }
 
-public class UIManager : Manager
+public class UIManager : MonoBehaviour
 {
     [HideInInspector]
     public UIState CurrState
@@ -24,9 +25,9 @@ public class UIManager : Manager
     private Dictionary<Type, UIBase> UIDic;
     private Stack<UIState> UIStack;
 
-    protected override void Awake()
+    protected virtual void Awake()
     {
-        base.Awake();
+        ManagerBase.SetFieldValue(typeof(UIManager), this);
 
         var UIs = GetComponentsInChildren<UIBase>(true);
 

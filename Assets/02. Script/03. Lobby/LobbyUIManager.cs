@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class LobbyUIManager : UIManager
 {
+    [SerializeField] Button optionBtn;
     [SerializeField] Button shopBtn;
     [SerializeField] Button createRoomBtn;
     [SerializeField] Button cafeBtn;
@@ -15,36 +16,18 @@ public class LobbyUIManager : UIManager
     {
         base.Start();
 
-        shopBtn.onClick.AddListener(OnClickShop);
-        createRoomBtn.onClick.AddListener(OnClickCreateRoom);
         cafeBtn.onClick.AddListener(OnClickCafe);
-        rankBtn.onClick.AddListener(OnClickRank);
-        clanBtn.onClick.AddListener(OnClickClan);
-    }
 
-    private void OnClickShop()
-    {
-        GetPanel<ShopPanel>().OpenPanel();
-    }
+        optionBtn.onClick.AddListener(() => GetPanel<OptionPanel>().OpenPanel());
+        shopBtn.onClick.AddListener(() => GetPanel<ShopPanel>().OpenPanel());
+        createRoomBtn.onClick.AddListener(() => GetPanel<CreateRoomPanel>().OpenPanel());
 
-    public void OnClickCreateRoom()
-    {
-        GetPanel<CreateRoomPanel>().OpenPanel();
+        rankBtn.onClick.AddListener(() => GetPanel<RankPanel>().OpenPanel());
+        clanBtn.onClick.AddListener(() => GetPanel<ClanPanel>().OpenPanel());
     }
 
     private void OnClickCafe()
     {
        
     }
-
-    private void OnClickRank()
-    {
-        GetPanel<RankPanel>().OpenPanel();
-    }
-
-    private void OnClickClan()
-    {
-        GetPanel<ClanPanel>().OpenPanel();
-    }
-
 }

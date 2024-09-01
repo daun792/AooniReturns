@@ -25,7 +25,9 @@ public abstract class UIBase : MonoBehaviour
     public virtual void OpenPanel()
     {
         if (IsAddUIStack() && !gameObject.activeSelf)
-            App.Manager.Lobby.AddUIStack(GetUIState());
+        {
+            App.Manager.UI.AddUIStack(GetUIState());
+        }
 
         gameObject.SetActive(true);
     }
@@ -38,6 +40,8 @@ public abstract class UIBase : MonoBehaviour
         gameObject.SetActive(false);
 
         if (IsAddUIStack())
+        {
             App.Manager.UI.PopUIStack(GetUIState());
+        }
     }
 }
