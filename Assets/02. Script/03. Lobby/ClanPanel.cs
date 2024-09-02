@@ -12,4 +12,14 @@ public class ClanPanel : UIBase
     {
 
     }
+
+    public override void OpenPanel()
+    {
+        if (App.UI.Lobby.CurrState == UIState.CreateRoom)
+        {
+            App.UI.Lobby.GetPanel<CreateRoomPanel>().ClosePanel();
+        }
+
+        base.OpenPanel();
+    }
 }

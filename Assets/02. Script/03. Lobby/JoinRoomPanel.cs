@@ -10,6 +10,6 @@ public class JoinRoomPanel : UIBase
 
     public override void Init()
     {
-        return;
+        OpenPanel();
     }
 }

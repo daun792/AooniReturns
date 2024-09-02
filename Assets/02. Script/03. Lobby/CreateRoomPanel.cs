@@ -13,4 +13,12 @@ public class CreateRoomPanel : UIBase
     {
         return;
     }
+
+    public override void ClosePanel()
+    {
+        base.ClosePanel();
+
+        ClosePanel();
+        App.UI.Lobby.GetPanel<JoinRoomPanel>().OpenPanel();
+    }
 }

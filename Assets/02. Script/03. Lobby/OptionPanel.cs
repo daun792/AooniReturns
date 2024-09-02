@@ -39,6 +39,16 @@ public class OptionPanel : UIBase
         continueBtn.onClick.AddListener(ClosePanel);
     }
 
+    public override void OpenPanel()
+    {
+        if (App.UI.Lobby.CurrState == UIState.CreateRoom)
+        {
+            App.UI.Lobby.GetPanel<CreateRoomPanel>().ClosePanel();
+        }
+
+        base.OpenPanel();
+    }
+
     private void OnClickBGM()
     {
         isMuteBGM = !isMuteBGM;
