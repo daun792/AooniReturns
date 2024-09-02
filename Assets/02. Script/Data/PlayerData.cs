@@ -26,13 +26,19 @@ public class PlayerData : Data
 
     private string nickName;
     private string clan;
+    private int experiencePoints;
+    private int oniKills;
+    private int hiroshiKills;
+    private int survivalCount;
     private int currency;
-    private int kills;
 
     public string NickName => nickName;
     public string Clan => clan;
+    public int ExperiencePoints => experiencePoints;
+    public int OniKills => oniKills;
+    public int HiroshiKills => hiroshiKills;
+    public int SurvivalCount => survivalCount;
     public int Currency => currency;
-    public int Kills => kills;
 
     private enum ENickValidateResult : byte
     {
@@ -45,7 +51,7 @@ public class PlayerData : Data
     {
         PlayFabClientAPI.GetPlayerCombinedInfo(new GetPlayerCombinedInfoRequest()
         {
-            InfoRequestParameters = new()
+            InfoRequestParameters = new GetPlayerCombinedInfoRequestParams()
             {
                 GetPlayerProfile = true,
                 GetPlayerStatistics = true,
@@ -53,7 +59,7 @@ public class PlayerData : Data
                 GetUserData = true,
             }
         },
-        (result) =>
+        result =>
         {
             var payload = result.InfoResultPayload;
 
@@ -63,7 +69,7 @@ public class PlayerData : Data
 
             _getPlayerDataCallback?.Invoke();
         },
-        (error) =>
+        error =>
         {
             _errorHandler?.Invoke(EPlayerDataError.LoadPlayerDataFailed);
         });
@@ -180,7 +186,7 @@ public class PlayerData : Data
 
     #endregion
 
-    #region Player Statistics (Currency, Kills)
+    #region Player Statistics (ExperiencePoints, OniKills, HiroshiKills, SurvivalCount, Currency)
 
     private void UpdatePlayerStatisticsInternal(List<StatisticValue> statistics)
     {
@@ -188,22 +194,34 @@ public class PlayerData : Data
         {
             switch (stat.StatisticName)
             {
+                case "ExperiencePoints":
+                    experiencePoints = stat.Value;
+                    break;
+                case "OniKills":
+                    oniKills = stat.Value;
+                    break;
+                case "HiroshiKills":
+                    hiroshiKills = stat.Value;
+                    break;
+                case "SurvivalCount":
+                    survivalCount = stat.Value;
+                    break;
                 case "Currency":
                     currency = stat.Value;
-                    break;
-                case "Kills":
-                    kills = stat.Value;
                     break;
             }
         }
     }
 
-    public void SetPlayerStatistics(int _currency, int _kills, Action onSuccess, Action<EPlayerDataError> onError)
+    public void SetPlayerStatistics(int _experiencePoints, int _oniKills, int _hiroshiKills, int _survivalCount, int _currency, Action onSuccess, Action<EPlayerDataError> onError)
     {
         var requestStats = new List<StatisticUpdate>
         {
-            new StatisticUpdate { StatisticName = "Currency", Value = _currency },
-            new StatisticUpdate { StatisticName = "Kills", Value = _kills }
+            new StatisticUpdate { StatisticName = "ExperiencePoints", Value = _experiencePoints },
+            new StatisticUpdate { StatisticName = "OniKills", Value = _oniKills },
+            new StatisticUpdate { StatisticName = "HiroshiKills", Value = _hiroshiKills },
+            new StatisticUpdate { StatisticName = "SurvivalCount", Value = _survivalCount },
+            new StatisticUpdate { StatisticName = "Currency", Value = _currency }
         };
 
         PlayFabClientAPI.UpdatePlayerStatistics(new UpdatePlayerStatisticsRequest()
@@ -212,8 +230,11 @@ public class PlayerData : Data
         },
         result =>
         {
+            experiencePoints = _experiencePoints;
+            oniKills = _oniKills;
+            hiroshiKills = _hiroshiKills;
+            survivalCount = _survivalCount;
             currency = _currency;
-            kills = _kills;
             onSuccess?.Invoke();
         },
         error =>
