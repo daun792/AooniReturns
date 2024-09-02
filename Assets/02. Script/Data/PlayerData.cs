@@ -14,6 +14,7 @@ public enum EPlayerDataError
 
     InvalidNickname,
     InvalidNicknameLength,
+    LoadLeaderboardFailed,
 }
 
 public class PlayerData : Data
@@ -293,5 +294,23 @@ public class PlayerData : Data
         });
     }
 
+    public void GetLeaderboard(string statisticName, int maxResultsCount, Action<List<PlayerLeaderboardEntry>> onSuccess, Action<EPlayerDataError> onError)
+    {
+        var request = new GetLeaderboardRequest
+        {
+            StatisticName = statisticName,
+            MaxResultsCount = maxResultsCount
+        };
+
+        PlayFabClientAPI.GetLeaderboard(request,
+        result =>
+        {
+            onSuccess?.Invoke(result.Leaderboard);
+        },
+        error =>
+        {
+            onError?.Invoke(EPlayerDataError.LoadLeaderboardFailed);
+        });
+    }
     #endregion
 }
