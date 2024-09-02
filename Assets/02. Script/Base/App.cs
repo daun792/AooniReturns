@@ -17,6 +17,8 @@ public class App : Singleton<App>
 
     private SoundManager sound;
 
+    private TitleData title;
+    private PlayerData player;
     private SettingData setting;
 
     #region Getter Setter
@@ -31,6 +33,8 @@ public class App : Singleton<App>
     public partial class Data
     {
         public static SettingData Setting => instance.setting;
+        public static TitleData Title => instance.title;
+        public static PlayerData Player => instance.player;
     }
     #endregion
 
@@ -114,5 +118,4 @@ public class App : Singleton<App>
         public static LobbyUIManager Lobby { get => GetLobbyUIManager(); }
     }
     #endregion
-
 }

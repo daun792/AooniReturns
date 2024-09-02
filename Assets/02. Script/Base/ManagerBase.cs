@@ -59,7 +59,7 @@ public class Manager : ManagerBase
     protected override void Awake() => SetFieldValue(this);
 }
 
-public class ViewManager : MonoBehaviour
+public class ViewManager : Fusion.Behaviour
 {
     protected virtual void Awake() => ManagerBase.SetFieldValue(typeof(ViewManager), this);
 }
