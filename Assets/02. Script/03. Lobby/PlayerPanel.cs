@@ -32,7 +32,7 @@ public class PlayerPanel : UIBase
     {
         var result = CalculateLevel(App.Data.Player.ExperiencePoints);
 
-        levelTMP.text = result.level.ToString();
+        levelTMP.text = string.Format("Lv. {0}", result.level.ToString());
 
         var percentage = result.remainingExp / (float)result.requiredExp * 100;
         expTMP.text = string.Format("{0}/{1} ({2}%)", result.remainingExp, result.requiredExp, Mathf.Round(percentage * 100f) / 100f);
