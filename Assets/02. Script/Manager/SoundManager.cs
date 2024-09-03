@@ -6,7 +6,6 @@ using DG.Tweening;
 
 public enum AudioType
 {
-    Master,
     BGM,
     SFX
 }
@@ -22,14 +21,12 @@ public class SoundManager : Manager
 {
     public struct VolumeData
     {
-        public float volume;
         public bool isMuted;
 
-        public readonly float Calculated => isMuted ? 0f : volume;
+        public readonly float Calculated => isMuted ? 0f : 50f;
 
-        public VolumeData(float _volume, bool _isMuted)
+        public VolumeData(bool _isMuted)
         {
-            volume = _volume;
             isMuted = _isMuted;
         }
     }
@@ -38,35 +35,22 @@ public class SoundManager : Manager
     {
         readonly SoundManager Sound = App.Manager.Sound;
 
-        public float Master
+        public bool BGM
         {
-            get => Sound.MasterData.volume;
+            get => Sound.BGMData.isMuted;
             set
             {
-                Sound.MasterData.volume = value;
-                Sound.MasterData.isMuted = value < 0.001f;
-                Sound.SetMasterVolume();
-            }
-        }
-
-        public float BGM
-        {
-            get => Sound.BGMData.volume;
-            set
-            {
-                Sound.BGMData.volume = value;
-                Sound.BGMData.isMuted = value < 0.001f;
+                Sound.BGMData.isMuted = value;
                 Sound.SetBGMVolume();
             }
         }
 
-        public float SFX
+        public bool SFX
         {
-            get => Sound.SFXData.volume;
+            get => Sound.SFXData.isMuted;
             set
             {
-                Sound.SFXData.volume = value;
-                Sound.SFXData.isMuted = value < 0.001f;
+                Sound.SFXData.isMuted = value;
                 Sound.SetSFXVolume();
             }
         }
@@ -86,7 +70,6 @@ public class SoundManager : Manager
     Dictionary<string, AudioClip> dic_BGM;
     Dictionary<string, AudioClip> dic_SFX;
 
-    private VolumeData MasterData;
     private VolumeData BGMData;
     private VolumeData SFXData;
 
@@ -116,11 +99,9 @@ public class SoundManager : Manager
     {
         var setting = App.Data.Setting.Sound;
 
-        MasterData = new(setting.Master, setting.MasterMuted);
-        BGMData = new(setting.BGM, setting.BGMMuted);
-        SFXData = new(setting.SFX, setting.SFXMuted);
+        BGMData = new(setting.BGMMuted);
+        SFXData = new(setting.SFXMuted);
 
-        SetMasterVolume();
         SetBGMVolume();
         SetSFXVolume();
     }
@@ -144,7 +125,7 @@ public class SoundManager : Manager
         bgmPlayer.clip = clip;
 
         bgmPlayer.Play();
-        bgmPlayer.DOFade(1f, 0.5f).SetEase(Ease.Linear);
+        bgmPlayer.DOFade(0.5f, 0.5f).SetEase(Ease.Linear);
     }
 
     public void ResumeBGM()
@@ -152,7 +133,7 @@ public class SoundManager : Manager
         if (bgmPlayer.isPlaying) return;
 
         bgmPlayer.Play();
-        bgmPlayer.DOFade(1f, 0.5f).SetEase(Ease.Linear);
+        bgmPlayer.DOFade(0.5f, 0.5f).SetEase(Ease.Linear);
     }
 
     public void StopBGM()
@@ -189,7 +170,6 @@ public class SoundManager : Manager
     #endregion
 
     #region Set Volume
-    private void SetMasterVolume() => SetVolume("Master", MasterData.Calculated);
     private void SetBGMVolume() => SetVolume("BGM", BGMData.Calculated);
     private void SetSFXVolume() => SetVolume("SFX", SFXData.Calculated);
 
@@ -205,14 +185,6 @@ public class SoundManager : Manager
     #endregion
 
     #region Set Mute
-    public bool IsMuted(AudioType _type) => _type switch
-    {
-        AudioType.Master => MasterData.isMuted,
-        AudioType.BGM => BGMData.isMuted,
-        AudioType.SFX => SFXData.isMuted,
-        _ => false,
-    };
-
     public bool ToggleMute(AudioType _type)
     {
         bool muted = IsMuted(_type);
@@ -220,15 +192,17 @@ public class SoundManager : Manager
         return !muted;
     }
 
+    public bool IsMuted(AudioType _type) => _type switch
+    {
+        AudioType.BGM => BGMData.isMuted,
+        AudioType.SFX => SFXData.isMuted,
+        _ => false,
+    };
+
     public void MuteVolume(AudioType _type, bool _mute)
     {
         switch (_type)
         {
-            case AudioType.Master:
-                MasterData.isMuted = _mute;
-                SetMasterVolume();
-                return;
-
             case AudioType.BGM:
                 BGMData.isMuted = _mute;
                 SetBGMVolume();

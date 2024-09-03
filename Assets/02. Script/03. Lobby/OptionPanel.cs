@@ -18,20 +18,14 @@ public class OptionPanel : UIBase
     [SerializeField] TextMeshProUGUI controlPositionTMP;
     [SerializeField] TextMeshProUGUI crossKeysTMP;
 
-    private bool isMuteBGM;
-    private bool isMuteSFX;
-
     public override UIState GetUIState() => UIState.Option;
 
     public override bool IsAddUIStack() => true;
 
     public override void Init()
     {
-        isMuteBGM = App.Manager.Sound.Volume.BGM < 0.001f;
-        isMuteSFX = App.Manager.Sound.Volume.SFX < 0.001f;
-
-        SetSoundText(bgmTMP, isMuteBGM);
-        SetSoundText(sfxTMP, isMuteSFX);
+        SetSoundText(bgmTMP, App.Manager.Sound.IsMuted(AudioType.BGM));
+        SetSoundText(sfxTMP, App.Manager.Sound.IsMuted(AudioType.SFX));
 
         bgmBtn.onClick.AddListener(OnClickBGM);
         sfxBtn.onClick.AddListener(OnClickSFX);
@@ -51,16 +45,14 @@ public class OptionPanel : UIBase
 
     private void OnClickBGM()
     {
-        isMuteBGM = !isMuteBGM;
-        App.Manager.Sound.MuteVolume(AudioType.BGM, isMuteBGM);
-        SetSoundText(bgmTMP, isMuteBGM);
+        var isMute = App.Manager.Sound.IsMuted(AudioType.BGM);
+        SetSoundText(bgmTMP, isMute);
     }
 
     private void OnClickSFX()
     {
-        isMuteSFX = !isMuteSFX;
-        App.Manager.Sound.MuteVolume(AudioType.SFX, isMuteSFX);
-        SetSoundText(sfxTMP, isMuteSFX);
+        var isMute = App.Manager.Sound.IsMuted(AudioType.SFX);
+        SetSoundText(sfxTMP, isMute);
     }
 
     private void SetSoundText(TextMeshProUGUI _tmp, bool _isMute)
