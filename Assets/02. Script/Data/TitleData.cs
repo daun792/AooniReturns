@@ -3,11 +3,10 @@ using PlayFab.ClientModels;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-using System.Linq;
 
 public class TitleData : Data
 {
-    //public Dictionary<string, CharData> charDatas = new();
+    public Dictionary<string, ShopData> shopDatas = new();
 
     public bool isTitleDataLoaded { get; private set; } = false;
 
@@ -26,30 +25,14 @@ public class TitleData : Data
                     return;
                 }
 
-                //charDatas.Clear();
+                shopDatas.Clear();
 
-                //var gameData = result.Data["GameData"];
-                //var deserializedGameData = JsonUtilityHelper.FromJson<GameData>(gameData);
-                //foreach (var data in deserializedGameData)
-                //{
-                //    if (data.version != Application.version)
-                //    {
-                //        _errorHandler(new PlayFabError
-                //        {
-                //            // steal one of the rarest code in playfab
-                //            ErrorMessage = "InvalidVersion",
-                //            Error = PlayFabErrorCode.VersionNotFound
-                //        });
-                //        return;
-                //    }
-                //}
-
-                //var charData = result.Data["CharData"];
-                //var charDataList = JsonUtilityHelper.FromJson<CharData>(charData);
-                //foreach (var data in charDataList)
-                //{
-                //    charDatas.Add(data.code, data);
-                //}
+                var charData = result.Data["ShopData"];
+                var charDataList = JsonUtilityHelper.FromJson<ShopData>(charData);
+                foreach (var data in charDataList)
+                {
+                    shopDatas.Add(data.code, data);
+                }
 
                 isTitleDataLoaded = true;
                 _loadDataCallback();
@@ -87,4 +70,14 @@ public class JsonUtilityHelper
     {
         public T[] array;
     }
+}
+
+[Serializable]
+public class ShopData
+{
+    public string code;
+    public int type;
+    public int cost;
+    public string name;
+    public string resource;
 }

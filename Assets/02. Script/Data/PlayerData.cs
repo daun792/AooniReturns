@@ -32,6 +32,8 @@ public class PlayerData : Data
     private int hiroshiKills;
     private int survivalCount;
     private int currency;
+    private int humanSkinIndex;
+    private int oniSkinIndex;
 
     public string NickName => nickName;
     public string Clan => clan;
@@ -40,6 +42,8 @@ public class PlayerData : Data
     public int HiroshiKills => hiroshiKills;
     public int SurvivalCount => survivalCount;
     public int Currency => currency;
+    public int HumanSkinIndex => humanSkinIndex;
+    public int OniSkinIndex => oniSkinIndex;
 
     private enum ENickValidateResult : byte
     {
@@ -246,7 +250,7 @@ public class PlayerData : Data
 
     #endregion
 
-    #region Title data (Clan)
+    #region Title data (Clan, HumanSkinIndex, OniSkinIndex)
 
     private void UpdateUserDataInternal(Dictionary<string, UserDataRecord> _userData)
     {
@@ -255,6 +259,14 @@ public class PlayerData : Data
         if (userData.ContainsKey("Clan"))
         {
             clan = userData["Clan"].Value;
+        }
+        if (userData.ContainsKey("HumanSkinIndex"))
+        {
+            int.TryParse(userData["HumanSkinIndex"].Value, out humanSkinIndex);
+        }
+        if (userData.ContainsKey("OniSkinIndex"))
+        {
+            int.TryParse(userData["OniSkinIndex"].Value, out oniSkinIndex);
         }
     }
 
@@ -272,6 +284,30 @@ public class PlayerData : Data
         result =>
         {
             clan = _clan;
+            onSuccess?.Invoke();
+        },
+        error =>
+        {
+            onError?.Invoke(EPlayerDataError.UpdateUserDataFailed);
+        });
+    }
+
+    public void SetPlayerSkinIndices(int _humanSkinIndex, int _oniSkinIndex, Action onSuccess, Action<EPlayerDataError> onError)
+    {
+        var requestData = new Dictionary<string, string>
+        {
+            { "HumanSkinIndex", _humanSkinIndex.ToString() },
+            { "OniSkinIndex", _oniSkinIndex.ToString() }
+        };
+
+        PlayFabClientAPI.UpdateUserData(new UpdateUserDataRequest
+        {
+            Data = requestData
+        },
+        result =>
+        {
+            humanSkinIndex = _humanSkinIndex;
+            oniSkinIndex = _oniSkinIndex;
             onSuccess?.Invoke();
         },
         error =>
