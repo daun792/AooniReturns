@@ -270,7 +270,29 @@ public class PlayerData : Data
         }
     }
 
-    public void SetPlayerClan(string _clan, Action onSuccess, Action<EPlayerDataError> onError)
+    public void SetCurrency(int _currency, Action onSuccess, Action<EPlayerDataError> onError)
+    {
+        var requestData = new Dictionary<string, string>
+    {
+        { "Currency", _currency.ToString() }
+    };
+
+        PlayFabClientAPI.UpdateUserData(new UpdateUserDataRequest
+        {
+            Data = requestData
+        },
+        result =>
+        {
+            currency = _currency; 
+        onSuccess?.Invoke();  
+    },
+        error =>
+        {
+            onError?.Invoke(EPlayerDataError.UpdateUserDataFailed); 
+    });
+    }
+
+    public void SetClan(string _clan, Action onSuccess, Action<EPlayerDataError> onError)
     {
         var requestData = new Dictionary<string, string>
         {
@@ -292,11 +314,10 @@ public class PlayerData : Data
         });
     }
 
-    public void SetPlayerSkinIndices(int _humanSkinIndex, int _oniSkinIndex, Action onSuccess, Action<EPlayerDataError> onError)
+    public void SetOniSkinIndices(int _oniSkinIndex, Action onSuccess, Action<EPlayerDataError> onError)
     {
         var requestData = new Dictionary<string, string>
         {
-            { "HumanSkinIndex", _humanSkinIndex.ToString() },
             { "OniSkinIndex", _oniSkinIndex.ToString() }
         };
 
@@ -306,8 +327,29 @@ public class PlayerData : Data
         },
         result =>
         {
-            humanSkinIndex = _humanSkinIndex;
             oniSkinIndex = _oniSkinIndex;
+            onSuccess?.Invoke();
+        },
+        error =>
+        {
+            onError?.Invoke(EPlayerDataError.UpdateUserDataFailed);
+        });
+    }
+
+    public void SetHumanSkinIndices(int _humanSkinIndex, Action onSuccess, Action<EPlayerDataError> onError)
+    {
+        var requestData = new Dictionary<string, string>
+        {
+            { "HumanSkinIndex", _humanSkinIndex.ToString() },
+        };
+
+        PlayFabClientAPI.UpdateUserData(new UpdateUserDataRequest
+        {
+            Data = requestData
+        },
+        result =>
+        {
+            humanSkinIndex = _humanSkinIndex;
             onSuccess?.Invoke();
         },
         error =>

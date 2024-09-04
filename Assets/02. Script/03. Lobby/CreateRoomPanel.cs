@@ -18,7 +18,6 @@ public class CreateRoomPanel : UIBase
     {
         base.ClosePanel();
 
-        ClosePanel();
         App.UI.Lobby.GetPanel<JoinRoomPanel>().OpenPanel();
     }
 }
