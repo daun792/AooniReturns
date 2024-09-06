@@ -15,7 +15,7 @@ public class ClanMemberBack : MonoBehaviour
 
     [SerializeField] TextMeshProUGUI rankTMP;
     [SerializeField] TextMeshProUGUI levelTMP;
-    [SerializeField] TextMeshProUGUI nameTMP;
+    [SerializeField] TextMeshProUGUI nickTMP;
 
     [SerializeField] Button outBtn;
 
@@ -38,7 +38,7 @@ public class ClanMemberBack : MonoBehaviour
             GetMemberProfile(playerID,
             (result) =>
             {
-                nameTMP.text = result;
+                nickTMP.text = result;
             },
             (error) =>
             {
