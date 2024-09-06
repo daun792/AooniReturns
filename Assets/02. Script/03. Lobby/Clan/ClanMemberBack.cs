@@ -45,14 +45,10 @@ public class ClanMemberBack : MonoBehaviour
                 isSuccess = false;
             });
 
-            GetMemberUserData(playerID,
+            GetMemberEXP(playerID,
             (result) =>
             {
-                if (result.ContainsKey("ExperiencePoints"))
-                {
-                    int.TryParse(result["ExperiencePoints"].Value, out var exp);
-                    SetLevelTMP(exp);
-                }
+                SetLevelTMP(result);
             },
             (error) =>
             {
@@ -62,14 +58,7 @@ public class ClanMemberBack : MonoBehaviour
             GetMemberRank(playerID,
             (result) =>
             {
-                if (result == 0)
-                {
-                    rankTMP.text = "순위권 외";
-                }
-                else
-                {
-                    rankTMP.text = string.Format("{0}위", result);
-                }
+                rankTMP.text = string.Format("{0}위", result + 1);
             },
             (error) =>
             {
@@ -127,7 +116,7 @@ public class ClanMemberBack : MonoBehaviour
         PlayFabClientAPI.GetPlayerProfile(request,
         result =>
         {
-        if (result.PlayerProfile != null && !string.IsNullOrEmpty(result.PlayerProfile.DisplayName))
+            if (result.PlayerProfile != null && !string.IsNullOrEmpty(result.PlayerProfile.DisplayName))
             {
                 onSuccess?.Invoke(result.PlayerProfile.DisplayName);
             }
@@ -142,7 +131,7 @@ public class ClanMemberBack : MonoBehaviour
         });
     }
 
-    private void GetMemberUserData(string playFabId, Action<Dictionary<string, UserDataRecord>> onSuccess, Action<EPlayerDataError> onError)
+    private void GetMemberEXP(string playFabId, Action<int> onSuccess, Action<EPlayerDataError> onError)
     {
         var request = new GetUserDataRequest
         {
@@ -152,7 +141,8 @@ public class ClanMemberBack : MonoBehaviour
         PlayFabClientAPI.GetUserData(request,
         result =>
         {
-            onSuccess?.Invoke(result.Data);
+            int.TryParse(result.Data["ExperiencePoints"].Value, out var exp);
+            onSuccess?.Invoke(exp);
         },
         error =>
         {

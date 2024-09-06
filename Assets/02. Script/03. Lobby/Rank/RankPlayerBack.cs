@@ -28,13 +28,13 @@ public class RankPlayerBack : MonoBehaviour
     {
         if (playerID == _player.PlayFabId) return;
 
-        rankTMP.text = string.Format("{0}À§", _player.Position.ToString());
+        rankTMP.text = string.Format("{0}À§", (_player.Position + 1).ToString());
         nickTMP.text = _player.DisplayName;
 
         GetPlayerEXP(_player.PlayFabId,
         (result) =>
         {
-            SetLevelTMP(int.Parse(result));
+            SetLevelTMP(result);
         }, null);
 
         scoreTMP.text = string.Format(GetScoreText(_type), _player.StatValue.ToString());
@@ -43,31 +43,29 @@ public class RankPlayerBack : MonoBehaviour
         gameObject.SetActive(true);
     }
 
-    private void GetPlayerEXP(string playFabId, Action<string> onSuccess, Action<PlayFabError> onError)
+    private void GetPlayerEXP(string playFabId, Action<int> onSuccess, Action<EPlayerDataError> onError)
     {
         var request = new GetUserDataRequest
         {
             PlayFabId = playFabId
         };
 
-        PlayFabClientAPI.GetUserData(request, result =>
+        PlayFabClientAPI.GetUserData(request,
+        result =>
         {
-            if (result.Data != null && result.Data.ContainsKey("ExperiencePoints"))
+            if (result.Data.ContainsKey("ExperiencePoints"))
             {
-                var userData = result.Data["ExperiencePoints"].Value;
-                onSuccess?.Invoke(userData);
+                int.TryParse(result.Data["ExperiencePoints"].Value, out var exp);
+                onSuccess?.Invoke(exp);
             }
-            else
-            {
-                Debug.LogError("User data not found.");
-                onError?.Invoke(new PlayFabError { ErrorMessage = "User data not found." });
-            }
-        }, error =>
+        },
+        error =>
         {
-            Debug.LogError($"Failed to get user data. Error: {error.GenerateErrorReport()}");
-            onError?.Invoke(error);
+            Debug.LogError($"Failed to get user data for PlayFabId: {playFabId}. Error: {error.GenerateErrorReport()}");
+            onError?.Invoke(EPlayerDataError.LoadUserDataFailed);
         });
     }
+
 
     private void SetLevelTMP(int _exp)
     {

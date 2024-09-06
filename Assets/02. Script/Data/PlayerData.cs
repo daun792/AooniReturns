@@ -198,7 +198,7 @@ public class PlayerData : Data
 
     #endregion
 
-    #region Player Statistics (ExperiencePoints, OniKills, HiroshiKills, SurvivalCount, Currency)
+    #region Player Statistics (ExperiencePoints, OniKills, HiroshiKills, SurvivalCount)
 
     private void UpdatePlayerStatisticsInternal(List<StatisticValue> statistics)
     {
@@ -218,40 +218,58 @@ public class PlayerData : Data
                 case "SurvivalCount":
                     survivalCount = stat.Value;
                     break;
-                case "Currency":
-                    currency = stat.Value;
-                    break;
             }
         }
     }
 
-    public void SetPlayerStatistics(int _experiencePoints, int _oniKills, int _hiroshiKills, int _survivalCount, int _currency, Action onSuccess, Action<EPlayerDataError> onError)
+    public void GetPlayerStatistics(Action<Dictionary<string, int>> onSuccess, Action<PlayFabError> onError)
     {
-        var requestStats = new List<StatisticUpdate>
+        PlayFabClientAPI.GetPlayerStatistics(new GetPlayerStatisticsRequest(),
+        result =>
         {
-            new StatisticUpdate { StatisticName = "ExperiencePoints", Value = _experiencePoints },
-            new StatisticUpdate { StatisticName = "OniKills", Value = _oniKills },
-            new StatisticUpdate { StatisticName = "HiroshiKills", Value = _hiroshiKills },
-            new StatisticUpdate { StatisticName = "SurvivalCount", Value = _survivalCount },
-            new StatisticUpdate { StatisticName = "Currency", Value = _currency }
+            Dictionary<string, int> playerStats = new Dictionary<string, int>();
+
+            foreach (var stat in result.Statistics)
+            {
+                playerStats.Add(stat.StatisticName, stat.Value); 
+            }
+
+            onSuccess?.Invoke(playerStats);
+        },
+        error =>
+        {
+            onError?.Invoke(error);
+        });
+    }
+
+    public void SetPlayerStatistics(int _experiencePoints, int _oniKills, int _hiroshiKills, int _survivalCount, Action onSuccess, Action<PlayFabErrorCode> onError)
+    {
+        var request = new UpdatePlayerStatisticsRequest
+        {
+            Statistics = new List<StatisticUpdate>
+            {
+                new StatisticUpdate { StatisticName = "ExperiencePoints", Value = _experiencePoints },
+                new StatisticUpdate { StatisticName = "OniKills", Value = _oniKills },
+                new StatisticUpdate { StatisticName = "HiroshiKills", Value = _hiroshiKills },
+                new StatisticUpdate { StatisticName = "SurvivalCount", Value = _survivalCount },
+            }
         };
 
-        PlayFabClientAPI.UpdatePlayerStatistics(new UpdatePlayerStatisticsRequest()
-        {
-            Statistics = requestStats
-        },
+        PlayFabClientAPI.UpdatePlayerStatistics(request,
         result =>
         {
             experiencePoints = _experiencePoints;
             oniKills = _oniKills;
             hiroshiKills = _hiroshiKills;
             survivalCount = _survivalCount;
-            currency = _currency;
+
+            SetExperiencePoints(experiencePoints.ToString(), null, null);
+
             onSuccess?.Invoke();
         },
         error =>
         {
-            onError?.Invoke(EPlayerDataError.UpdatePlayerStatisticsFailed);
+            onError?.Invoke(error.Error);
         });
     }
 
@@ -267,6 +285,10 @@ public class PlayerData : Data
         {
             clan = userData["Clan"].Value;
         }
+        if (userData.ContainsKey("Currency"))
+        {
+            int.TryParse(userData["Currency"].Value, out currency);
+        }
         if (userData.ContainsKey("HumanSkinIndex"))
         {
             int.TryParse(userData["HumanSkinIndex"].Value, out humanSkinIndex);
@@ -277,12 +299,12 @@ public class PlayerData : Data
         }
     }
 
-    public void SetCurrency(int _currency, Action onSuccess, Action<EPlayerDataError> onError)
+    public void SetExperiencePoints(string _exp, Action onSuccess, Action<EPlayerDataError> onError)
     {
         var requestData = new Dictionary<string, string>
-    {
-        { "Currency", _currency.ToString() }
-    };
+        {
+            { "ExperiencePoints", _exp }
+        };
 
         PlayFabClientAPI.UpdateUserData(new UpdateUserDataRequest
         {
@@ -290,13 +312,12 @@ public class PlayerData : Data
         },
         result =>
         {
-            currency = _currency; 
-        onSuccess?.Invoke();  
-    },
+            onSuccess?.Invoke();
+        },
         error =>
         {
-            onError?.Invoke(EPlayerDataError.UpdateUserDataFailed); 
-    });
+            onError?.Invoke(EPlayerDataError.UpdateUserDataFailed);
+        });
     }
 
     public void SetClan(string _clan, Action onSuccess, Action<EPlayerDataError> onError)
@@ -313,6 +334,28 @@ public class PlayerData : Data
         result =>
         {
             clan = _clan;
+            onSuccess?.Invoke();
+        },
+        error =>
+        {
+            onError?.Invoke(EPlayerDataError.UpdateUserDataFailed);
+        });
+    }
+
+    public void SetCurrency(int _currency, Action onSuccess, Action<EPlayerDataError> onError)
+    {
+        var requestData = new Dictionary<string, string>
+        {
+            { "Currency", _currency.ToString() }
+        };
+
+        PlayFabClientAPI.UpdateUserData(new UpdateUserDataRequest
+        {
+            Data = requestData
+        },
+        result =>
+        {
+            currency = _currency;
             onSuccess?.Invoke();
         },
         error =>
@@ -384,13 +427,25 @@ public class PlayerData : Data
         var request = new GetLeaderboardRequest
         {
             StatisticName = statisticName,
-            MaxResultsCount = maxResultsCount
+            MaxResultsCount = maxResultsCount,
+            ProfileConstraints = new PlayerProfileViewConstraints
+            {
+                ShowDisplayName = true,
+                ShowStatistics = true
+            }
         };
 
         PlayFabClientAPI.GetLeaderboard(request,
         result =>
         {
-            onSuccess?.Invoke(result.Leaderboard);
+            if (result.Leaderboard != null && result.Leaderboard.Count > 0)
+            {
+                onSuccess?.Invoke(result.Leaderboard);
+            }
+            else
+            {
+                onError?.Invoke(EPlayerDataError.LoadLeaderboardFailed);
+            }
         },
         error =>
         {
