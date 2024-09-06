@@ -136,16 +136,18 @@ public class ShopPanel : UIBase
             if (oniScrollBack.gameObject.activeSelf)
             {
                 index = Array.IndexOf(oniItemBtns, selectedBtn);
-                App.Data.Player.SetOniSkinIndices(index, null, null);
+                App.Data.Player.SetOniSkinIndex(index, null, null);
             }
             else
             {
                 index = Array.IndexOf(humanItemBtns, selectedBtn);
-                App.Data.Player.SetHumanSkinIndices(index, null, null);
+                App.Data.Player.SetHumanSkinIndex(index, null, null);
             }
 
             var newCurrency = App.Data.Player.Currency - selectedBtn.Cost;
             App.Data.Player.SetCurrency(newCurrency, null, null);
+
+            App.Manager.UI.GetPanel<PlayerPanel>().SetPlayerSkin();
         }
 
         ResetSelectedItem();

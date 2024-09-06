@@ -53,6 +53,10 @@ public class TitleManager : ViewManager
 
         runner = gameObject.AddComponent<NetworkRunner>();
         runner.ProvideInput = true;
+
+#if UNITY_EDITOR
+        TryLogin("daun1124", "123456", null, null);
+#endif
     }
 
     public bool TryLogin(string ID, string PW,

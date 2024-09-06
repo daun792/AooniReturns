@@ -314,7 +314,7 @@ public class PlayerData : Data
         });
     }
 
-    public void SetOniSkinIndices(int _oniSkinIndex, Action onSuccess, Action<EPlayerDataError> onError)
+    public void SetOniSkinIndex(int _oniSkinIndex, Action onSuccess, Action<EPlayerDataError> onError)
     {
         var requestData = new Dictionary<string, string>
         {
@@ -336,7 +336,7 @@ public class PlayerData : Data
         });
     }
 
-    public void SetHumanSkinIndices(int _humanSkinIndex, Action onSuccess, Action<EPlayerDataError> onError)
+    public void SetHumanSkinIndex(int _humanSkinIndex, Action onSuccess, Action<EPlayerDataError> onError)
     {
         var requestData = new Dictionary<string, string>
         {

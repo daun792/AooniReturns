@@ -17,6 +17,9 @@ public class PlayerPanel : UIBase
     [SerializeField] TextMeshProUGUI expTMP;
     [SerializeField] Image expImg;
 
+    [SerializeField] Animator humanAnim;
+    [SerializeField] Animator oniAnim;
+
     public override void Init()
     {
         nickTMP.text = App.Data.Player.NickName;
@@ -66,5 +69,11 @@ public class PlayerPanel : UIBase
             clanTMP.gameObject.SetActive(true);
             clanTMP.text = string.Format("Å¬·£ <color=#00FF00>{0}</color>", App.Data.Player.Clan);
         }
+    }
+
+    public void SetPlayerSkin()
+    {
+        humanAnim.SetTrigger(App.Data.Player.HumanSkinIndex.ToString());
+        oniAnim.SetTrigger(App.Data.Player.OniSkinIndex.ToString());
     }
 }
