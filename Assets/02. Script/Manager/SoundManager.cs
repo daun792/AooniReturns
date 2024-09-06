@@ -23,36 +23,11 @@ public class SoundManager : Manager
     {
         public bool isMuted;
 
-        public readonly float Calculated => isMuted ? 0f : 50f;
+        public readonly float Calculated => isMuted ? 0f : 0.5f;
 
         public VolumeData(bool _isMuted)
         {
             isMuted = _isMuted;
-        }
-    }
-
-    public class VolumeAccessor
-    {
-        readonly SoundManager Sound = App.Manager.Sound;
-
-        public bool BGM
-        {
-            get => Sound.BGMData.isMuted;
-            set
-            {
-                Sound.BGMData.isMuted = value;
-                Sound.SetBGMVolume();
-            }
-        }
-
-        public bool SFX
-        {
-            get => Sound.SFXData.isMuted;
-            set
-            {
-                Sound.SFXData.isMuted = value;
-                Sound.SetSFXVolume();
-            }
         }
     }
 
@@ -64,22 +39,15 @@ public class SoundManager : Manager
     [SerializeField] AudioSource bgmPlayer = null;
     [SerializeField] AudioSource sfxPlayer = null;
 
-    [Header("Audio Mixer")]
-    [SerializeField] AudioMixer mixer;
-
     Dictionary<string, AudioClip> dic_BGM;
     Dictionary<string, AudioClip> dic_SFX;
 
     private VolumeData BGMData;
     private VolumeData SFXData;
 
-    [HideInInspector] public VolumeAccessor Volume;
-
     protected override void Awake()
     {
         base.Awake();
-
-        Volume = new();
 
         dic_BGM = new Dictionary<string, AudioClip>();
         dic_SFX = new Dictionary<string, AudioClip>();
@@ -125,7 +93,6 @@ public class SoundManager : Manager
         bgmPlayer.clip = clip;
 
         bgmPlayer.Play();
-        bgmPlayer.DOFade(0.5f, 0.5f).SetEase(Ease.Linear);
     }
 
     public void ResumeBGM()
@@ -133,12 +100,11 @@ public class SoundManager : Manager
         if (bgmPlayer.isPlaying) return;
 
         bgmPlayer.Play();
-        bgmPlayer.DOFade(0.5f, 0.5f).SetEase(Ease.Linear);
     }
 
     public void StopBGM()
     {
-        bgmPlayer.DOFade(0f, 0.5f).OnComplete(() => bgmPlayer.Stop());
+        bgmPlayer.Stop();
     }
     #endregion
 
@@ -170,18 +136,15 @@ public class SoundManager : Manager
     #endregion
 
     #region Set Volume
-    private void SetBGMVolume() => SetVolume("BGM", BGMData.Calculated);
-    private void SetSFXVolume() => SetVolume("SFX", SFXData.Calculated);
-
-    private void SetVolume(string _param, float _value)
+    private void SetBGMVolume()
     {
-        if (_value < 0.001f)
-            _value = 0.00001f;
-
-        mixer.SetFloat(_param, ValueToDecibel(_value));
+        bgmPlayer.volume = BGMData.Calculated;
     }
 
-    private float ValueToDecibel(float value) => Mathf.Log10(value * 2) * 20;
+    private void SetSFXVolume()
+    {
+        sfxPlayer.volume = SFXData.Calculated;
+    }
     #endregion
 
     #region Set Mute

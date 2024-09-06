@@ -45,13 +45,13 @@ public class OptionPanel : UIBase
 
     private void OnClickBGM()
     {
-        var isMute = App.Manager.Sound.IsMuted(AudioType.BGM);
+        var isMute = App.Manager.Sound.ToggleMute(AudioType.BGM);
         SetSoundText(bgmTMP, isMute);
     }
 
     private void OnClickSFX()
     {
-        var isMute = App.Manager.Sound.IsMuted(AudioType.SFX);
+        var isMute = App.Manager.Sound.ToggleMute(AudioType.SFX);
         SetSoundText(sfxTMP, isMute);
     }
 

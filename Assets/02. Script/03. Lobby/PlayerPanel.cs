@@ -29,6 +29,8 @@ public class PlayerPanel : UIBase
 
         SetLevelTMP();
         SetClanTMP();
+
+        SetPlayerSkin();
     }
 
     private void SetLevelTMP()

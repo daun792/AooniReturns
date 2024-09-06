@@ -6792,8 +6792,8 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1153861787}
   - {fileID: 1003646619}
+  - {fileID: 1153861787}
   m_Father: {fileID: 1039015676}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
@@ -8733,6 +8733,8 @@ MonoBehaviour:
   levelTMP: {fileID: 1245884440}
   expTMP: {fileID: 1430738406}
   expImg: {fileID: 78321844}
+  humanAnim: {fileID: 1003646620}
+  oniAnim: {fileID: 1153861788}
 --- !u!1 &1040487788
 GameObject:
   m_ObjectHideFlags: 0
@@ -10691,10 +10693,10 @@ MonoBehaviour:
   controlPositionBtn: {fileID: 807041738}
   crossKeysBtn: {fileID: 2014345560}
   continueBtn: {fileID: 477666968}
-  bgmTMP: {fileID: 525933140}
-  sfxTMP: {fileID: 1494428543}
-  controlPositionTMP: {fileID: 569370642}
-  crossKeysTMP: {fileID: 1009100845}
+  bgmTMP: {fileID: 1294038778}
+  sfxTMP: {fileID: 1682769556}
+  controlPositionTMP: {fileID: 1270571042}
+  crossKeysTMP: {fileID: 607272769}
 --- !u!1 &1294038776
 GameObject:
   m_ObjectHideFlags: 0
