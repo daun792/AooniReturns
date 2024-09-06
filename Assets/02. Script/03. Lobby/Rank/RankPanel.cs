@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class RankPanel : UIBase
 {
     [SerializeField] Button[] rankBtns;
-    [SerializeField] GameObject[] rankDetailBacks;
+    [SerializeField] RankDetailBack[] rankDetailBacks;
     [SerializeField] Button backBtn;
 
     public override UIState GetUIState() => UIState.Rank;
@@ -22,6 +22,7 @@ public class RankPanel : UIBase
             int index = i;
 
             rankBtns[index].onClick.AddListener(() => OnClickRank(index));
+            rankDetailBacks[index].Init();
         }
     }
 
@@ -43,11 +44,11 @@ public class RankPanel : UIBase
         {
             if (i == _index)
             {
-                rankDetailBacks[i].SetActive(true);
+                rankDetailBacks[i].gameObject.SetActive(true);
             }
             else
             {
-                rankDetailBacks[i].SetActive(false);
+                rankDetailBacks[i].gameObject.SetActive(false);
             }
         }
     }

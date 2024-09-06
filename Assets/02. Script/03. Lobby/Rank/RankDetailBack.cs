@@ -23,7 +23,15 @@ public class RankDetailBack : MonoBehaviour
 
     public void Init()
     {
+        App.Data.Player.GetLeaderboard(GetStatisticName, 100,
+        (result) =>
+        {
+            for (int i = 0; i < result.Count; i++)
+            {
+                playerBacks[i].Init(result[i], type);
+            }
 
+        }, null);
     }
 
     private string GetStatisticName => type switch

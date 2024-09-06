@@ -95,6 +95,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d334c5969ff3b8c4d8fa2cf39482c18b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  medalImg: {fileID: 7196553775020413903}
+  rankTMP: {fileID: 6802685183125405023}
+  levelTMP: {fileID: 361052003521610799}
+  nickTMP: {fileID: 4613250733654244433}
+  scoreTMP: {fileID: 8763275146016374327}
 --- !u!1 &6085273548175488353
 GameObject:
   m_ObjectHideFlags: 0
@@ -584,7 +589,7 @@ GameObject:
   - component: {fileID: 2169261775301752569}
   - component: {fileID: 8763275146016374327}
   m_Layer: 5
-  m_Name: Txt_EXP
+  m_Name: Txt_Score
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
