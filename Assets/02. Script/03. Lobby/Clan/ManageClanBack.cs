@@ -1,0 +1,51 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
+
+public class ManageClanBack : MonoBehaviour
+{
+    [SerializeField] TextMeshProUGUI clanNameTMP;
+    [SerializeField] TMP_InputField inviteNickInput;
+    [SerializeField] Button inviteBtn;
+    [SerializeField] Button deleteBtn;
+
+    private void Awake()
+    {
+        inviteBtn.onClick.AddListener(OnClickInvite);
+        deleteBtn.onClick.AddListener(OnClickDelete);
+    }
+
+    private void OnEnable()
+    {
+        inviteNickInput.text = string.Empty;
+    }
+
+    private void OnClickInvite()
+    {
+        inviteNickInput.text = string.Empty;
+    }
+
+    private void OnClickDelete()
+    {
+        App.Data.Clan.DeleteClan(null,
+        (error) =>
+        {
+            Debug.LogError("Failed to get clan name: " + error);
+        });
+    }
+
+    public void SetClanName()
+    {
+        App.Data.Clan.GetClanName(
+       (clanName) =>
+       {
+           clanNameTMP.text = string.Format("Å¬·£ <color=#00FF00>{0}</color>", clanName);
+       },
+       (error) =>
+       {
+           Debug.LogError("Failed to get clan name: " + error);
+       });
+    }
+}

@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   path: data.Aooni
   sound:
-    Master: 1
-    BGM: 1
-    SFX: 1
+    Master: 0.5
+    BGM: 0.5
+    SFX: 0.5
     MasterMuted: 0
     BGMMuted: 0
     SFXMuted: 0

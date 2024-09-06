@@ -8,7 +8,11 @@ public class ClanData : Data
 {
     public void GetClanName(Action<string> onSuccess, Action<EPlayerDataError> onError)
     {
-        if (string.IsNullOrEmpty(App.Data.Player.Clan)) return;
+        if (string.IsNullOrEmpty(App.Data.Player.Clan))
+        {
+            onSuccess?.Invoke(string.Empty);
+            return;
+        }
 
         var request = new GetGroupRequest
         {
@@ -33,43 +37,48 @@ public class ClanData : Data
         });
     }
 
-    public void CheckIfPlayerIsClanOwner(Action<bool> onSuccess, Action<EPlayerDataError> onError)
+    public void CheckPlayerIsClanOwner(Action<bool> onSuccess, Action<EPlayerDataError> onError)
     {
-        if (string.IsNullOrEmpty(App.Data.Player.Clan)) return;
-
-        var request = new GetGroupRequest
+        if (string.IsNullOrEmpty(App.Data.Player.Clan))
         {
-            Group = new EntityKey
-            {
-                Id = App.Data.Player.Clan,
-                Type = "group"
+            onSuccess?.Invoke(false);
+            return;
+        }
+
+        var request = new ListGroupMembersRequest
+        {
+            Group = new EntityKey 
+            { 
+                Id = App.Data.Player.Clan, 
+                Type = "group" 
             }
         };
 
-        PlayFabGroupsAPI.GetGroup(request,
+        PlayFabGroupsAPI.ListGroupMembers(request,
         result =>
         {
-            string ownerId = result.Group.Id;
+            string adminRoleId = "admins";
 
-            if (ownerId == PlayFabSettings.staticPlayer.EntityId)
+            foreach (var member in result.Members)
             {
-                Debug.Log("The player is the owner of the clan.");
-                onSuccess?.Invoke(true);
-            }
-            else
-            {
-                Debug.Log("The player is not the owner of the clan.");
-                onSuccess?.Invoke(false);
+                if (member.RoleId == adminRoleId)
+                {
+                    string ownerId = member.Members[0].Key.Id;
+                    var isOwner = ownerId.Equals(PlayFabSettings.staticPlayer.EntityId);
+                    Debug.Log($"Clan Owner Entity ID: {ownerId}");
+                    onSuccess?.Invoke(isOwner);
+                    return;
+                }
             }
         },
         error =>
         {
-            Debug.LogError($"Failed to get clan information. Error: {error.GenerateErrorReport()}");
-            onError?.Invoke(EPlayerDataError.GetGroupFailed);
+            Debug.LogError($"Failed to get clan members. Error: {error.GenerateErrorReport()}");
+            onError?.Invoke(EPlayerDataError.ListGroupMembersFailed);
         });
     }
 
-    private void CreateClan(string clanName, Action<string> onSuccess, Action<EPlayerDataError> onError)
+    public void CreateClan(string clanName, Action<string> onSuccess, Action<EPlayerDataError> onError)
     {
         if (!string.IsNullOrEmpty(App.Data.Player.Clan)) return;
 
@@ -167,13 +176,17 @@ public class ClanData : Data
         });
     }
 
-    public void GetClanMembers(string groupId, Action<List<EntityMemberRole>> onSuccess, Action<EPlayerDataError> onError)
+    public void GetClanMembers(Action<List<EntityMemberRole>> onSuccess, Action<EPlayerDataError> onError)
     {
         if (string.IsNullOrEmpty(App.Data.Player.Clan)) return;
 
         var request = new ListGroupMembersRequest
         {
-            Group = new EntityKey { Id = groupId, Type = "group" }
+            Group = new EntityKey 
+            { 
+                Id = App.Data.Player.Clan, 
+                Type = "group" 
+            }
         };
 
         PlayFabGroupsAPI.ListGroupMembers(request,

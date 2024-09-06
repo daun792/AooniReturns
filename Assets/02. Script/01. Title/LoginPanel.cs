@@ -24,9 +24,9 @@ public class LoginPanel : UIBase
     {
         base.ClosePanel();
 
-        IDInput.text = "";
+        IDInput.text = string.Empty;
 
-        passwordInput.text = "";
+        passwordInput.text = string.Empty;
         passwordInput.contentType = TMP_InputField.ContentType.Password;
     }
 

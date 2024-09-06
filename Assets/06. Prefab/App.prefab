@@ -58,7 +58,6 @@ MonoBehaviour:
   SFX: []
   bgmPlayer: {fileID: 534742487641631985}
   sfxPlayer: {fileID: 3476820470611672230}
-  mixer: {fileID: 24100000, guid: aa6df7286e2d04240afb1044e439c74c, type: 2}
 --- !u!1 &932288685164607278
 GameObject:
   m_ObjectHideFlags: 0
@@ -91,8 +90,9 @@ Transform:
   m_Children:
   - {fileID: 86671216465689984}
   - {fileID: 3095910842331545430}
-  - {fileID: 5767906284574784590}
   - {fileID: 4332880119319262012}
+  - {fileID: 5767906284574784590}
+  - {fileID: 5704205864842813800}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5712135517774297468
@@ -324,6 +324,50 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Default: {fileID: 11400000, guid: 9459d941f1bfa2a45b139b39abd690ac, type: 2}
+--- !u!1 &6071777070170200950
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5704205864842813800}
+  - component: {fileID: 8153510306046363584}
+  m_Layer: 0
+  m_Name: ClanData
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5704205864842813800
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6071777070170200950}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5372356222660151268}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8153510306046363584
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6071777070170200950}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69f4e02f4df75ab44a261f04f3df2873, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6714351404675928503
 GameObject:
   m_ObjectHideFlags: 0
