@@ -33,6 +33,7 @@ public class ManageClanBack : MonoBehaviour
         ()=>
         {
             App.Manager.UI.GetPanel<ClanPanel>().CheckHasClan();
+            App.Manager.UI.GetPanel<PlayerPanel>().SetPlayerClan();
         },
         (error) =>
         {

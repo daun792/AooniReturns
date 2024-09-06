@@ -32,6 +32,7 @@ public class MyClanBack : MonoBehaviour
         App.Data.Clan.LeaveClan(()=>
         {
             App.Manager.UI.GetPanel<ClanPanel>().CheckHasClan();
+            App.Manager.UI.GetPanel<PlayerPanel>().SetPlayerClan();
         }, null);
     }
 
@@ -43,6 +44,7 @@ public class MyClanBack : MonoBehaviour
         (result) =>
         {
             App.Manager.UI.GetPanel<ClanPanel>().CheckHasClan();
+            App.Manager.UI.GetPanel<PlayerPanel>().SetPlayerClan();
         }, null);
     }
 

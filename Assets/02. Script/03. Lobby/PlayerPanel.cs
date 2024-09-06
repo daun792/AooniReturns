@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -27,13 +25,13 @@ public class PlayerPanel : UIBase
         rankTMP.text = string.Format("전체 랭킹 <color=#00FF00>{0}</color>", 1);
         goldTMP.text = App.Data.Player.Currency.ToString();
 
-        SetLevelTMP();
-        SetClanTMP();
+        SetPlayerLevel();
+        SetPlayerClan();
 
         SetPlayerSkin();
     }
 
-    private void SetLevelTMP()
+    private void SetPlayerLevel()
     {
         var result = CalculateLevel(App.Data.Player.ExperiencePoints);
 
@@ -60,7 +58,7 @@ public class PlayerPanel : UIBase
         return (currLevel, _totalExp, requiredExp);
     }
     
-    private void SetClanTMP()
+    public void SetPlayerClan()
     {
         if (string.IsNullOrEmpty(App.Data.Player.Clan))
         {
@@ -69,7 +67,12 @@ public class PlayerPanel : UIBase
         else
         {
             clanTMP.gameObject.SetActive(true);
-            clanTMP.text = string.Format("클랜 <color=#00FF00>{0}</color>", App.Data.Player.Clan);
+
+            App.Data.Clan.GetClanName(
+            (result) =>
+            {
+                clanTMP.text = string.Format("클랜 <color=#00FF00>{0}</color>", result);
+            }, null);
         }
     }
 

@@ -68,7 +68,7 @@ public class ClanMemberBack : MonoBehaviour
                 }
                 else
                 {
-                rankTMP.text = string.Format("{0}À§", result);
+                    rankTMP.text = string.Format("{0}À§", result);
                 }
             },
             (error) =>
