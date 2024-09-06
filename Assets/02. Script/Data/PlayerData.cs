@@ -15,6 +15,13 @@ public enum EPlayerDataError
     InvalidNickname,
     InvalidNicknameLength,
     LoadLeaderboardFailed,
+
+    CreateGroupFailed,
+    JoinGroupFailed,
+    LeaveGroupFailed,
+    ListGroupMembersFailed,
+    GetGroupFailed,
+    DeleteGroupFailed
 }
 
 public class PlayerData : Data

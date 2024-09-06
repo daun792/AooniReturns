@@ -20,6 +20,7 @@ public class App : Singleton<App>
     private TitleData title;
     private PlayerData player;
     private SettingData setting;
+    private ClanData clan;
 
     #region Getter Setter
     public partial class Manager
@@ -34,7 +35,9 @@ public class App : Singleton<App>
     {
         public static SettingData Setting => instance.setting;
         public static TitleData Title => instance.title;
+
         public static PlayerData Player => instance.player;
+        public static ClanData Clan => instance.clan;
     }
     #endregion
 
@@ -53,7 +56,6 @@ public class App : Singleton<App>
         DOTween.KillAll();
         UnityEngine.SceneManagement.SceneManager.LoadScene((int)sceneName);
     }
-
 
     #region Get View As T
     public static T ViewManagerAs<T>(object manager) where T : MonoBehaviour
