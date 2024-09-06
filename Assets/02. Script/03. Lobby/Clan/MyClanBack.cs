@@ -1,4 +1,4 @@
-using System.Collections;
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,18 +12,27 @@ public class MyClanBack : MonoBehaviour
     [Header("HasClanBack")]
     [SerializeField] TextMeshProUGUI clanNameTMP;
     [SerializeField] Button outBtn;
-    [SerializeField] Transform clanMemberParent;
-    [SerializeField] GameObject clanMemberPrefab;
 
     [Header("NoClanBack")]
     [SerializeField] TMP_InputField createClanInput;
     [SerializeField] Button createBtn;
 
-    private bool isClanOwner;
+    private List<ClanMemberBack> memberBackList;
 
     private void Awake()
     {
+        outBtn.onClick.AddListener(OnClickOut);
         createBtn.onClick.AddListener(OnClickCreate);
+
+        memberBackList = GetComponentsInChildren<ClanMemberBack>(true).ToList();
+    }
+
+    private void OnClickOut()
+    {
+        App.Data.Clan.LeaveClan(()=>
+        {
+            App.Manager.UI.GetPanel<ClanPanel>().CheckHasClan();
+        }, null);
     }
 
     private void OnClickCreate()
@@ -47,7 +56,25 @@ public class MyClanBack : MonoBehaviour
             App.Data.Clan.GetClanName(
             (clanName) =>
             {
-                clanNameTMP.text = string.Format("클랜 <color=#00FF00>{0}</color>", clanName);
+              clanNameTMP.text = string.Format("클랜 <color=#00FF00>{0}</color>", clanName);
+            },
+            (error) =>
+            {
+                Debug.LogError("Failed to get clan name: " + error);
+            });
+
+            App.Data.Clan.GetClanMembers(
+            (result) =>
+            {
+                int index = 0;
+
+                foreach (var role in result)
+                {
+                    foreach (var member in role.Members)
+                    {
+                        memberBackList[index++].Init(member.Key.Id);
+                    }
+                }
             },
             (error) =>
             {
@@ -59,6 +86,5 @@ public class MyClanBack : MonoBehaviour
     public void SetActiveToIsClanOwner(bool _isOwner)
     {
         outBtn.gameObject.SetActive(!_isOwner);
-        isClanOwner = _isOwner;
     }
 }

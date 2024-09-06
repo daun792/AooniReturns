@@ -29,7 +29,11 @@ public class ManageClanBack : MonoBehaviour
 
     private void OnClickDelete()
     {
-        App.Data.Clan.DeleteClan(null,
+        App.Data.Clan.DeleteClan(
+        ()=>
+        {
+            App.Manager.UI.GetPanel<ClanPanel>().CheckHasClan();
+        },
         (error) =>
         {
             Debug.LogError("Failed to get clan name: " + error);
@@ -39,13 +43,13 @@ public class ManageClanBack : MonoBehaviour
     public void SetClanName()
     {
         App.Data.Clan.GetClanName(
-       (clanName) =>
-       {
-           clanNameTMP.text = string.Format("클랜 <color=#00FF00>{0}</color>", clanName);
-       },
-       (error) =>
-       {
-           Debug.LogError("Failed to get clan name: " + error);
-       });
+        (clanName) =>
+        {
+            clanNameTMP.text = string.Format("클랜 <color=#00FF00>{0}</color>", clanName);
+        },
+        (error) =>
+        {
+            Debug.LogError("Failed to get clan name: " + error);
+        });
     }
 }
