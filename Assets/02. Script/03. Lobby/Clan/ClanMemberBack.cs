@@ -55,10 +55,11 @@ public class ClanMemberBack : MonoBehaviour
                 isSuccess = false;
             });
 
-            GetMemberRank(playerID,
-            (result) =>
+            App.Data.Player.GetLeaderboardRank(playerID,
+            (result, isRanked) =>
             {
-                rankTMP.text = string.Format("{0}위", result + 1);
+                var rankText = isRanked ? string.Format("{0}위", result) : "순위권 외";
+                rankTMP.text = rankText;
             },
             (error) =>
             {
@@ -171,36 +172,5 @@ public class ClanMemberBack : MonoBehaviour
         }
 
         return currLevel;
-    }
-
-    private void GetMemberRank(string playFabId, Action<int> onSuccess, Action<PlayFabError> onError)
-    {
-        var request = new GetLeaderboardAroundPlayerRequest
-        {
-            StatisticName = "ExperiencePoints",
-            PlayFabId = playFabId,    
-            MaxResultsCount = 1      
-        };
-
-        PlayFabClientAPI.GetLeaderboardAroundPlayer(request,
-        result =>
-        {
-            if (result.Leaderboard != null && result.Leaderboard.Count > 0)
-            {
-                var entry = result.Leaderboard[0];
-                int rank = entry.Position; 
-                onSuccess?.Invoke(rank);
-            }
-            else
-            {
-                Debug.LogError("Leaderboard entry not found.");
-                onError?.Invoke(new PlayFabError { ErrorMessage = "Leaderboard entry not found." });
-            }
-        },
-        error =>
-        {
-            Debug.LogError($"Failed to get leaderboard around player. Error: {error.GenerateErrorReport()}");
-            onError?.Invoke(error);
-        });
     }
 }

@@ -56,16 +56,19 @@ public class RankPlayerBack : MonoBehaviour
             if (result.Data.ContainsKey("ExperiencePoints"))
             {
                 int.TryParse(result.Data["ExperiencePoints"].Value, out var exp);
+                Debug.Log(result.Data["ExperiencePoints"].Value);
                 onSuccess?.Invoke(exp);
+            }
+            else
+            {
+                Debug.LogError($"Failed to get user data for PlayFabId: {playFabId}. Error: LoadUserDataFailed");
             }
         },
         error =>
         {
             Debug.LogError($"Failed to get user data for PlayFabId: {playFabId}. Error: {error.GenerateErrorReport()}");
-            onError?.Invoke(EPlayerDataError.LoadUserDataFailed);
         });
     }
-
 
     private void SetLevelTMP(int _exp)
     {

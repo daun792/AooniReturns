@@ -31,6 +31,8 @@ public class PlayerData : Data
     private Dictionary<string, UserDataRecord> roData;
     private Dictionary<string, UserDataRecord> userData;
     public IReadOnlyDictionary<string, UserDataRecord> UserData => userData;
+    
+    public string PlayerID { get; private set; }
 
     private string nickName;
     private string clan;
@@ -74,6 +76,8 @@ public class PlayerData : Data
         result =>
         {
             var payload = result.InfoResultPayload;
+
+            PlayerID = payload.PlayerProfile.PlayerId;
 
             UpdatePlayerProfileInternal(payload.PlayerProfile, null, payload.UserReadOnlyData);
             UpdateUserDataInternal(payload.UserData);
@@ -275,7 +279,7 @@ public class PlayerData : Data
 
     #endregion
 
-    #region Title data (Clan, HumanSkinIndex, OniSkinIndex)
+    #region Title data (ExperiencePoints, Clan, Currency, HumanSkinIndex, OniSkinIndex)
 
     private void UpdateUserDataInternal(Dictionary<string, UserDataRecord> _userData)
     {
@@ -407,21 +411,9 @@ public class PlayerData : Data
             onError?.Invoke(EPlayerDataError.UpdateUserDataFailed);
         });
     }
+    #endregion
 
-    public void GetPlayerTitleData(Action _getTitleDataCallback, Action<EPlayerDataError> _errorHandler)
-    {
-        PlayFabClientAPI.GetUserData(new GetUserDataRequest(),
-        result =>
-        {
-            UpdateUserDataInternal(result.Data);
-            _getTitleDataCallback?.Invoke();
-        },
-        error =>
-        {
-            _errorHandler?.Invoke(EPlayerDataError.LoadUserDataFailed);
-        });
-    }
-
+    #region Leaderboard
     public void GetLeaderboard(string statisticName, int maxResultsCount, Action<List<PlayerLeaderboardEntry>> onSuccess, Action<EPlayerDataError> onError)
     {
         var request = new GetLeaderboardRequest
@@ -451,6 +443,33 @@ public class PlayerData : Data
         {
             onError?.Invoke(EPlayerDataError.LoadLeaderboardFailed);
         });
+    }
+
+    public void GetLeaderboardRank(string playFabId, Action<int, bool> onSuccess, Action<PlayFabError> onError)
+    {
+        var request = new GetLeaderboardAroundPlayerRequest
+        {
+            StatisticName = "ExperiencePoints",
+            PlayFabId = playFabId,
+            MaxResultsCount = 1
+        };
+
+        PlayFabClientAPI.GetLeaderboardAroundPlayer(request, result =>
+        {
+            if (result.Leaderboard != null && result.Leaderboard.Count > 0)
+            {
+                var playerRank = result.Leaderboard[0].Position;
+                onSuccess?.Invoke(playerRank, true); 
+            }
+            else
+            {
+                onSuccess?.Invoke(-1, false); 
+            }
+        },
+        error =>
+        {
+            onError?.Invoke(error); 
+    });
     }
     #endregion
 }

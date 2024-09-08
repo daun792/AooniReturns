@@ -22,11 +22,12 @@ public class PlayerPanel : UIBase
     {
         nickTMP.text = App.Data.Player.NickName;
         recordTMP.text = string.Format("{0}오니 / {1}히로시 / {2}생존", App.Data.Player.OniKills, App.Data.Player.HiroshiKills, App.Data.Player.SurvivalCount);
-        rankTMP.text = string.Format("전체 랭킹 <color=#00FF00>{0}</color>", 1);
+
         goldTMP.text = App.Data.Player.Currency.ToString();
 
         SetPlayerLevel();
         SetPlayerClan();
+        SetPlayerRank();
 
         SetPlayerSkin();
     }
@@ -74,6 +75,20 @@ public class PlayerPanel : UIBase
                 clanTMP.text = string.Format("클랜 <color=#00FF00>{0}</color>", result);
             }, null);
         }
+    }
+
+    public void SetPlayerRank()
+    {
+        App.Data.Player.GetLeaderboardRank(App.Data.Player.PlayerID, 
+        (rank, isRanked) =>
+        {
+            var rankText = isRanked ? rank.ToString() : "";
+            rankTMP.text = string.Format("전체 랭킹 <color=#00FF00>{0}</color>", rankText);
+        },
+        (error)=>
+        {
+            rankTMP.text = "전체 랭킹 <color=#00FF00>순위권 외</color>";
+        });
     }
 
     public void SetPlayerSkin()

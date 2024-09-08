@@ -37,25 +37,23 @@ public enum ELoadError
 
 public class TitleManager : ViewManager
 {
-    private readonly string defaultEmail = "@aooni.com";
+    [SerializeField] bool autoLogin;
 
-    private string userID;
+    private readonly string defaultEmail = "@aooni.com";
 
     private bool isConnectionBusy = false;
     private bool isLoggedIn = false;
-
-    private NetworkRunner runner;
 
     private void Start()
     {
         App.Manager.Sound.PlayBGM("BGM_Title");
         Application.targetFrameRate = 120;
 
-        runner = gameObject.AddComponent<NetworkRunner>();
-        runner.ProvideInput = true;
-
 #if UNITY_EDITOR
-        TryLogin("daun1124", "123456", null, null);
+        if (autoLogin)
+        {
+            TryLogin("daun1124", "123456", null, null);
+        }
 #endif
     }
 
@@ -110,7 +108,6 @@ public class TitleManager : ViewManager
         },
         (result) =>
         {
-            userID = result.PlayFabId;
             isConnectionBusy = false;
             isLoggedIn = true;
             _loginCallback();
@@ -150,11 +147,9 @@ public class TitleManager : ViewManager
             return;
         }
         isConnectionBusy = true;
-
-        // 타이틀 정보 불러옴 ->
+        
         App.Data.Title.LoadTitleData(() =>
         {
-            // 유저 정보 불러옴 ->
             App.Data.Player.GetPlayerData(() =>
             {
                 _loadDataCallback?.Invoke();
@@ -231,7 +226,7 @@ public class TitleManager : ViewManager
             return false;
         }
 
-        SIgnUp(ID, PW, Nick, () =>
+        SignUp(ID, PW, Nick, () =>
         {
             //App.UI.Title.GetPanel<AlertPanel>().ShowNotice("STR_NOTICE_CONPLETE_JOIN", () =>
             //{
@@ -243,7 +238,7 @@ public class TitleManager : ViewManager
         return true;
     }
 
-    private void SIgnUp(string ID, string PW, string nick,
+    private void SignUp(string ID, string PW, string nick,
         Action _signUpCallback,
         Action<ERegisterError> _signUpErrorHandler)
     {
