@@ -95,11 +95,17 @@ public class App : Singleton<App>
         return GetViewAs<LobbyManager>();
     }
 
-    public partial class View
+    public static GameManager GetGameManager()
+    {
+        return GetViewAs<GameManager>();
+    }
+
+    public partial class Manager
     {
         public static DeveloperManager Developer { get => GetDeveloperManager(); }
         public static TitleManager Title { get => GetTitleManager(); }
         public static LobbyManager Lobby { get => GetLobbyManager(); }
+        public static GameManager Game { get => GetGameManager(); }
     }
     #endregion
 
