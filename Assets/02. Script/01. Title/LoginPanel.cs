@@ -35,7 +35,7 @@ public class LoginPanel : UIBase
         var logID = IDInput.text;
         var logPW = passwordInput.text;
 
-        if (App.View.Title.TryLogin(logID, logPW, LoginErrorCallback, LoadErrorCallback))
+        if (App.Manager.Title.TryLogin(logID, logPW, LoginErrorCallback, LoadErrorCallback))
         {
             App.UI.Title.GetPanel<LoadingPanel>().OpenPanel();
         }

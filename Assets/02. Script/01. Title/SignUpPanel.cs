@@ -54,7 +54,7 @@ public class SignUpPanel : UIBase
         var regNick = nickInput.text;
         var regEmail = emailInput.text;
 
-        if (App.View.Title.TrySignUp(regID, regPW, regPWCheck, regNick, regEmail,
+        if (App.Manager.Title.TrySignUp(regID, regPW, regPWCheck, regNick, regEmail,
             SignUpErrorCallback, LoginErrorCallback, LoadErrorCallback))
         {
             ClosePanel();
