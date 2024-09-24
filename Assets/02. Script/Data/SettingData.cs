@@ -16,7 +16,7 @@ public struct SoundData
     public bool SFXMuted;
 }
 
-public class SettingData : Data
+public class SettingData : Manager
 {
     public struct GameData
     {

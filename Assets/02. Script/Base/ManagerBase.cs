@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public abstract class ManagerBase : MonoBehaviour
+public abstract class ManagerBase
 {
     protected static IEnumerable<FieldInfo> AppFieldInfo;
 
@@ -14,37 +14,24 @@ public abstract class ManagerBase : MonoBehaviour
         AppFieldInfo = typeof(App).GetFields(flag);
     }
 
-    protected abstract void Awake();
-
-    internal static void SetFieldValue(Type type, MonoBehaviour manager)
+    internal static FieldInfo SetFieldValue(Type type, MonoBehaviour manager)
     {
         var fields = AppFieldInfo.Where(field => field.FieldType.IsAssignableFrom(type));
         if (fields == null || fields.Count() != 1)
         {
             Debug.LogError($"Unresolved manager found. Type: {type.Name}");
-            return;
+            return null;
         }
 
         var targetField = fields.ElementAt(0);
         targetField.SetValue(App.instance, manager);
+        return targetField;
     }
 
-    internal static void SetFieldValue(MonoBehaviour manager)
+    internal static FieldInfo SetFieldValue(MonoBehaviour manager)
     {
-        SetFieldValue(manager.GetType(), manager);
+        return SetFieldValue(manager.GetType(), manager);
     }
-}
-
-
-/// <summary>
-/// Base data manager class
-/// By calling Awake function, manager will be registered to App(manager router).
-/// Manager will not be unregistered on destroy. 
-/// Instead it will be overriden on new manager (of same type) appears. 
-/// </summary>
-public class Data : ManagerBase
-{
-    protected override void Awake() => SetFieldValue(this);
 }
 
 /// <summary>
@@ -54,12 +41,83 @@ public class Data : ManagerBase
 /// Manager will not be unregistered on destroy. 
 /// Instead it will be overriden on new manager (of same type) appears.
 /// </summary>
-public class Manager : ManagerBase
+public class Manager : Fusion.Behaviour
 {
-    protected override void Awake() => SetFieldValue(this);
+    private FieldInfo fieldInfo;
+
+    protected virtual void Awake()
+    {
+        fieldInfo = ManagerBase.SetFieldValue(this);
+    }
+
+    protected virtual void OnDestroy()
+    {
+        if (fieldInfo == null)
+        {
+            return;
+        }
+
+        fieldInfo.SetValue(App.instance, null);
+    }
+}
+
+public class SimManager : Fusion.SimulationBehaviour
+{
+    private FieldInfo fieldInfo;
+
+    protected virtual void Awake()
+    {
+        fieldInfo = ManagerBase.SetFieldValue(this);
+        //App.Manager.Network.Runner.AddGlobal(this);
+    }
+
+    protected virtual void OnDestroy()
+    {
+        if (fieldInfo == null)
+        {
+            return;
+        }
+
+        fieldInfo.SetValue(App.instance, null);
+    }
 }
 
 public class ViewManager : Fusion.Behaviour
 {
-    protected virtual void Awake() => ManagerBase.SetFieldValue(typeof(ViewManager), this);
+    private FieldInfo fieldInfo;
+
+    protected virtual void Awake()
+    {
+        fieldInfo = ManagerBase.SetFieldValue(this);
+    }
+
+    protected virtual void OnDestroy()
+    {
+        if (fieldInfo == null)
+        {
+            return;
+        }
+
+        fieldInfo.SetValue(App.instance, null);
+    }
+}
+
+public class NetManager : Fusion.NetworkBehaviour
+{
+    private FieldInfo fieldInfo;
+
+    protected virtual void Awake()
+    {
+        fieldInfo = ManagerBase.SetFieldValue(this);
+    }
+
+    protected virtual void OnDestroy()
+    {
+        if (fieldInfo == null)
+        {
+            return;
+        }
+
+        fieldInfo.SetValue(App.instance, null);
+    }
 }

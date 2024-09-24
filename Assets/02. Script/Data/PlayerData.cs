@@ -24,7 +24,7 @@ public enum EPlayerDataError
     DeleteGroupFailed
 }
 
-public class PlayerData : Data
+public class PlayerData : Manager
 {
     private string DefaultNick => $"아오오니{new Random().Next(1000, 10000)}";
 

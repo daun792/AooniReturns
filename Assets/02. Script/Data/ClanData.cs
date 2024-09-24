@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ClanData : Data
+public class ClanData : Manager
 {
     public void GetClanName(Action<string> onSuccess, Action<EPlayerDataError> onError)
     {

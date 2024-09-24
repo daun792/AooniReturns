@@ -16,11 +16,14 @@ public class App : Singleton<App>
     private UIManager ui;
 
     private SoundManager sound;
+    private NetworkManager network;
+    private PlayerManager player;
+    private GameManager game;
 
-    private TitleData title;
-    private PlayerData player;
-    private SettingData setting;
-    private ClanData clan;
+    private TitleData titleData;
+    private PlayerData playerData;
+    private SettingData settingData;
+    private ClanData clanData;
 
     #region Getter Setter
     public partial class Manager
@@ -29,15 +32,18 @@ public class App : Singleton<App>
         public static ViewManager View => instance.view;
 
         public static SoundManager Sound => instance.sound;
+        public static NetworkManager Network => instance.network;
+        public static PlayerManager Player => instance.player;
+        public static GameManager Game => instance.game;
     }
 
     public partial class Data
     {
-        public static SettingData Setting => instance.setting;
-        public static TitleData Title => instance.title;
+        public static SettingData Setting => instance.settingData;
+        public static TitleData Title => instance.titleData;
 
-        public static PlayerData Player => instance.player;
-        public static ClanData Clan => instance.clan;
+        public static PlayerData Player => instance.playerData;
+        public static ClanData Clan => instance.clanData;
     }
     #endregion
 
@@ -95,17 +101,11 @@ public class App : Singleton<App>
         return GetViewAs<LobbyManager>();
     }
 
-    public static GameManager GetGameManager()
-    {
-        return GetViewAs<GameManager>();
-    }
-
     public partial class Manager
     {
         public static DeveloperManager Developer { get => GetDeveloperManager(); }
         public static TitleManager Title { get => GetTitleManager(); }
         public static LobbyManager Lobby { get => GetLobbyManager(); }
-        public static GameManager Game { get => GetGameManager(); }
     }
     #endregion
 
@@ -120,10 +120,16 @@ public class App : Singleton<App>
         return GetUIAs<LobbyUIManager>();
     }
 
+    public static GameUIManager GetGameUIManager()
+    {
+        return GetUIAs<GameUIManager>();
+    }
+
     public class UI
     {
         public static TitleUIManager Title { get => GetTitleUIManager(); }
         public static LobbyUIManager Lobby { get => GetLobbyUIManager(); }
+        public static GameUIManager Game { get => GetGameUIManager(); }
     }
     #endregion
 }

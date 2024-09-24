@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class TitleData : Data
+public class TitleData : Manager
 {
     public Dictionary<string, ShopData> shopDatas = new();
 
