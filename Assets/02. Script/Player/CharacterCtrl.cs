@@ -10,15 +10,12 @@ public class CharacterCtrl : NetworkBehaviour
 {
     [Header("Player Settings")]
     [SerializeField] float DefaultSpeed = 4.5f;
-    [SerializeField] float RunSpeed = 6f;
-    [SerializeField] float RotateSpeed = 0.05f;
 
     [Header("Joystick Settings")]
     public JoystickPanel joystick;
     public float joystickSensitivity = 1f;
 
     // networked values
-    [Networked] float animSpeed { get; set; }
     [Networked] float speed { get; set; }
     [Networked] bool IsCaught { get; set; }
     [Networked] public bool Targetable { get; private set; } = true;
@@ -30,7 +27,7 @@ public class CharacterCtrl : NetworkBehaviour
     public bool Escaped { get; set; } = false;
 
     private Rigidbody2D rb2d;
-    //private Animator animCtrl;
+    [SerializeField] private Animator animCtrl;
 
     private TweenerCore<float, float, FloatOptions> speedTween;
     private float speedTarget;
@@ -68,7 +65,6 @@ public class CharacterCtrl : NetworkBehaviour
     private void Start()
     {
         rb2d = GetComponent<Rigidbody2D>();
-        //animCtrl = GetComponent<Animator>();
 
         App.Manager.Player.SubmitPlayer(this);
         joystick = App.UI.Game.GetPanel<JoystickPanel>();
@@ -109,24 +105,22 @@ public class CharacterCtrl : NetworkBehaviour
 
         var dir = new Vector2(xDir, yDir);
 
-        Debug.Log(dir);
         if (dir == Vector2.zero)
         {
+            animCtrl.SetBool("isWalk", false);
+
             Speed = 0f;
-            animSpeed = 0f;
-            //animCtrl?.SetFloat("speed", animSpeed);
+            rb2d.velocity = Vector2.zero;
             return;
         }
 
+        animCtrl.SetBool("isWalk", true);
+        animCtrl.SetFloat("MoveX", xDir);
+        animCtrl.SetFloat("MoveY", yDir);
+
         Speed = DefaultSpeed;
-        animSpeed = 1;
 
         rb2d.velocity = Speed * dir.normalized;
-
-        if (dir != Vector2.zero)
-        {
-            transform.right = dir;
-        }
     }
     #endregion
 

@@ -181,6 +181,7 @@ GameObject:
   - component: {fileID: 4526739762427506985}
   - component: {fileID: 9194704116235038489}
   - component: {fileID: 6745093569589246052}
+  - component: {fileID: 5958455807564152938}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -238,14 +239,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9458022f074eb44cbe247152b998d8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DefaultSpeed: 4.5
-  RunSpeed: 6
-  RotateSpeed: 0.05
+  DefaultSpeed: 6
   joystick: {fileID: 0}
   joystickSensitivity: 1
   _Targetable: 1
   _IsBusted: 0
   _Escaped: 0
+  animCtrl: {fileID: 3527498517120926763}
 --- !u!114 &9194704116235038489
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -289,6 +289,41 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!58 &5958455807564152938
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8290601803686028534}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0.2}
+  serializedVersion: 2
+  m_Radius: 0.2
 --- !u!1001 &1728618497561483940
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -340,6 +375,10 @@ PrefabInstance:
     - target: {fileID: 8834954020503639879, guid: 7aad42f75a2286a4abf3105b7f079daa, type: 3}
       propertyPath: m_Name
       value: Oni
+      objectReference: {fileID: 0}
+    - target: {fileID: 8834954020503639879, guid: 7aad42f75a2286a4abf3105b7f079daa, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -411,5 +450,10 @@ PrefabInstance:
 --- !u!4 &1323068878178937558 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4908274265018316735, guid: a7cdead2fa7626042ace5c71d2b4d723, type: 3}
+  m_PrefabInstance: {fileID: 6215474716503793001}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &3527498517120926763 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 7401099072856430914, guid: a7cdead2fa7626042ace5c71d2b4d723, type: 3}
   m_PrefabInstance: {fileID: 6215474716503793001}
   m_PrefabAsset: {fileID: 0}
