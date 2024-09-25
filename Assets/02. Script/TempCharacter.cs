@@ -6,7 +6,7 @@ using System.Collections;
 using System.Linq;
 using UnityEngine;
 
-public class CharacterCtrl : NetworkBehaviour
+public class TempCharacter : MonoBehaviour
 {
     [Header("Player Settings")]
     [SerializeField] float DefaultSpeed = 4.5f;
@@ -18,19 +18,12 @@ public class CharacterCtrl : NetworkBehaviour
     public float joystickSensitivity = 1f;
 
     // networked values
-    [Networked] float animSpeed { get; set; }
-    [Networked] float speed { get; set; }
-    [Networked] bool IsCaught { get; set; }
-    [Networked] public bool Targetable { get; private set; } = true;
-
-    [Networked, OnChangedRender(nameof(SaveCurrentInfo))]
-    public bool IsBusted { get; private set; } = false;
-
-    [Networked, OnChangedRender(nameof(OnEscape))]
-    public bool Escaped { get; set; } = false;
+    float animSpeed { get; set; }
+    float speed { get; set; }
+    bool IsCaught { get; set; }
+    public bool Targetable { get; private set; } = true;
 
     private Rigidbody2D rb2d;
-    //private Animator animCtrl;
 
     private TweenerCore<float, float, FloatOptions> speedTween;
     private float speedTarget;
@@ -68,36 +61,10 @@ public class CharacterCtrl : NetworkBehaviour
     private void Start()
     {
         rb2d = GetComponent<Rigidbody2D>();
-        //animCtrl = GetComponent<Animator>();
-
-        App.Manager.Player.SubmitPlayer(this);
-        joystick = App.UI.Game.GetPanel<JoystickPanel>();
-    }
-
-    public override void Spawned()
-    {
-        if (!HasStateAuthority)
-        {
-            Object.RequestStateAuthority();
-        }
     }
 
     private void FixedUpdate()
     {
-        //if (animCtrl == null)
-        //{
-        //    return;
-        //}
-
-        //animCtrl.SetFloat("speed", animSpeed);
-
-        CalculatePosition();
-    }
-
-    public override void FixedUpdateNetwork()
-    {
-        if (!HasStateAuthority || IsCaught || Escaped) return;
-
         CalculatePosition();
     }
 
@@ -114,7 +81,6 @@ public class CharacterCtrl : NetworkBehaviour
         {
             Speed = 0f;
             animSpeed = 0f;
-            //animCtrl?.SetFloat("speed", animSpeed);
             return;
         }
 
@@ -133,15 +99,5 @@ public class CharacterCtrl : NetworkBehaviour
     private void SaveCurrentInfo()
     {
         // 네트워크 동기화 로직
-    }
-
-    private void OnEscape()
-    {
-        if (!HasStateAuthority)
-        {
-            return;
-        }
-
-        SaveCurrentInfo();
     }
 }

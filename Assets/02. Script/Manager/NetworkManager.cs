@@ -7,10 +7,11 @@ using Fusion.Photon.Realtime;
 
 public enum EScene : byte
 {
-    Title = 0,
-    Lobby = 1,
-    Game = 2,
-    Result = 3,
+    Title = 1,
+    Lobby = 3,
+    Ready = 4,
+    Game = 5,
+    Result = 6,
 }
 
 [RequireComponent(typeof(INetworkSceneManager), typeof(INetworkObjectProvider))]
@@ -48,7 +49,7 @@ public class NetworkManager : Manager
     public void LeaveMatch(Action _onComplete = null)
     {
         netRunner.Shutdown();
-        SceneManager.LoadScene((int)EScene.Title);
+        SceneManager.LoadScene((int)EScene.Lobby);
 
         try { _onComplete?.Invoke(); }
         catch (Exception error)
@@ -101,7 +102,7 @@ public class NetworkManager : Manager
             yield break;
         }
 
-        SceneManager.LoadScene((int)EScene.Lobby);
+        SceneManager.LoadScene((int)EScene.Ready);
 
         try { _onComplete?.Invoke(); }
         catch (Exception error)
@@ -135,7 +136,7 @@ public class NetworkManager : Manager
             yield break;
         }
 
-        SceneManager.LoadScene((int)EScene.Lobby);
+        SceneManager.LoadScene((int)EScene.Ready);
 
         try { _onComplete?.Invoke(); }
         catch (Exception error)

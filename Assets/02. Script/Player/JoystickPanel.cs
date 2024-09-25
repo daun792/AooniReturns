@@ -39,7 +39,8 @@ public class JoystickPanel : UIBase, IPointerDownHandler, IDragHandler, IPointer
 
     private Vector2 input = Vector2.zero;
 
-    public override void Init()
+    public override void Init() { }
+    private void Awake()
     {
         HandleRange = handleRange;
         DeadZone = deadZone;

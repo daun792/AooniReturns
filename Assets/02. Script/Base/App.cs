@@ -15,6 +15,8 @@ public class App : Singleton<App>
     private ViewManager view;
     private UIManager ui;
 
+    private ReadyManager ready;
+
     private SoundManager sound;
     private NetworkManager network;
     private PlayerManager player;
@@ -30,6 +32,8 @@ public class App : Singleton<App>
     {
         public static UIManager UI => instance.ui;
         public static ViewManager View => instance.view;
+
+        public static ReadyManager Ready => instance.ready;
 
         public static SoundManager Sound => instance.sound;
         public static NetworkManager Network => instance.network;

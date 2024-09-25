@@ -68,7 +68,7 @@ public class SimManager : Fusion.SimulationBehaviour
     protected virtual void Awake()
     {
         fieldInfo = ManagerBase.SetFieldValue(this);
-        //App.Manager.Network.Runner.AddGlobal(this);
+        App.Manager.Network.Runner.AddGlobal(this);
     }
 
     protected virtual void OnDestroy()
