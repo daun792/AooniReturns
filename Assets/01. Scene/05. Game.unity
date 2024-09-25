@@ -82447,9 +82447,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b04d95c561c88c941a54f0b99727e219, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  netPlayerObject: {fileID: 0}
+  netPlayerObject: {fileID: 6409362478292922955, guid: b5a5d87f25ca40d47819b61cd6770e9e, type: 3}
   respawnPos: {fileID: 262029415}
   _GameOver: 0
+  spawnPositions:
+  - {fileID: 262029415}
 --- !u!4 &1025591325
 Transform:
   m_ObjectHideFlags: 0

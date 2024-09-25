@@ -9,8 +9,8 @@ public class ReadyManager : SimManager, IPlayerLeft
     [SerializeField] NetworkObject playerPrefab;
 
     [Header("Panel Buttons")]
-    [SerializeField] Button btn_GameStart;
-    [SerializeField] Button btn_GameExit;
+    [SerializeField] Button startBtn;
+    [SerializeField] Button exitBtn;
     [SerializeField] GameObject loadingPanel;
 
     private Dictionary<PlayerRef, NetworkObject> playerList;
@@ -20,17 +20,17 @@ public class ReadyManager : SimManager, IPlayerLeft
         playerList = new(4);
         Runner.SpawnAsync(playerPrefab);
 
-        //btn_GameStart.onClick.AddListener(StartGameBtnEvent);
-        //btn_GameExit.onClick.AddListener(ExitGameBtnEvent);
+        startBtn.onClick.AddListener(OnClickStart);
+        exitBtn.onClick.AddListener(OnClickExit);
     }
 
-    private void StartGameBtnEvent()
+    private void OnClickStart()
     {
         App.Manager.Network.StartGame();
         loadingPanel.SetActive(true);
     }
 
-    private void ExitGameBtnEvent()
+    private void OnClickExit()
     {
         App.Manager.Network.LeaveMatch();
     }

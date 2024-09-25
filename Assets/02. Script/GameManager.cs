@@ -19,7 +19,7 @@ public class GameManager : NetManager
     private NetworkObject myPlayerObject;
     public int[] RandomNum { get; private set; }
 
-    private List<Transform> spawnPositions;
+    public List<Transform> spawnPositions;
 
     protected override void Awake()
     {
@@ -28,30 +28,30 @@ public class GameManager : NetManager
         InitializeSpawnPositions();
     }
 
-    private void GenerateRandomNumber()
-    {
-        int randomNumber = Random.Range(10000, 100000); // Generates a number between 10000 and 99999
-        string randomNumberStr = randomNumber.ToString();
+    //private void GenerateRandomNumber()
+    //{
+    //    int randomNumber = Random.Range(10000, 100000); // Generates a number between 10000 and 99999
+    //    string randomNumberStr = randomNumber.ToString();
 
-        Debug.LogError(randomNumber);
+    //    Debug.LogError(randomNumber);
 
-        RandomNum = new int[randomNumberStr.Length];
+    //    RandomNum = new int[randomNumberStr.Length];
 
-        for (int i = 0; i < randomNumberStr.Length; i++)
-        {
-            RandomNum[i] = int.Parse(randomNumberStr[i].ToString());
-        }
+    //    for (int i = 0; i < randomNumberStr.Length; i++)
+    //    {
+    //        RandomNum[i] = int.Parse(randomNumberStr[i].ToString());
+    //    }
 
-        RPC_GenerateRandomNumber(RandomNum);
-    }
+    //    RPC_GenerateRandomNumber(RandomNum);
+    //}
 
-    [Rpc]
-    private void RPC_GenerateRandomNumber(int[] _rands)
-    {
-        RandomNum = _rands;
+    //[Rpc]
+    //private void RPC_GenerateRandomNumber(int[] _rands)
+    //{
+    //    RandomNum = _rands;
 
-        Debug.LogError(string.Join(' ', _rands));
-    }
+    //    Debug.LogError(string.Join(' ', _rands));
+    //}
 
     private void InitializeSpawnPositions()
     {
@@ -84,7 +84,7 @@ public class GameManager : NetManager
 
         myPlayerObject = spawnTask.GetAwaiter().GetResult();
 
-        App.Manager.Sound.PlayBGM("Ambience");
+        App.Manager.Sound.PlayBGM("BGM_Game");
 
         if (HasStateAuthority)
         {
@@ -93,7 +93,7 @@ public class GameManager : NetManager
             // 도대체 얘내가 뭘 추구하고 뭘 위해서 이렇게 하는지도 모르겠음
             // TargetObjectVerificationResult.ObjectNotConfirmed
             yield return new WaitForSeconds(1f);
-            GenerateRandomNumber();
+            //GenerateRandomNumber();
         }
     }
 
