@@ -26,6 +26,7 @@ public class PlayerManager : Manager
             }
         }
 
+        Debug.LogError("Can't find My CharCC");
         return null;
     }
 }

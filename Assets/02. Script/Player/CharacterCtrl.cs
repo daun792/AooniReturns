@@ -31,6 +31,9 @@ public class CharacterCtrl : NetworkBehaviour
 
     private TweenerCore<float, float, FloatOptions> speedTween;
     private float speedTarget;
+    public ArrowCtrl arrow;
+
+    public Vector2 currDir;
 
     public float Stamina { get; private set; } = 100;
 
@@ -80,14 +83,7 @@ public class CharacterCtrl : NetworkBehaviour
 
     private void FixedUpdate()
     {
-        //if (animCtrl == null)
-        //{
-        //    return;
-        //}
 
-        //animCtrl.SetFloat("speed", animSpeed);
-
-        CalculatePosition();
     }
 
     public override void FixedUpdateNetwork()
@@ -119,6 +115,7 @@ public class CharacterCtrl : NetworkBehaviour
         animCtrl.SetFloat("MoveY", yDir);
 
         Speed = DefaultSpeed;
+        currDir = dir.normalized;
 
         rb2d.velocity = Speed * dir.normalized;
     }
