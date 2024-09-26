@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Fusion;
 using Fusion.Photon.Realtime;
+using System.Collections.Generic;
 
 public enum EScene : byte
 {
@@ -36,9 +37,14 @@ public class NetworkManager : Manager
         netObjectProvider = GetComponent<INetworkObjectProvider>();
     }
 
-    public void CreateMatch(Action _onComplete = null)
+    public void GoToLobby(Action _onComplete = null)
     {
-        StartCoroutine(CreateMatchInternal(_onComplete));
+        StartCoroutine(StartClient());
+    }
+
+    public void CreateMatch(string _roomName, string _password, ModeType _mode, Action _onComplete = null)
+    {
+        StartCoroutine(CreateMatchInternal(_roomName, _password, _mode, _onComplete));
     }
 
     public void FindMatch(Action _onComplete = null)
@@ -78,17 +84,41 @@ public class NetworkManager : Manager
         StartCoroutine(ReturnToLobbyInternal(_onComplete));
     }
 
-    private IEnumerator CreateMatchInternal(Action _onComplete)
+    private IEnumerator StartClient()
+    {
+
+        var joinTask = netRunner.JoinSessionLobby(SessionLobby.ClientServer);
+
+        yield return new WaitUntil(() => joinTask.IsCompleted);
+
+        var joinTaskResult = joinTask.Result;
+        if (!joinTaskResult.Ok)
+        {
+            // TODO: handle error case
+            Debug.LogError("Failed to join game. Exiting...");
+            LeaveMatch();
+            yield break;
+        }
+
+        SceneManager.LoadScene((int)EScene.Lobby);
+    }
+
+    private IEnumerator CreateMatchInternal(string _roomName, string _password, ModeType _mode, Action _onComplete)
     {
         var joinTask = netRunner.StartGame(new StartGameArgs()
         {
             GameMode = GameMode.Shared,
-            SessionName = $"ROOM_{UnityEngine.Random.Range(0, 10000)}",
-            IsOpen = false,
-            IsVisible = false,
+            SessionName = _roomName,
+            IsOpen = true,
+            IsVisible = true,
             UseCachedRegions = true,
             SceneManager = netSceneManager,
             ObjectProvider = netObjectProvider,
+            PlayerCount = GetMaxPlayers(_mode),
+            SessionProperties = new Dictionary<string, SessionProperty>()
+            {
+                { "GameMode", (int)_mode },
+            }
         });
 
         yield return new WaitUntil(() => joinTask.IsCompleted);
@@ -111,6 +141,15 @@ public class NetworkManager : Manager
                 $"{error.Message}\n{error.StackTrace}");
         }
     }
+
+    private int GetMaxPlayers(ModeType _type) => _type switch
+    {
+        ModeType.Infection => 8,
+        ModeType.Bomb => 8,
+        ModeType.Police => 8,
+        ModeType.Dual => 2,
+        _ => 8
+    };
 
     private IEnumerator FindMatchInternal(Action _onComplete)
     {

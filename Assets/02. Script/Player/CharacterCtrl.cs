@@ -92,8 +92,6 @@ public class CharacterCtrl : NetworkBehaviour
 
         App.Manager.Player.SubmitPlayer(this);
         joystick = App.UI.Game.GetPanel<JoystickPanel>();
-
-        SetCharacterState(0);
     }
 
     public override void Spawned()

@@ -17,7 +17,7 @@ public class ReadyManager : SimManager, IPlayerLeft
 
     private void Start()
     {
-        playerList = new(4);
+        playerList = new(8);
         Runner.SpawnAsync(playerPrefab);
 
         startBtn.onClick.AddListener(OnClickStart);
@@ -76,6 +76,9 @@ public class ReadyManager : SimManager, IPlayerLeft
         {
             playerList.Remove(_player);
         }
+
+        int currentPlayers = Runner.SessionInfo.Properties["CurrentPlayers"];
+        //Runner.SessionInfo.SetSessionProperty("CurrentPlayers", currentPlayers - 1);
 
         //RefreshPlayerPreview();
     }

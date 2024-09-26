@@ -13,9 +13,8 @@ public enum SceneName
 public class App : Singleton<App>
 {
     private ViewManager view;
+    private SimManager sim;
     private UIManager ui;
-
-    private ReadyManager ready;
 
     private SoundManager sound;
     private NetworkManager network;
@@ -32,8 +31,7 @@ public class App : Singleton<App>
     {
         public static UIManager UI => instance.ui;
         public static ViewManager View => instance.view;
-
-        public static ReadyManager Ready => instance.ready;
+        public static SimManager Sim => instance.sim;
 
         public static SoundManager Sound => instance.sound;
         public static NetworkManager Network => instance.network;
@@ -83,6 +81,11 @@ public class App : Singleton<App>
         return ViewManagerAs<T>(Manager.View);
     }
 
+    public static T GetSimAs<T>() where T : MonoBehaviour
+    {
+        return ViewManagerAs<T>(Manager.Sim);
+    }
+
     public static T GetUIAs<T>() where T : MonoBehaviour
     {
         return ViewManagerAs<T>(Manager.UI);
@@ -110,6 +113,18 @@ public class App : Singleton<App>
         public static DeveloperManager Developer { get => GetDeveloperManager(); }
         public static TitleManager Title { get => GetTitleManager(); }
         public static LobbyManager Lobby { get => GetLobbyManager(); }
+    }
+    #endregion
+
+    #region  Get SimManager
+    public static ReadyManager GetReadyManager()
+    {
+        return GetViewAs<ReadyManager>();
+    }
+
+    public partial class Manager
+    {
+        public static ReadyManager Ready { get => GetReadyManager(); }
     }
     #endregion
 
