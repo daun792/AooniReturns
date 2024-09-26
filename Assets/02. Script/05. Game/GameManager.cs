@@ -213,8 +213,6 @@ public class GameManager : NetManager
             return;
         }
 
-        var bustedCount = 0;
-        var escapedCount = 0;
         var players = App.Manager.Player.AllPlayers;
 
         if (players.Count == 0)
@@ -222,28 +220,40 @@ public class GameManager : NetManager
             return;
         }
 
-        for (int i = 0; i < players.Count; ++i)
-        {
-            var player = players[i];
-            if (player.IsBusted)
-            {
-                ++bustedCount;
-            }
-            else if (player.Escaped)
-            {
-                ++escapedCount;
-            }
-        }
-
-        if (bustedCount + escapedCount >= players.Count)
+        if (App.Manager.Player.OniPlayers.Count == players.Count)
         {
             internalTime = 0;
+            return;
+        }
+
+        if (GetOniAllDead())
+        {
+            internalTime = 0;
+            return;
         }
 
         if (App.Manager.UI.GetPanel<TimePanel>().Remaining <= 0f)
         {
             internalTime = 0;
+            return;
         }
+    }
+
+    public bool GetOniAllDead()
+    {
+        foreach (var charCtrl in App.Manager.Player.OniPlayers)
+        {
+            if (charCtrl.Dead == true)
+            {
+                continue;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
 

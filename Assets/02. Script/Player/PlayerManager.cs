@@ -5,28 +5,22 @@ using System.Linq;
 
 public class PlayerManager : Manager
 {
-    private readonly List<CharacterCtrl> characterDict = new(4);
+    private readonly List<CharacterCtrl> characterList = new(8);
 
-    public CharacterCtrl MyCtrl => FindMyChar();
+    public CharacterCtrl MyCtrl { get; private set; }
 
-    public IReadOnlyList<CharacterCtrl> AllPlayers => characterDict;
+    public IReadOnlyList<CharacterCtrl> AllPlayers => characterList;
+
+    public IReadOnlyList<CharacterCtrl> HumanPlayers => characterList.Where(x => x.CurrState == CharacterType.Human).ToList();
+    public IReadOnlyList<CharacterCtrl> OniPlayers => characterList.Where(x => x.CurrState == CharacterType.Oni).ToList();
 
     public void SubmitPlayer(CharacterCtrl _char)
     {
-        characterDict.Add(_char);
-    }
+        characterList.Add(_char);
 
-    public CharacterCtrl FindMyChar()
-    {
-        for (int i = 0; i < characterDict.Count; ++i)
+        if (_char.Object.StateAuthority.PlayerId == App.Manager.Network.Runner.LocalPlayer.PlayerId)
         {
-            if (characterDict[i].Object.StateAuthority.PlayerId == App.Manager.Network.Runner.LocalPlayer.PlayerId)
-            {
-                return characterDict[i];
-            }
+            MyCtrl = _char;
         }
-
-        Debug.LogError("Can't find My CharCC");
-        return null;
     }
 }

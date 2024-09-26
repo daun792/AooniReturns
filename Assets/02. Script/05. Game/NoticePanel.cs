@@ -22,8 +22,7 @@ public class NoticePanel : UIBase
     {
         noticeRect.DOKill();
 
-        noticeRect.sizeDelta = Vector3.zero;
-        noticeRect.DOSizeDelta(Vector3.one, 0.5f);
+        noticeRect.DOScale(Vector3.zero, 0.5f).From();
     }
 
     public void NoticeBeforeGameStart()

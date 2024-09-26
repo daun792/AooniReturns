@@ -409,10 +409,17 @@ MonoBehaviour:
   DefaultSpeed: 6
   joystick: {fileID: 0}
   joystickSensitivity: 1
+  characterStates:
+  - type: 0
+    obj: {fileID: 3992379332761390294}
+    animator: {fileID: 3527498517120926763}
+  - type: 1
+    obj: {fileID: 7881658348449631715}
+    animator: {fileID: 8708111621498625984}
   _Targetable: 1
   _IsBusted: 0
   _Escaped: 0
-  animCtrl: {fileID: 3527498517120926763}
+  _Dead: 0
   arrow: {fileID: 8715883189541085358}
   currDir: {x: 0, y: 0}
 --- !u!114 &9194704116235038489
@@ -559,6 +566,16 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 179002306238337349, guid: 7aad42f75a2286a4abf3105b7f079daa, type: 3}
   m_PrefabInstance: {fileID: 1728618497561483940}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &7881658348449631715 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8834954020503639879, guid: 7aad42f75a2286a4abf3105b7f079daa, type: 3}
+  m_PrefabInstance: {fileID: 1728618497561483940}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &8708111621498625984 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 8008565880654005604, guid: 7aad42f75a2286a4abf3105b7f079daa, type: 3}
+  m_PrefabInstance: {fileID: 1728618497561483940}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &6215474716503793001
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -624,5 +641,10 @@ Transform:
 --- !u!95 &3527498517120926763 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 7401099072856430914, guid: a7cdead2fa7626042ace5c71d2b4d723, type: 3}
+  m_PrefabInstance: {fileID: 6215474716503793001}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &3992379332761390294 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7000294263355068863, guid: a7cdead2fa7626042ace5c71d2b4d723, type: 3}
   m_PrefabInstance: {fileID: 6215474716503793001}
   m_PrefabAsset: {fileID: 0}
