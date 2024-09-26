@@ -41,12 +41,17 @@ public class ArrowCtrl : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.TryGetComponent<CharacterCtrl>(out var characterCtrl))
+        if (collision.CompareTag("Oni"))
         {
-            transform.DOKill();
+            if (collision.transform.parent.TryGetComponent<CharacterCtrl>(out var charCtrl))
+            {
+                transform.DOKill();
 
-            gameObject.SetActive(false);
-            transform.localPosition = startPosition;
+                gameObject.SetActive(false);
+                transform.localPosition = startPosition;
+
+                //charCtrl
+            }
         }
     }
 }
