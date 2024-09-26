@@ -23,17 +23,21 @@ public class NoticePanel : UIBase
         noticeRect.DOKill();
 
         noticeRect.sizeDelta = Vector3.zero;
-        noticeRect.DOScale(Vector3.one, 0.5f);
+        noticeRect.DOSizeDelta(Vector3.one, 0.5f);
     }
 
     public void NoticeBeforeGameStart()
     {
+        base.OpenPanel();
+
         noticeTMP.text = beforeGameStart;
         PlayTMPAnim();
     }
 
     public void NoticeCountDown()
     {
+        base.OpenPanel();
+
         StartCoroutine(CountDown());
     }
 
@@ -51,6 +55,8 @@ public class NoticePanel : UIBase
 
     public void NoticeBecomeOni()
     {
+        base.OpenPanel();
+
         noticeTMP.text = string.Format(becomeOni, 1);
         PlayTMPAnim();
     }

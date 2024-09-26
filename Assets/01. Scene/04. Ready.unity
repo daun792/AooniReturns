@@ -3305,7 +3305,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &724828345
 Transform:
   m_ObjectHideFlags: 0
@@ -3335,7 +3335,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netPlayerObject: {fileID: 6409362478292922955, guid: b5a5d87f25ca40d47819b61cd6770e9e, type: 3}
   respawnPos: {fileID: 628523509}
-  _GameOver: 0
+  _GamePlay: 0
+  _RoundCount: 1
   spawnPositions: []
 --- !u!114 &724828347
 MonoBehaviour:

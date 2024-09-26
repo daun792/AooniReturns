@@ -4,6 +4,15 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
+public enum GameState
+{
+    None,
+    Begin,
+    CountDown,
+    Play,
+    Over,
+}
+
 public class GameManager : NetManager
 {
     [Header("Network")]
@@ -11,8 +20,12 @@ public class GameManager : NetManager
     [SerializeField] Transform respawnPos;
 
     // networked properties
-    [Networked] public bool GameOver { get; private set; } = false;
+    [Networked] public bool GamePlay { get; private set; } = false;
+    [Networked] public int RoundCount { get; private set; } = 1;
 
+    private GameState currState = GameState.None;
+    private bool isGamePlaying => currState != GameState.Over;
+    
     public Vector3 RespawnPosition => respawnPos.position;
     public Quaternion RespawnRotation => respawnPos.rotation;
 
@@ -21,6 +34,8 @@ public class GameManager : NetManager
 
     public List<Transform> spawnPositions;
 
+    private float internalTime = 0;
+
     protected override void Awake()
     {
         base.Awake();
@@ -28,39 +43,10 @@ public class GameManager : NetManager
         InitializeSpawnPositions();
     }
 
-    //private void GenerateRandomNumber()
-    //{
-    //    int randomNumber = Random.Range(10000, 100000); // Generates a number between 10000 and 99999
-    //    string randomNumberStr = randomNumber.ToString();
-
-    //    Debug.LogError(randomNumber);
-
-    //    RandomNum = new int[randomNumberStr.Length];
-
-    //    for (int i = 0; i < randomNumberStr.Length; i++)
-    //    {
-    //        RandomNum[i] = int.Parse(randomNumberStr[i].ToString());
-    //    }
-
-    //    RPC_GenerateRandomNumber(RandomNum);
-    //}
-
-    //[Rpc]
-    //private void RPC_GenerateRandomNumber(int[] _rands)
-    //{
-    //    RandomNum = _rands;
-
-    //    Debug.LogError(string.Join(' ', _rands));
-    //}
-
-    private void InitializeSpawnPositions()
-    {
-        //spawnPositions = FindObjectsOfType<SpawnPoint>().Select(x => x.transform).ToList();
-    }
-
     public override void Spawned()
     {
         StartCoroutine(Initialize());
+        StartCoroutine(InternalGameLoop());
     }
 
     private IEnumerator Initialize()
@@ -97,9 +83,132 @@ public class GameManager : NetManager
         }
     }
 
+    private IEnumerator InternalGameLoop()
+    {
+        do
+        {
+            internalTime -= Time.deltaTime;
+            if (internalTime > 0f)
+            {
+                yield return null;
+                continue;
+            }
+
+            var prevState = currState;
+            var nextState = GetNextState(currState);
+            currState = nextState;
+
+            if (nextState == GameState.None)
+            {
+                Debug.LogError($"Impossible route detected. {prevState} > {nextState}");
+                yield break;
+            }
+
+            internalTime = GetRequiredTime(nextState); // get required time for next state
+
+            if (nextState == GameState.Begin)
+            {
+                RoundCount++;
+            }
+
+            if ((int)internalTime < 0)
+            {
+                yield break;
+            }
+        }
+        while (isGamePlaying);
+    }
+
+    private GameState GetNextState(GameState _prevState)
+    {
+        var nextState = GameState.None;
+
+        switch (_prevState)
+        {
+            case GameState.None:
+                nextState = GameState.Begin;
+                App.Manager.UI.GetPanel<RoundPanel>().OpenPanel();
+                App.Manager.UI.GetPanel<TimePanel>().ClosePanel();
+                App.Manager.UI.GetPanel<NoticePanel>().NoticeBeforeGameStart();
+                break;
+
+            case GameState.Begin:
+                nextState = GameState.CountDown;
+                App.Manager.UI.GetPanel<NoticePanel>().NoticeCountDown();
+                break;
+
+            case GameState.CountDown:
+                nextState = GameState.Play;
+                GamePlay = true;
+                App.Manager.UI.GetPanel<RoundPanel>().ClosePanel();
+                App.Manager.UI.GetPanel<TimePanel>().OpenPanel();
+                break;
+
+            case GameState.Play:
+                GamePlay = false;
+
+                if (RoundCount >= 8)
+                {
+                    nextState = GameState.Over;
+                }
+                else
+                {
+                    nextState = GameState.Begin;
+                    App.Manager.UI.GetPanel<RoundPanel>().OpenPanel();
+                    App.Manager.UI.GetPanel<TimePanel>().ClosePanel();
+                    App.Manager.UI.GetPanel<NoticePanel>().NoticeBeforeGameStart();
+                }
+                break;
+        }
+
+        Debug.Log(nextState);
+
+        return nextState;
+    }
+
+    private float GetRequiredTime(GameState _time) => _time switch
+    {
+        GameState.Begin => 5,
+        GameState.CountDown => 10,
+        GameState.Play => 120,
+        _ => 0,
+    };
+
+    //private void GenerateRandomNumber()
+    //{
+    //    int randomNumber = Random.Range(10000, 100000); // Generates a number between 10000 and 99999
+    //    string randomNumberStr = randomNumber.ToString();
+
+    //    Debug.LogError(randomNumber);
+
+    //    RandomNum = new int[randomNumberStr.Length];
+
+    //    for (int i = 0; i < randomNumberStr.Length; i++)
+    //    {
+    //        RandomNum[i] = int.Parse(randomNumberStr[i].ToString());
+    //    }
+
+    //    RPC_GenerateRandomNumber(RandomNum);
+    //}
+
+    //[Rpc]
+    //private void RPC_GenerateRandomNumber(int[] _rands)
+    //{
+    //    RandomNum = _rands;
+
+    //    Debug.LogError(string.Join(' ', _rands));
+    //}
+
+    private void InitializeSpawnPositions()
+    {
+        //spawnPositions = FindObjectsOfType<SpawnPoint>().Select(x => x.transform).ToList();
+    }
+
+   
+
     public override void Render()
     {
-        if (!Runner.IsSceneAuthority || GameOver)
+        if (!Runner.IsSceneAuthority || GamePlay)
         {
             return;
         }
@@ -128,15 +237,13 @@ public class GameManager : NetManager
 
         if (bustedCount + escapedCount >= players.Count)
         {
-            App.Manager.Network.ShowResult();
-            GameOver = true;
+            internalTime = 0;
         }
 
-        //if (App.Manager.UI.GetPanel<TimePanel>().Remaining <= 0f)
-        //{
-        //    App.Manager.Network.ShowResult();
-        //    GameOver = true;
-        //}
+        if (App.Manager.UI.GetPanel<TimePanel>().Remaining <= 0f)
+        {
+            internalTime = 0;
+        }
     }
 }
 

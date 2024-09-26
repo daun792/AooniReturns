@@ -14,10 +14,10 @@ public class RoundPanel : UIBase
         roundTMP.text = string.Format(roundTextFormat, 1);
     }
 
-    public void OpenPanel(int _roundCount)
+    public override void OpenPanel()
     {
-        roundTMP.text = string.Format(roundTextFormat, _roundCount);
-
         base.OpenPanel();
+
+        roundTMP.text = string.Format(roundTextFormat, App.Manager.Game.RoundCount);
     }
 }

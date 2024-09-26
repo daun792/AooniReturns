@@ -33,6 +33,16 @@ public class TimePanel : UIBase
         UpdateText();
     }
 
+    public override void OpenPanel()
+    {
+        base.OpenPanel();
+
+        remainTime = givenTime;
+        intervalTime = Time.time;
+
+        UpdateText();
+    }
+
     private void Update()
     {
         if (Time.time - intervalTime < 1f) return;
