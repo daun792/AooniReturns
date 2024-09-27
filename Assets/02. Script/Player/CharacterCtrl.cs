@@ -91,7 +91,7 @@ public class CharacterCtrl : NetworkBehaviour
         rb2d = GetComponent<Rigidbody2D>();
 
         App.Manager.Player.SubmitPlayer(this);
-        joystick = App.UI.Game.GetPanel<JoystickPanel>();
+        joystick = App.Manager.UI.GetPanel<JoystickPanel>();
     }
 
     public override void Spawned()

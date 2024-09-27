@@ -16,7 +16,7 @@ public enum UIState
     Option,
 }
 
-public class UIManager : MonoBehaviour
+public class UIManager : Fusion.Behaviour
 {
     [HideInInspector]
     public UIState CurrState

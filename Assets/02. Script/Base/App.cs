@@ -151,6 +151,11 @@ public class App : Singleton<App>
         return GetUIAs<LobbyUIManager>();
     }
 
+    public static ReadyUIManager GetReadyUIManager()
+    {
+        return GetUIAs<ReadyUIManager>();
+    }
+
     public static GameUIManager GetGameUIManager()
     {
         return GetUIAs<GameUIManager>();
@@ -160,6 +165,7 @@ public class App : Singleton<App>
     {
         public static TitleUIManager Title { get => GetTitleUIManager(); }
         public static LobbyUIManager Lobby { get => GetLobbyUIManager(); }
+        public static ReadyUIManager Ready { get => GetReadyUIManager(); }
         public static GameUIManager Game { get => GetGameUIManager(); }
     }
     #endregion
