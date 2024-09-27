@@ -54,7 +54,7 @@ public class TitleManager : ViewManager
 #if UNITY_EDITOR
             TryLogin("daun1124", "123456", null, null);
 #else
-            TryLogin("ekdms", "12345", null, null);
+            TryLogin("ekdms", "123456", null, null);
 #endif
         }
     }

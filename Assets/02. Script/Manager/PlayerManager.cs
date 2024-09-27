@@ -3,7 +3,7 @@ using UnityEngine;
 using Fusion;
 using System.Linq;
 
-public class PlayerManager : Manager
+public class PlayerManager : NetManager
 {
     private readonly List<CharacterCtrl> characterList = new(8);
 
@@ -22,5 +22,20 @@ public class PlayerManager : Manager
         {
             MyCtrl = _char;
         }
+    }
+
+    public void SetRandomOni()
+    {
+        var randomIndex = Random.Range(0, AllPlayers.Count);
+
+        RPC_SetOni(AllPlayers[randomIndex]);
+    }
+
+    [Rpc]
+    private void RPC_SetOni(CharacterCtrl _charCtrl)
+    {
+        _charCtrl.SetCharacterState(1);
+
+        App.Manager.UI.GetPanel<NoticePanel>().NoticeBecomeOni();
     }
 }

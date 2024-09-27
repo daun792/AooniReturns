@@ -19,9 +19,8 @@ public class GameManager : NetManager
     [SerializeField] NetworkObject netPlayerObject;
     [SerializeField] Transform respawnPos;
 
-    // networked properties
-    [Networked] public bool GamePlay { get; private set; } = false;
-    [Networked] public int RoundCount { get; private set; } = 0;
+    private bool isGamePlay = false;
+    public int RoundCount { get; private set; } = 0;
 
     private GameState currState = GameState.None;
 
@@ -40,6 +39,8 @@ public class GameManager : NetManager
 
     public override void Spawned()
     {
+        App.Manager.Sound.PlayBGM("BGM_Game");
+
         StartCoroutine(Initialize());
     }
 
@@ -64,9 +65,7 @@ public class GameManager : NetManager
 
         myPlayerObject = spawnTask.GetAwaiter().GetResult();
 
-        App.Manager.Sound.PlayBGM("BGM_Game");
-
-        if (HasStateAuthority)
+        if (Runner.IsSceneAuthority)
         {
             // 뱌로 보내면 안감. 실패 이유 구글링해도 안나옴.
             // ObjectNotConfirmed라는데 서버에서 해주는건 있지도 않으면서 확인은 왜한다는건지 모르겠음
@@ -79,6 +78,7 @@ public class GameManager : NetManager
 
     private IEnumerator InternalGameLoop()
     {
+        Debug.LogError("InternalGameLoop");
         do
         {
             internalTime -= Time.deltaTime;
@@ -153,12 +153,12 @@ public class GameManager : NetManager
         switch (_state)
         {
             case GameState.None:
-                GamePlay = false;
+                isGamePlay = false;
                 Debug.LogError($"Impossible route detected. {_state}");
                 break;
 
             case GameState.Begin:
-                GamePlay = false;
+                isGamePlay = false;
                 RoundCount++;
 
                 App.Manager.UI.GetPanel<RoundPanel>().OpenPanel();
@@ -167,57 +167,42 @@ public class GameManager : NetManager
                 break;
 
             case GameState.CountDown:
+                isGamePlay = false;
                 App.Manager.UI.GetPanel<NoticePanel>().NoticeCountDown();
                 break;
 
             case GameState.Play:
-                GamePlay = true;
+                isGamePlay = true;
 
                 App.Manager.UI.GetPanel<RoundPanel>().ClosePanel();
                 App.Manager.UI.GetPanel<TimePanel>().OpenPanel();
+                SetRandomOni();
                 break;
 
             case GameState.Over:
-                GamePlay = false;
+                isGamePlay = false;
                 break;
         }
     }
 
-    //private void GenerateRandomNumber()
-    //{
-    //    int randomNumber = Random.Range(10000, 100000); // Generates a number between 10000 and 99999
-    //    string randomNumberStr = randomNumber.ToString();
+    private void SetRandomOni()
+    {
+        if (!Runner.IsSceneAuthority)
+        {
+            return;
+        }
 
-    //    Debug.LogError(randomNumber);
-
-    //    RandomNum = new int[randomNumberStr.Length];
-
-    //    for (int i = 0; i < randomNumberStr.Length; i++)
-    //    {
-    //        RandomNum[i] = int.Parse(randomNumberStr[i].ToString());
-    //    }
-
-    //    RPC_GenerateRandomNumber(RandomNum);
-    //}
-
-    //[Rpc]
-    //private void RPC_GenerateRandomNumber(int[] _rands)
-    //{
-    //    RandomNum = _rands;
-
-    //    Debug.LogError(string.Join(' ', _rands));
-    //}
+        App.Manager.Player.SetRandomOni();
+    }
 
     private void InitializeSpawnPositions()
     {
         //spawnPositions = FindObjectsOfType<SpawnPoint>().Select(x => x.transform).ToList();
     }
 
-   
-
     public override void Render()
     {
-        if (!Runner.IsSceneAuthority || GamePlay)
+        if (!Runner.IsSceneAuthority || isGamePlay)
         {
             return;
         }
@@ -239,13 +224,6 @@ public class GameManager : NetManager
         if (GetOniAllDead())
         {
             Debug.Log("GetOniAllDead()");
-            internalTime = 0;
-            return;
-        }
-
-        if (App.Manager.UI.GetPanel<TimePanel>().Remaining <= 0f)
-        {
-            Debug.Log("App.Manager.UI.GetPanel<TimePanel>().Remaining <= 0f");
             internalTime = 0;
             return;
         }

@@ -7,11 +7,11 @@ public class RoundPanel : UIBase
 {
     [SerializeField] TextMeshProUGUI roundTMP;
 
-    private const string roundTextFormat = "ROUND {0} / 4";
+    private const string roundTextFormat = "ROUND {0} / 8 ";
 
     public override void Init()
     {
-        roundTMP.text = string.Format(roundTextFormat, 1);
+
     }
 
     public override void OpenPanel()
