@@ -21,16 +21,11 @@ public class GameManager : NetManager
 
     // networked properties
     [Networked] public bool GamePlay { get; private set; } = false;
-    [Networked] public int RoundCount { get; private set; } = 1;
+    [Networked] public int RoundCount { get; private set; } = 0;
 
     private GameState currState = GameState.None;
-    private bool isGamePlaying => currState != GameState.Over;
-    
-    public Vector3 RespawnPosition => respawnPos.position;
-    public Quaternion RespawnRotation => respawnPos.rotation;
 
     private NetworkObject myPlayerObject;
-    public int[] RandomNum { get; private set; }
 
     public List<Transform> spawnPositions;
 
@@ -93,31 +88,20 @@ public class GameManager : NetManager
                 continue;
             }
 
-            var prevState = currState;
             var nextState = GetNextState(currState);
+
+            RPC_ChangeState(nextState);
+
+            internalTime = GetRequiredTime(nextState);
+
             currState = nextState;
-
-            if (nextState == GameState.None)
-            {
-                Debug.LogError($"Impossible route detected. {prevState} > {nextState}");
-                yield break;
-            }
-
-            internalTime = GetRequiredTime(nextState); // get required time for next state
-
-            Debug.Log(nextState + " " + internalTime);
-
-            if (nextState == GameState.Begin)
-            {
-                RoundCount++;
-            }
 
             if ((int)internalTime < 0)
             {
                 yield break;
             }
         }
-        while (isGamePlaying);
+        while (true);
     }
 
     private GameState GetNextState(GameState _prevState)
@@ -127,35 +111,18 @@ public class GameManager : NetManager
         switch (_prevState)
         {
             case GameState.None:
-
                 nextState = GameState.Begin;
-                GamePlay = false;
-
-                App.Manager.UI.GetPanel<RoundPanel>().OpenPanel();
-                App.Manager.UI.GetPanel<TimePanel>().ClosePanel();
-                App.Manager.UI.GetPanel<NoticePanel>().NoticeBeforeGameStart();
                 break;
 
             case GameState.Begin:
-
                 nextState = GameState.CountDown;
-
-                App.Manager.UI.GetPanel<NoticePanel>().NoticeCountDown();
                 break;
 
             case GameState.CountDown:
-
                 nextState = GameState.Play;
-                GamePlay = true;
-
-                App.Manager.UI.GetPanel<RoundPanel>().ClosePanel();
-                App.Manager.UI.GetPanel<TimePanel>().OpenPanel();
                 break;
 
             case GameState.Play:
-
-                GamePlay = false;
-
                 if (RoundCount >= 8)
                 {
                     nextState = GameState.Over;
@@ -163,9 +130,6 @@ public class GameManager : NetManager
                 else
                 {
                     nextState = GameState.Begin;
-                    App.Manager.UI.GetPanel<RoundPanel>().OpenPanel();
-                    App.Manager.UI.GetPanel<TimePanel>().ClosePanel();
-                    App.Manager.UI.GetPanel<NoticePanel>().NoticeBeforeGameStart();
                 }
                 break;
         }
@@ -178,8 +142,46 @@ public class GameManager : NetManager
         GameState.Begin => 5,
         GameState.CountDown => 10,
         GameState.Play => 120,
-        _ => 0,
+        _ => -1,
     };
+
+    [Rpc]
+    private void RPC_ChangeState(GameState _state, RpcInfo _info = default)
+    {
+        currState = _state;
+
+        switch (_state)
+        {
+            case GameState.None:
+                GamePlay = false;
+                Debug.LogError($"Impossible route detected. {_state}");
+                break;
+
+            case GameState.Begin:
+                GamePlay = false;
+                RoundCount++;
+
+                App.Manager.UI.GetPanel<RoundPanel>().OpenPanel();
+                App.Manager.UI.GetPanel<TimePanel>().ClosePanel();
+                App.Manager.UI.GetPanel<NoticePanel>().NoticeBeforeGameStart();
+                break;
+
+            case GameState.CountDown:
+                App.Manager.UI.GetPanel<NoticePanel>().NoticeCountDown();
+                break;
+
+            case GameState.Play:
+                GamePlay = true;
+
+                App.Manager.UI.GetPanel<RoundPanel>().ClosePanel();
+                App.Manager.UI.GetPanel<TimePanel>().OpenPanel();
+                break;
+
+            case GameState.Over:
+                GamePlay = false;
+                break;
+        }
+    }
 
     //private void GenerateRandomNumber()
     //{

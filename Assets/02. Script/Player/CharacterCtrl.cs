@@ -86,20 +86,17 @@ public class CharacterCtrl : NetworkBehaviour
         }
     }
 
-    private void Start()
-    {
-        rb2d = GetComponent<Rigidbody2D>();
-
-        App.Manager.Player.SubmitPlayer(this);
-        joystick = App.Manager.UI.GetPanel<JoystickPanel>();
-    }
-
     public override void Spawned()
     {
         if (!HasStateAuthority)
         {
             Object.RequestStateAuthority();
         }
+
+        rb2d = GetComponent<Rigidbody2D>();
+
+        App.Manager.Player.SubmitPlayer(this);
+        joystick = App.Manager.UI.GetPanel<JoystickPanel>();
 
         SetCharacterState(0);
     }
@@ -126,11 +123,6 @@ public class CharacterCtrl : NetworkBehaviour
     public void SetCharacterDead()
     {
         Dead = true;
-    }
-
-    private void FixedUpdate()
-    {
-
     }
 
     #region Calculate Position

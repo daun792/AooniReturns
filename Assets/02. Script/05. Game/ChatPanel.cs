@@ -35,18 +35,6 @@ public class ChatPanel : NetworkBehaviour
         chatInput.onEndEdit.AddListener(ClosePanel);
     }
 
-    public override void Spawned()
-    {
-        if (Object != null)
-        {
-            Debug.Log("NetworkObject initialized successfully.");
-        }
-        else
-        {
-            Debug.LogError("NetworkObject is null.");
-        }
-    }
-
     private void OpenPanel(string _msg)
     {
         chatInput.text = string.Empty;
@@ -81,28 +69,6 @@ public class ChatPanel : NetworkBehaviour
 
     private void SendChat(string _msg)
     {
-        if (Runner != null && Runner.IsRunning)
-        {
-            Debug.Log("NetworkRunner is running.");
-        }
-        else
-        {
-            Debug.LogError("NetworkRunner is not initialized or running.");
-        }
-
-        if (Object == null)
-        {
-            Debug.LogError("NetworkBehaviour Object가 null입니다.");
-         
-        }
-
-        if (!Object.HasInputAuthority)
-        {
-            Debug.LogError("현재 객체에 Input Authority가 없습니다.");
-       
-        }
-
-
         if (string.IsNullOrWhiteSpace(_msg))
         {
             return;

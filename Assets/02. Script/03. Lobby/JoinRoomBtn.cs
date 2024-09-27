@@ -34,7 +34,7 @@ public class JoinRoomBtn : MonoBehaviour
         ModeType.Police => "µµµÏ°ú °æÂû ¸ðµå",
         ModeType.Dual => "µà¾ó ¸ðµå",
         _ => "°¨¿° ¸ðµå"
-    };
+    }; 
 
     public void SetNone()
     {

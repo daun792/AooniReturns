@@ -49,12 +49,14 @@ public class TitleManager : ViewManager
         App.Manager.Sound.PlayBGM("BGM_Title");
         Application.targetFrameRate = 120;
 
-#if UNITY_EDITOR
         if (autoLogin)
         {
+#if UNITY_EDITOR
             TryLogin("daun1124", "123456", null, null);
-        }
+#else
+            TryLogin("ekdms", "12345", null, null);
 #endif
+        }
     }
 
     public bool TryLogin(string ID, string PW,
@@ -179,7 +181,7 @@ public class TitleManager : ViewManager
         });
     }
 
-    #region Sign Up
+#region Sign Up
     public bool TrySignUp(string ID, string PW, string PWCheck, string Nick, string Email,
         Action<ERegisterError> _registerErrorHandler,
         Action<ELoginError> _loginErrorHandler,
@@ -286,5 +288,5 @@ public class TitleManager : ViewManager
             }
         });
     }
-    #endregion
+#endregion
 }
