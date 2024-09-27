@@ -46,7 +46,6 @@ public class GameManager : NetManager
     public override void Spawned()
     {
         StartCoroutine(Initialize());
-        StartCoroutine(InternalGameLoop());
     }
 
     private IEnumerator Initialize()
@@ -79,7 +78,7 @@ public class GameManager : NetManager
             // 도대체 얘내가 뭘 추구하고 뭘 위해서 이렇게 하는지도 모르겠음
             // TargetObjectVerificationResult.ObjectNotConfirmed
             yield return new WaitForSeconds(1f);
-            //GenerateRandomNumber();
+            StartCoroutine(InternalGameLoop());
         }
     }
 
@@ -106,6 +105,8 @@ public class GameManager : NetManager
 
             internalTime = GetRequiredTime(nextState); // get required time for next state
 
+            Debug.Log(nextState + " " + internalTime);
+
             if (nextState == GameState.Begin)
             {
                 RoundCount++;
@@ -126,25 +127,33 @@ public class GameManager : NetManager
         switch (_prevState)
         {
             case GameState.None:
+
                 nextState = GameState.Begin;
+                GamePlay = false;
+
                 App.Manager.UI.GetPanel<RoundPanel>().OpenPanel();
                 App.Manager.UI.GetPanel<TimePanel>().ClosePanel();
                 App.Manager.UI.GetPanel<NoticePanel>().NoticeBeforeGameStart();
                 break;
 
             case GameState.Begin:
+
                 nextState = GameState.CountDown;
+
                 App.Manager.UI.GetPanel<NoticePanel>().NoticeCountDown();
                 break;
 
             case GameState.CountDown:
+
                 nextState = GameState.Play;
                 GamePlay = true;
+
                 App.Manager.UI.GetPanel<RoundPanel>().ClosePanel();
                 App.Manager.UI.GetPanel<TimePanel>().OpenPanel();
                 break;
 
             case GameState.Play:
+
                 GamePlay = false;
 
                 if (RoundCount >= 8)
@@ -160,8 +169,6 @@ public class GameManager : NetManager
                 }
                 break;
         }
-
-        Debug.Log(nextState);
 
         return nextState;
     }
@@ -222,18 +229,21 @@ public class GameManager : NetManager
 
         if (App.Manager.Player.OniPlayers.Count == players.Count)
         {
+            Debug.Log("App.Manager.Player.OniPlayers.Count == players.Count");
             internalTime = 0;
             return;
         }
 
         if (GetOniAllDead())
         {
+            Debug.Log("GetOniAllDead()");
             internalTime = 0;
             return;
         }
 
         if (App.Manager.UI.GetPanel<TimePanel>().Remaining <= 0f)
         {
+            Debug.Log("App.Manager.UI.GetPanel<TimePanel>().Remaining <= 0f");
             internalTime = 0;
             return;
         }
@@ -241,6 +251,11 @@ public class GameManager : NetManager
 
     public bool GetOniAllDead()
     {
+        if (App.Manager.Player.OniPlayers.Count == 0) 
+        {
+            return false;
+        }
+
         foreach (var charCtrl in App.Manager.Player.OniPlayers)
         {
             if (charCtrl.Dead == true)

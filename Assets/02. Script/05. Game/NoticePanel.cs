@@ -16,6 +16,8 @@ public class NoticePanel : UIBase
     public override void Init()
     {
         noticeRect = noticeTMP.GetComponent<RectTransform>();
+
+        noticeTMP.text = string.Empty;
     }
 
     private void PlayTMPAnim()
@@ -50,6 +52,8 @@ public class NoticePanel : UIBase
 
             yield return new WaitForSeconds(1);
         }
+
+        noticeTMP.text = string.Empty;
     }
 
     public void NoticeBecomeOni()
