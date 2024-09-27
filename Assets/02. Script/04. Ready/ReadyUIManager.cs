@@ -15,6 +15,8 @@ public class ReadyUIManager : UIManager
 
     protected override void Start()
     {
+        base.Start();
+
         startBtn.onClick.AddListener(OnClickStart);
         exitBtn.onClick.AddListener(OnClickExit);
 
@@ -29,7 +31,6 @@ public class ReadyUIManager : UIManager
         yield return new WaitUntil(() => App.Manager.Player.MyCtrl != null);
 
         startBtn.gameObject.SetActive(App.Manager.Network.Runner.IsSharedModeMasterClient);
-        Debug.Log(App.Manager.Network.Runner.IsSharedModeMasterClient);
     }
 
     private void OnClickStart()
