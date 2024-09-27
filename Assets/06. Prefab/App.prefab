@@ -68,7 +68,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5372356222660151268}
   - component: {fileID: 5712135517774297468}
-  - component: {fileID: 5783069894119971246}
   m_Layer: 0
   m_Name: App
   m_TagString: Untagged
@@ -109,18 +108,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab37cad034ca23647a8157215b6f403e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &5783069894119971246
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 932288685164607278}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: -1199893898, guid: e725a070cec140c4caffb81624c8c787, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  runnerObj: {fileID: 5478334661577443543, guid: f7a4bd1ac63f39c44914c184f73edc8e, type: 3}
 --- !u!1 &1004425059335413574
 GameObject:
   m_ObjectHideFlags: 0
@@ -339,7 +327,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c3986fa7caca4f41a26cb18b8c93af3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  netRunner: {fileID: 5783069894119971246}
 --- !u!114 &5460744249308799293
 MonoBehaviour:
   m_ObjectHideFlags: 0

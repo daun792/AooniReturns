@@ -16,7 +16,7 @@ public class NoticeManager : MonoBehaviour
 
     private void OnClickContinue()
     {
-        App.Manager.Network.GoToLobby();
+        App.Manager.Network.JoinLobby();
     }
 
     private void OnClickRating()

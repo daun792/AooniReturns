@@ -7,11 +7,16 @@ using System;
 
 public class LobbyManager : ViewManager, INetworkRunnerCallbacks
 {
+    protected override void Awake()
+    {
+        base.Awake();
+
+        App.Manager.Network.Runner.AddCallbacks(this);
+    }
+
     private void Start()
     { 
         App.Manager.Sound.PlayBGM("BGM_Lobby");
-
-        App.Manager.Network.Runner.AddCallbacks(this);
     }
 
     public void OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList)
@@ -37,5 +42,4 @@ public class LobbyManager : ViewManager, INetworkRunnerCallbacks
     public void OnReliableDataProgress(NetworkRunner runner, PlayerRef player, ReliableKey key, float progress) { }
     public void OnSceneLoadDone(NetworkRunner runner) { }
     public void OnSceneLoadStart(NetworkRunner runner) { }
-
 }

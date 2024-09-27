@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 using Fusion;
 using Fusion.Photon.Realtime;
 using System.Collections.Generic;
+using System.Linq;
 
 public enum EScene : byte
 {
@@ -18,16 +19,14 @@ public enum EScene : byte
 [RequireComponent(typeof(INetworkSceneManager), typeof(INetworkObjectProvider))]
 public class NetworkManager : Manager
 {
-    [SerializeField] NetworkRunner netRunner;
-
     private INetworkSceneManager netSceneManager;
     private INetworkObjectProvider netObjectProvider;
 
     // NetworkRunnmer.CloudServices
     // CloudServices.CloudCommunicator
     // CloudCommnuicator.FusionRelayClient -> Realtime.LoadBalancingClient
-    public NetworkRunner Runner => netRunner;
-    public SessionInfo Session => netRunner.SessionInfo;
+    public NetworkRunner Runner => App.Runner;
+    public SessionInfo Session => App.Runner.SessionInfo;
 
     protected override void Awake()
     {
@@ -37,9 +36,9 @@ public class NetworkManager : Manager
         netObjectProvider = GetComponent<INetworkObjectProvider>();
     }
 
-    public void GoToLobby(Action _onComplete = null)
+    public void JoinLobby(Action _onComplete = null)
     {
-        StartCoroutine(StartClient());
+        StartCoroutine(JoinLobbyInternal(_onComplete));
     }
 
     public void CreateMatch(string _roomName, string _password, ModeType _mode, Action _onComplete = null)
@@ -47,14 +46,14 @@ public class NetworkManager : Manager
         StartCoroutine(CreateMatchInternal(_roomName, _password, _mode, _onComplete));
     }
 
-    public void FindMatch(Action _onComplete = null)
+    public void JoinMatch(SessionInfo _info, Action _onComplete = null)
     {
-        StartCoroutine(FindMatchInternal(_onComplete));
+        StartCoroutine(JoinMatchInternal(_info, _onComplete));
     }
 
     public void LeaveMatch(Action _onComplete = null)
     {
-        netRunner.Shutdown();
+        Runner.Shutdown(true);
         SceneManager.LoadScene((int)EScene.Lobby);
 
         try { _onComplete?.Invoke(); }
@@ -79,15 +78,9 @@ public class NetworkManager : Manager
         //StartCoroutine(ShowResultInternal(_onComplete));
     }
 
-    public void ReturnToLobby(Action _onComplete = null)
+    private IEnumerator JoinLobbyInternal(Action _onComplete)
     {
-        StartCoroutine(ReturnToLobbyInternal(_onComplete));
-    }
-
-    private IEnumerator StartClient()
-    {
-
-        var joinTask = netRunner.JoinSessionLobby(SessionLobby.ClientServer);
+        var joinTask = Runner.JoinSessionLobby(SessionLobby.ClientServer);
 
         yield return new WaitUntil(() => joinTask.IsCompleted);
 
@@ -95,17 +88,24 @@ public class NetworkManager : Manager
         if (!joinTaskResult.Ok)
         {
             // TODO: handle error case
-            Debug.LogError("Failed to join game. Exiting...");
+            Debug.LogError("Failed to join lobby. Exiting...");
             LeaveMatch();
             yield break;
         }
 
         SceneManager.LoadScene((int)EScene.Lobby);
+
+        try { _onComplete?.Invoke(); }
+        catch (Exception error)
+        {
+            Debug.LogError("Exception was thrown while invoking OnComplete of JoinLobby. " +
+                $"{error.Message}\n{error.StackTrace}");
+        }
     }
 
     private IEnumerator CreateMatchInternal(string _roomName, string _password, ModeType _mode, Action _onComplete)
     {
-        var joinTask = netRunner.StartGame(new StartGameArgs()
+        var joinTask = Runner.StartGame(new StartGameArgs()
         {
             GameMode = GameMode.Shared,
             SessionName = _roomName,
@@ -151,17 +151,24 @@ public class NetworkManager : Manager
         _ => 8
     };
 
-    private IEnumerator FindMatchInternal(Action _onComplete)
+    private IEnumerator JoinMatchInternal(SessionInfo _info, Action _onComplete)
     {
-        var joinTask = netRunner.StartGame(new StartGameArgs()
+        var gameMode = (int)_info.Properties["GameMode"];
+
+        var joinTask = Runner.StartGame(new StartGameArgs()
         {
             GameMode = GameMode.Shared,
-            MatchmakingMode = MatchmakingMode.FillRoom,
-            IsOpen = true,
-            IsVisible = true,
+            SessionName = _info.Name,
+            IsOpen = _info.IsOpen,
+            IsVisible = _info.IsVisible,
             UseCachedRegions = true,
             SceneManager = netSceneManager,
             ObjectProvider = netObjectProvider,
+            PlayerCount = GetMaxPlayers((ModeType)gameMode),
+            SessionProperties = new Dictionary<string, SessionProperty>()
+            {
+                { "GameMode", gameMode },
+            }
         });
 
         yield return new WaitUntil(() => joinTask.IsCompleted);
@@ -187,8 +194,8 @@ public class NetworkManager : Manager
 
     private IEnumerator StartGameInternal(Action _onComplete)
     {
-        netRunner.SessionInfo.IsOpen = false;
-        var loadTask = netRunner.LoadScene(SceneRef.FromIndex((int)EScene.Game));
+        Runner.SessionInfo.IsOpen = false;
+        var loadTask = Runner.LoadScene(SceneRef.FromIndex((int)EScene.Game));
 
         yield return new WaitUntil(() => loadTask.IsDone);
 
@@ -202,7 +209,7 @@ public class NetworkManager : Manager
 
     private IEnumerator ShowResultInternal(Action _onComplete)
     {
-        var loadTask = netRunner.LoadScene(SceneRef.FromIndex((int)EScene.Result));
+        var loadTask = Runner.LoadScene(SceneRef.FromIndex((int)EScene.Result));
 
         yield return new WaitUntil(() => loadTask.IsDone);
 
@@ -210,20 +217,6 @@ public class NetworkManager : Manager
         catch (Exception error)
         {
             Debug.LogError("Exception was thrown while invoking OnComplete of ShowResult. " +
-                $"{error.Message}\n{error.StackTrace}");
-        }
-    }
-
-    private IEnumerator ReturnToLobbyInternal(Action _onComplete)
-    {
-        var loadTask = netRunner.LoadScene(SceneRef.FromIndex((int)EScene.Lobby));
-
-        yield return new WaitUntil(() => loadTask.IsDone);
-
-        try { _onComplete?.Invoke(); }
-        catch (Exception error)
-        {
-            Debug.LogError("Exception was thrown while invoking OnComplete of ReturnToLobby. " +
                 $"{error.Message}\n{error.StackTrace}");
         }
     }

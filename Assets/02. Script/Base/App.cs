@@ -1,5 +1,6 @@
 using UnityEngine;
 using DG.Tweening;
+using Fusion;
 
 public enum SceneName
 {
@@ -12,6 +13,9 @@ public enum SceneName
 
 public class App : Singleton<App>
 {
+    [SerializeField] GameObject runnerObj;
+    public static NetworkRunner Runner { get; private set; }
+
     private ViewManager view;
     private SimManager sim;
     private UIManager ui;
@@ -57,6 +61,14 @@ public class App : Singleton<App>
         DOTween.safeModeLogBehaviour = DG.Tweening.Core.Enums.SafeModeLogBehaviour.Error;
 
         DontDestroyOnLoad(gameObject);
+    }
+
+    private void Update()
+    {
+        if (Runner == null)
+        {
+            Runner = Instantiate(runnerObj, transform).GetComponent<NetworkRunner>();
+        }
     }
 
     public static void LoadScene(SceneName sceneName)
