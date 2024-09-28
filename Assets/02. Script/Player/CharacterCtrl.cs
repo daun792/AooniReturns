@@ -26,6 +26,7 @@ public class CharacterCtrl : NetworkBehaviour
     [SerializeField] float DefaultSpeed = 4.5f;
 
     [Header("Joystick Settings")]
+    private JoystickPanel joystick;
     public float joystickSensitivity = 1f;
 
     [Header("CharacterState")]

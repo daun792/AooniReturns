@@ -836,7 +836,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DefaultSpeed: 6
-  joystick: {fileID: 0}
   joystickSensitivity: 1
   characterStates:
   - type: 0
@@ -985,7 +984,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8834954020503639879, guid: 7aad42f75a2286a4abf3105b7f079daa, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1083,7 +1082,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7000294263355068863, guid: a7cdead2fa7626042ace5c71d2b4d723, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
