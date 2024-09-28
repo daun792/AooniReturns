@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Fusion;
 
-public class OniCtrl : NetworkBehaviour
+public abstract class OniCtrl : NetworkBehaviour
 {
     [SerializeField] SpriteRenderer sprite;
     [SerializeField] CharacterUICtrl uiCtrl;
@@ -12,7 +12,7 @@ public class OniCtrl : NetworkBehaviour
 
     [Networked] public bool IsInvincible { get; private set; } = false;
 
-    private CharacterCtrl ownerCtrl;
+    protected CharacterCtrl ownerCtrl;
 
     public override void Spawned()
     {
@@ -39,16 +39,12 @@ public class OniCtrl : NetworkBehaviour
         {
             if (collision.transform.parent.TryGetComponent<CharacterCtrl>(out var charCtrl))
             {
-                RPC_SetHumanToOni(charCtrl);
+                InteractHuman(charCtrl);
             }
         }
     }
 
-    [Rpc]
-    private void RPC_SetHumanToOni(CharacterCtrl _charCtrl)
-    {
-        _charCtrl.SetCharacterState(1);
-    }
+    protected abstract void InteractHuman(CharacterCtrl _charCtrl);
 
     public void Attacked(float _damage)
     {

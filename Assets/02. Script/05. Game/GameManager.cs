@@ -206,9 +206,6 @@ public abstract class GameManager : NetManager
         }
     }
 
-    protected virtual bool CheckVictoryCondition()
-    {
-        return false;
-    }
+    protected abstract bool CheckVictoryCondition();
 }
 

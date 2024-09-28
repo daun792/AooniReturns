@@ -82724,7 +82724,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0baa346ca67715041b7f194c452c9f2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  netPlayerObject: {fileID: 6409362478292922955, guid: b5a5d87f25ca40d47819b61cd6770e9e, type: 3}
+  netPlayerObject: {fileID: 6409362478292922955, guid: 21195a1391328714ab6240abe123a7cb, type: 3}
   respawnPos: {fileID: 262029415}
 --- !u!1 &1098606986
 GameObject:

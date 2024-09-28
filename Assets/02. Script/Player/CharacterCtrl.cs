@@ -76,6 +76,7 @@ public class CharacterCtrl : NetworkBehaviour
 
     public override void Spawned()
     {
+        Debug.LogError(Object.Id);
         App.Manager.Player.SubmitPlayer(this);
 
         if (!HasStateAuthority)

@@ -35,17 +35,17 @@ public class PlayerManager : NetManager
     {
         var randomIndex = Random.Range(0, AllPlayers.Count);
 
-        RPC_SetOni(AllPlayers[randomIndex].Object.Id);
+        RPC_SetOni(networkObjList[randomIndex].Id);
     }
 
     [Rpc]
     private void RPC_SetOni(NetworkId characterNetworkId)
     {
-        foreach (var obj in networkObjList)
+        for (int i = 0; i < networkObjList.Count; i++)
         {
-            if (obj.Id == characterNetworkId)
+            if (networkObjList[i].Id == characterNetworkId)
             {
-                obj.GetComponent<CharacterCtrl>().SetCharacterState(1);
+                characterList[i].SetCharacterState(1);
                 App.Manager.UI.GetPanel<NoticePanel>().NoticeBecomeOni();
             }
         }
