@@ -13,29 +13,20 @@ public enum GameState
     Over,
 }
 
-public class GameManager : NetManager
+public abstract class GameManager : NetManager
 {
     [Header("Network")]
     [SerializeField] NetworkObject netPlayerObject;
     [SerializeField] Transform respawnPos;
 
-    public bool IsGamePlay { get; private set; } = false;
-    public int RoundCount { get; private set; } = 0;
+    public bool IsGamePlay { get; protected set; } = false;
+    public int RoundCount { get; protected set; } = 0;
+
+    protected int maxRound;
+    protected int gameTime;
 
     private GameState currState = GameState.None;
-
-    private NetworkObject myPlayerObject;
-
-    public List<Transform> spawnPositions;
-
     private float internalTime = 1;
-
-    protected override void Awake()
-    {
-        base.Awake();
-
-        InitializeSpawnPositions();
-    }
 
     public override void Spawned()
     {
@@ -46,12 +37,7 @@ public class GameManager : NetManager
 
     private IEnumerator Initialize()
     {
-        //var spawnLoc = new Vector3(5f, 0f, 0f);
-
-        spawnPositions.ElementAt(Random.Range(0, spawnPositions.Count))
-            .GetPositionAndRotation(out var spawnLoc, out var spawnRot);
-
-        var spawnTask = Runner.SpawnAsync(netPlayerObject, spawnLoc, spawnRot,
+        var spawnTask = Runner.SpawnAsync(netPlayerObject, respawnPos.position, respawnPos.rotation,
             Runner.LocalPlayer, null, NetworkSpawnFlags.SharedModeStateAuthLocalPlayer);
 
         yield return new WaitUntil(() => spawnTask.GetAwaiter().IsCompleted);
@@ -62,8 +48,6 @@ public class GameManager : NetManager
             App.Manager.Network.LeaveMatch();
             yield break;
         }
-
-        myPlayerObject = spawnTask.GetAwaiter().GetResult();
 
         if (Runner.IsSceneAuthority)
         {
@@ -124,7 +108,7 @@ public class GameManager : NetManager
                 break;
 
             case GameState.Play:
-                if (RoundCount >= 8)
+                if (RoundCount >= maxRound)
                 {
                     nextState = GameState.Over;
                 }
@@ -142,7 +126,7 @@ public class GameManager : NetManager
     {
         GameState.Begin => 3,
         GameState.CountDown => 10,
-        GameState.Play => 120,
+        GameState.Play => gameTime,
         _ => -1,
     };
 
@@ -203,11 +187,6 @@ public class GameManager : NetManager
         App.Manager.Player.SetRandomOni();
     }
 
-    private void InitializeSpawnPositions()
-    {
-        //spawnPositions = FindObjectsOfType<SpawnPoint>().Select(x => x.transform).ToList();
-    }
-
     public override void Render()
     {
         if (!Runner.IsSceneAuthority || !IsGamePlay)
@@ -215,55 +194,21 @@ public class GameManager : NetManager
             return;
         }
 
-        var players = App.Manager.Player.AllPlayers;
-
-        if (players.Count == 0)
+        if (App.Manager.Player.AllPlayers.Count == 0)
         {
             return;
         }
 
-        if (App.Manager.Player.OniPlayers.Count == players.Count)
+        if (CheckVictoryCondition())
         {
             IsGamePlay = false;
             internalTime = 0;
-            return;
-        }
-
-        if (GetOniAllDead())
-        {
-            IsGamePlay = false;
-            internalTime = 0;
-            return;
-        }
-
-        if (App.Manager.UI.GetPanel<TimePanel>().Remaining <= 0f)
-        {
-            IsGamePlay = false;
-            internalTime = 0;
-            return;
         }
     }
 
-    public bool GetOniAllDead()
+    protected virtual bool CheckVictoryCondition()
     {
-        if (App.Manager.Player.OniPlayers.Count == 0) 
-        {
-            return false;
-        }
-
-        foreach (var charCtrl in App.Manager.Player.OniPlayers)
-        {
-            if (charCtrl.Dead == true)
-            {
-                continue;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        return true;
+        return false;
     }
 }
 

@@ -132,7 +132,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4716749956124521973, guid: 9e695efd63d1b124c97491a4903f2bd7, type: 3}
       propertyPath: SortKey
-      value: 1738326474
+      value: 2484827646
       objectReference: {fileID: 0}
     - target: {fileID: 7828544114283558283, guid: 9e695efd63d1b124c97491a4903f2bd7, type: 3}
       propertyPath: m_Name
@@ -82671,7 +82671,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1025591325}
   - component: {fileID: 1025591326}
-  - component: {fileID: 1025591324}
+  - component: {fileID: 1025591327}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -82679,22 +82679,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1025591324
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1025591323}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b04d95c561c88c941a54f0b99727e219, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  netPlayerObject: {fileID: 6409362478292922955, guid: b5a5d87f25ca40d47819b61cd6770e9e, type: 3}
-  respawnPos: {fileID: 262029415}
-  spawnPositions:
-  - {fileID: 262029415}
 --- !u!4 &1025591325
 Transform:
   m_ObjectHideFlags: 0
@@ -82722,12 +82706,26 @@ MonoBehaviour:
   m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SortKey: 164388143
+  SortKey: 910889315
   ObjectInterest: 1
   Flags: 262145
   NestedObjects: []
   NetworkedBehaviours:
-  - {fileID: 1025591324}
+  - {fileID: 1025591327}
+--- !u!114 &1025591327
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1025591323}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd78bba47eaa8db45b6ab1c8443acfc3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  netPlayerObject: {fileID: 6409362478292922955, guid: b5a5d87f25ca40d47819b61cd6770e9e, type: 3}
+  respawnPos: {fileID: 262029415}
 --- !u!1 &1098606986
 GameObject:
   m_ObjectHideFlags: 0
@@ -82758,6 +82756,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba9763afbd3d0af4cac408b9eb917ae5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  networkObjList: []
+  characterList: []
 --- !u!4 &1098606988
 Transform:
   m_ObjectHideFlags: 0
@@ -82785,7 +82785,7 @@ MonoBehaviour:
   m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SortKey: 2404990763
+  SortKey: 3151491935
   ObjectInterest: 1
   Flags: 262145
   NestedObjects: []
