@@ -8,8 +8,8 @@ public class DualManager : GameManager
     {
         base.Awake();
 
-        maxRound = 4;
-        gameTime = 60;
+        MaxRoundCount = 4;
+        GameTime = 60;
     }
 
     protected override bool CheckVictoryCondition()

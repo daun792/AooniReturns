@@ -13,6 +13,6 @@ public class OniDualCtrl : OniCtrl
     [Rpc]
     private void RPC_TeleportHuman(CharacterCtrl _charCtrl)
     {
-
+        //_charCtrl.MoveToRandomPosition();
     }
 }

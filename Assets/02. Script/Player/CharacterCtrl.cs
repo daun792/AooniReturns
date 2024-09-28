@@ -14,9 +14,8 @@ public enum CharacterType
 
 public class CharacterCtrl : NetworkBehaviour
 {
-    private JoystickPanel joystick;
-
-    public CircleCollider2D characterCollider;
+    [SerializeField] Vector2 mapMinBounds;
+    [SerializeField] Vector2 mapMaxBounds;
 
     [Networked] float speed { get; set; }
 
@@ -25,10 +24,13 @@ public class CharacterCtrl : NetworkBehaviour
     [Networked, OnChangedRender(nameof(OnChangeDir))] public Vector2 CurrDir { get; private set; } = new Vector2(0, -1);
     [Networked, OnChangedRender(nameof(OnChangeWalk))] public bool IsWalk { get; private set; } = false;
 
-    public Rigidbody2D rb2d;
-    public OniCtrl oniCtrl;
-    public HumanCtrl humanCtrl;
+    private Rigidbody2D rb2d;
+    private CircleCollider2D characterCollider;
 
+    private OniCtrl oniCtrl;
+    private HumanCtrl humanCtrl;
+
+    private JoystickPanel joystick;
     private Animator currAnimator;
 
     private TweenerCore<float, float, FloatOptions> speedTween;
@@ -187,5 +189,23 @@ public class CharacterCtrl : NetworkBehaviour
     private void OnChangeWalk()
     {
         currAnimator.SetBool("isWalk", IsWalk);
+    }
+
+    public void MoveToRandomPosition(Vector2 _randomPosition)
+    {
+        transform.position = _randomPosition;
+    }
+
+    private Vector2 GetRandomPosition()
+    {
+        float randomX = UnityEngine.Random.Range(mapMinBounds.x, mapMaxBounds.x);
+        float randomY = UnityEngine.Random.Range(mapMinBounds.y, mapMaxBounds.y);
+        return new Vector2(randomX, randomY);
+    }
+
+    private bool IsPositionColliding(Vector2 position)
+    {
+        Collider2D hitCollider = Physics2D.OverlapCircle(position, 0.5f);
+        return hitCollider != null; 
     }
 }

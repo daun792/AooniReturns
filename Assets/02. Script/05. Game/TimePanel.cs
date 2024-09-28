@@ -6,38 +6,23 @@ using TMPro;
 public class TimePanel : UIBase
 {
     [SerializeField] TextMeshProUGUI timeTMP;
-    [Tooltip("unit: Minute")] [SerializeField] float remainTime = 2f;
 
     private float intervalTime;
-    private float givenTime;
+
+    private float remainTime;
 
     public float Remaining => remainTime;
 
-    public (int, int) Elapsed
-    {
-        get
-        {
-            var elapsed = givenTime - remainTime;
-            var min = Mathf.FloorToInt(elapsed / 60f);
-            var sec = Mathf.FloorToInt(elapsed % 60f);
-            return (min, sec);
-        }
-    }
-
     public override void Init()
     {
-        remainTime *= 60f;
-        givenTime = remainTime;
-        intervalTime = Time.time;
 
-        UpdateText();
     }
 
     public override void OpenPanel()
     {
         base.OpenPanel();
 
-        remainTime = givenTime;
+        remainTime = App.Manager.Game.GameTime;
         intervalTime = Time.time;
 
         UpdateText();

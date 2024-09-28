@@ -131703,7 +131703,7 @@ GameObject:
   - component: {fileID: 1279099410}
   - component: {fileID: 1279099409}
   - component: {fileID: 1279099408}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Map4-Collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -210712,7 +210712,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timeTMP: {fileID: 1238198759}
-  remainTime: 2
 --- !u!1 &1902445758
 GameObject:
   m_ObjectHideFlags: 0

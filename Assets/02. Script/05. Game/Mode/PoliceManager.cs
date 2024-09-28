@@ -8,8 +8,8 @@ public class PoliceManager : GameManager
     {
         base.Awake();
 
-        maxRound = 6;
-        gameTime = 180;
+        MaxRoundCount = 6;
+        GameTime = 180;
     }
 
     protected override bool CheckVictoryCondition()

@@ -8,8 +8,8 @@ public class InfectionManager : GameManager
     {
         base.Awake();
 
-        maxRound = 8;
-        gameTime = 120;
+        MaxRoundCount = 8;
+        GameTime = 120;
     }
 
     protected override bool CheckVictoryCondition()

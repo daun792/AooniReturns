@@ -20,10 +20,10 @@ public abstract class GameManager : NetManager
     [SerializeField] Transform respawnPos;
 
     public bool IsGamePlay { get; protected set; } = false;
-    public int RoundCount { get; protected set; } = 0;
+    public int GameTime { get; protected set; }
 
-    protected int maxRound;
-    protected int gameTime;
+    public int RoundCount { get; protected set; } = 0;
+    public int MaxRoundCount { get; protected set; }
 
     private GameState currState = GameState.None;
     private float internalTime = 1;
@@ -108,7 +108,7 @@ public abstract class GameManager : NetManager
                 break;
 
             case GameState.Play:
-                if (RoundCount >= maxRound)
+                if (RoundCount >= MaxRoundCount)
                 {
                     nextState = GameState.Over;
                 }
@@ -126,7 +126,7 @@ public abstract class GameManager : NetManager
     {
         GameState.Begin => 3,
         GameState.CountDown => 10,
-        GameState.Play => gameTime,
+        GameState.Play => GameTime,
         _ => -1,
     };
 

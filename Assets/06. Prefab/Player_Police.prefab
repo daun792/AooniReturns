@@ -241,14 +241,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9458022f074eb44cbe247152b998d8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterCollider: {fileID: 5958455807564152938}
+  mapMinBounds: {x: -9.4, y: -57.6}
+  mapMaxBounds: {x: 53.2, y: 1.3}
   _Dead: 0
   _CurrState: 0
   _CurrDir: {x: 0, y: -1}
   _IsWalk: 0
-  rb2d: {fileID: 6745093569589246052}
-  oniCtrl: {fileID: 0}
-  humanCtrl: {fileID: 8414292356784627400}
   arrow: {fileID: 8715883189541085358}
 --- !u!114 &9194704116235038489
 MonoBehaviour:
