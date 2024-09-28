@@ -28,7 +28,7 @@ public class GameManager : NetManager
 
     public List<Transform> spawnPositions;
 
-    private float internalTime = 0;
+    private float internalTime = 1;
 
     protected override void Awake()
     {
@@ -138,7 +138,7 @@ public class GameManager : NetManager
 
     private float GetRequiredTime(GameState _time) => _time switch
     {
-        GameState.Begin => 5,
+        GameState.Begin => 3,
         GameState.CountDown => 10,
         GameState.Play => 120,
         _ => -1,
@@ -160,7 +160,11 @@ public class GameManager : NetManager
                 isGamePlay = false;
                 RoundCount++;
 
-                App.Manager.Player.SetAllHuman();
+                if (RoundCount > 1)
+                {
+                    App.Manager.Player.SetAllHuman();
+                }
+
                 App.Manager.UI.GetPanel<RoundPanel>().OpenPanel();
                 App.Manager.UI.GetPanel<TimePanel>().ClosePanel();
                 App.Manager.UI.GetPanel<NoticePanel>().NoticeBeforeGameStart();

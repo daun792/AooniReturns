@@ -8,10 +8,19 @@ public class OniCtrl : NetworkBehaviour
     [SerializeField] SpriteRenderer sprite;
     [SerializeField] CharacterUICtrl uiCtrl;
 
+    public CharacterType Type => CharacterType.Oni;
+
     public float CurrHP { get; private set; } = 100f;
 
     [Networked]
     public bool IsInvincible { get; private set; } = false;
+
+    private CharacterCtrl ownerCtrl;
+
+    public override void Spawned()
+    {
+        ownerCtrl = transform.parent.GetComponent<CharacterCtrl>();
+    }
 
     public void Setup()
     {
@@ -46,7 +55,15 @@ public class OniCtrl : NetworkBehaviour
     {
         CurrHP -= _damage;
         uiCtrl.SetHP(CurrHP);
-        StartCoroutine(AttackedAnimation());
+
+        if (CurrHP <= 0)
+        {
+            ownerCtrl.SetCharacterDead();
+        }
+        else
+        {
+            StartCoroutine(AttackedAnimation());
+        }
     }
 
     private IEnumerator AttackedAnimation()

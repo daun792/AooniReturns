@@ -12,23 +12,14 @@ public enum CharacterType
     Oni
 }
 
-[Serializable]
-public struct CharacterState
-{
-    public CharacterType type;
-    public GameObject obj;
-    public Animator animator;
-}
-
 public class CharacterCtrl : NetworkBehaviour
 {
     [Header("Joystick Settings")]
     private JoystickPanel joystick;
     public float joystickSensitivity = 1f;
 
-    [Header("CharacterState")]
-    [SerializeField] CharacterState[] characterStates;
 
+    CircleCollider2D characterCollider;
     // networked values
     [Networked] float speed { get; set; }
 
@@ -42,7 +33,8 @@ public class CharacterCtrl : NetworkBehaviour
     public bool Dead { get; set; } = false;
 
     private Rigidbody2D rb2d;
-    [SerializeField] OniCtrl oniCtrl;
+    OniCtrl oniCtrl;
+    HumanCtrl humanCtrl;
 
     public CharacterType CurrState { get; private set; }
     private Animator currAnimator;
@@ -95,6 +87,10 @@ public class CharacterCtrl : NetworkBehaviour
         }
 
         rb2d = GetComponent<Rigidbody2D>();
+        characterCollider = GetComponent<CircleCollider2D>();
+
+        oniCtrl = GetComponentInChildren<OniCtrl>();
+        humanCtrl = GetComponentInChildren<HumanCtrl>();
 
         App.Manager.Player.SubmitPlayer(this);
         joystick = App.Manager.UI.GetPanel<JoystickPanel>();
@@ -104,37 +100,57 @@ public class CharacterCtrl : NetworkBehaviour
 
     public void SetCharacterState(int _index)
     {
-        for (int i = 0; i < characterStates.Length; i++)
-        {
-            int index = i;
+        characterCollider.enabled = true;
 
-            if (index == _index)
-            {
-                currAnimator = characterStates[index].animator;
-                CurrState = characterStates[index].type;
-                characterStates[index].obj.SetActive(true);
-            }
-            else
-            {
-                characterStates[index].obj.SetActive(false);
-            }
-        }
-
-        if ((CharacterType.Oni == (CharacterType)_index))
+        switch ((CharacterType)_index)
         {
-            oniCtrl.Setup();
+            case CharacterType.Human:
+                humanCtrl.gameObject.SetActive(true);
+
+                currAnimator = humanCtrl.GetComponent<Animator>();
+                currAnimator.SetFloat("MoveX", CurrDir.x);
+                currAnimator.SetFloat("MoveY", CurrDir.y);
+                currAnimator.SetBool("isWalk", IsWalk);
+
+                CurrState = humanCtrl.Type;
+
+                oniCtrl.gameObject.SetActive(false);
+                break;
+
+            case CharacterType.Oni:
+                oniCtrl.gameObject.SetActive(true);
+
+                oniCtrl.Setup();
+
+                currAnimator = oniCtrl.GetComponent<Animator>();
+                currAnimator.SetFloat("MoveX", CurrDir.x);
+                currAnimator.SetFloat("MoveY", CurrDir.y);
+                currAnimator.SetBool("isWalk", IsWalk);
+
+                CurrState = oniCtrl.Type;
+
+                humanCtrl.gameObject.SetActive(false);
+                break;
         }
     }
     
     public void SetCharacterDead()
     {
         Dead = true;
+
+        oniCtrl.gameObject.SetActive(false);
+        humanCtrl.gameObject.SetActive(false);
+
+        characterCollider.enabled = false;
     }
 
     #region Calculate Position
-    public void FixedUpdate()
+    public override void FixedUpdateNetwork()
     {
-        CalculatePosition();
+        if (HasStateAuthority)
+        {
+            CalculatePosition();
+        }
     }
 
     private void CalculatePosition()
