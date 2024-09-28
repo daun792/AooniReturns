@@ -10,14 +10,17 @@ public class ArrowCtrl : NetworkBehaviour
 
     private Vector3 startPosition = new(0, 0.7f, 0);
 
+    private CharacterCtrl myCharCtrl;
+
     private void Start()
     {
         gameObject.SetActive(false);
+        myCharCtrl = GetComponentInParent<CharacterCtrl>();
     }
 
     public void FireArrow()
     {
-        RPC_FireArrow(App.Manager.Player.MyCtrl.CurrDir);
+        RPC_FireArrow(myCharCtrl.CurrDir);
     }
 
     [Rpc]
@@ -53,6 +56,11 @@ public class ArrowCtrl : NetworkBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (!App.Manager.Game.IsGamePlay)
+        {
+            return;
+        }
+
         if (collision.CompareTag("Oni"))
         {
             if (collision.TryGetComponent<OniCtrl>(out var oniCtrl))

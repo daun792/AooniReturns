@@ -19,7 +19,7 @@ public class GameManager : NetManager
     [SerializeField] NetworkObject netPlayerObject;
     [SerializeField] Transform respawnPos;
 
-    private bool isGamePlay = false;
+    public bool IsGamePlay { get; private set; } = false;
     public int RoundCount { get; private set; } = 0;
 
     private GameState currState = GameState.None;
@@ -99,6 +99,8 @@ public class GameManager : NetManager
             {
                 yield break;
             }
+
+            yield return null;
         }
         while (true);
     }
@@ -152,12 +154,12 @@ public class GameManager : NetManager
         switch (_state)
         {
             case GameState.None:
-                isGamePlay = false;
+                IsGamePlay = false;
                 Debug.LogError($"Impossible route detected. {_state}");
                 break;
 
             case GameState.Begin:
-                isGamePlay = false;
+                IsGamePlay = false;
                 RoundCount++;
 
                 if (RoundCount > 1)
@@ -171,20 +173,20 @@ public class GameManager : NetManager
                 break;
 
             case GameState.CountDown:
-                isGamePlay = false;
+                IsGamePlay = false;
                 App.Manager.UI.GetPanel<NoticePanel>().NoticeCountDown();
                 break;
 
             case GameState.Play:
-                isGamePlay = true;
-
                 App.Manager.UI.GetPanel<RoundPanel>().ClosePanel();
                 App.Manager.UI.GetPanel<TimePanel>().OpenPanel();
                 SetRandomOni();
+
+                IsGamePlay = true;
                 break;
 
             case GameState.Over:
-                isGamePlay = false;
+                IsGamePlay = false;
                 break;
         }
     }
@@ -206,7 +208,7 @@ public class GameManager : NetManager
 
     public override void Render()
     {
-        if (!Runner.IsSceneAuthority || !isGamePlay)
+        if (!Runner.IsSceneAuthority || !IsGamePlay)
         {
             return;
         }
@@ -220,21 +222,21 @@ public class GameManager : NetManager
 
         if (App.Manager.Player.OniPlayers.Count == players.Count)
         {
-            isGamePlay = false;
+            IsGamePlay = false;
             internalTime = 0;
             return;
         }
 
         if (GetOniAllDead())
         {
-            isGamePlay = false;
+            IsGamePlay = false;
             internalTime = 0;
             return;
         }
 
         if (App.Manager.UI.GetPanel<TimePanel>().Remaining <= 0f)
         {
-            isGamePlay = false;
+            IsGamePlay = false;
             internalTime = 0;
             return;
         }

@@ -8,16 +8,27 @@ public class SkillPanel : UIBase
     [SerializeField] Button arrowBtn;
     [SerializeField] Button barrelBtn;
 
+    private CharacterCtrl myCharCtrl;
+
     public override void Init()
     {
         arrowBtn.onClick.AddListener(OnClickArrow);
         barrelBtn.onClick.AddListener(OnClickBarrel);
+
+        StartCoroutine(WaitForMyChar());
+    }
+
+    private IEnumerator WaitForMyChar()
+    {
+        yield return new WaitUntil(() => App.Manager.Player.MyCtrl != null);
+
+        myCharCtrl = App.Manager.Player.MyCtrl;
     }
 
     private void OnClickArrow()
     {
         StartCoroutine(WaitForCoolTime());
-        App.Manager.Player.MyCtrl.arrow.FireArrow();
+        myCharCtrl.arrow.FireArrow();
     }
 
     private void OnClickBarrel()

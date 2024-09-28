@@ -23,7 +23,7 @@ public class SoundManager : Manager
     {
         public bool isMuted;
 
-        public readonly float Calculated => isMuted ? 0f : 0.5f;
+        public readonly float Calculated => isMuted ? 0f : 0.1f;
 
         public VolumeData(bool _isMuted)
         {

@@ -5,7 +5,8 @@ using System.Linq;
 
 public class PlayerManager : NetManager
 {
-    private readonly List<CharacterCtrl> characterList = new(8);
+    public List<NetworkObject> networkObjList = new(8);
+    public List<CharacterCtrl> characterList = new(8);
 
     public CharacterCtrl MyCtrl { get; private set; }
 
@@ -16,7 +17,13 @@ public class PlayerManager : NetManager
 
     public void SubmitPlayer(CharacterCtrl _char)
     {
+        if (characterList.Contains(_char))
+        {
+            return;
+        }
+
         characterList.Add(_char);
+        networkObjList.Add(_char.Object);
 
         if (_char.Object.StateAuthority.PlayerId == App.Manager.Network.Runner.LocalPlayer.PlayerId)
         {
@@ -28,22 +35,33 @@ public class PlayerManager : NetManager
     {
         var randomIndex = Random.Range(0, AllPlayers.Count);
 
-        RPC_SetOni(AllPlayers[randomIndex]);
+        RPC_SetOni(AllPlayers[randomIndex].Object.Id);
     }
 
     [Rpc]
-    private void RPC_SetOni(CharacterCtrl _charCtrl)
+    private void RPC_SetOni(NetworkId characterNetworkId)
     {
-        _charCtrl.SetCharacterState(1);
-
-        App.Manager.UI.GetPanel<NoticePanel>().NoticeBecomeOni();
+        foreach (var obj in networkObjList)
+        {
+            if (obj.Id == characterNetworkId)
+            {
+                obj.GetComponent<CharacterCtrl>().SetCharacterState(1);
+                App.Manager.UI.GetPanel<NoticePanel>().NoticeBecomeOni();
+            }
+        }
     }
 
     public void SetAllHuman()
     {
-        foreach (var charCtrl in AllPlayers)
+        RPC_SetHuman();
+    }
+
+    [Rpc]
+    private void RPC_SetHuman()
+    {
+        foreach (var character in characterList)
         {
-            charCtrl.SetCharacterState(0);
+            character.SetCharacterState(0);
         }
     }
 }

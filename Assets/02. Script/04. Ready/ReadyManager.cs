@@ -7,12 +7,10 @@ public class ReadyManager : SimManager, IPlayerJoined, IPlayerLeft
     [Header("Network Objects")]
     [SerializeField] NetworkObject playerPrefab;
 
-    private Dictionary<PlayerRef, NetworkObject> playerList;
-
     private void Start()
     {
-        playerList = new(8);
-        Runner.SpawnAsync(playerPrefab);
+        Runner.SpawnAsync(playerPrefab, Vector3.zero, Quaternion.identity,
+            Runner.LocalPlayer, null, NetworkSpawnFlags.SharedModeStateAuthLocalPlayer);
     }
 
     void IPlayerJoined.PlayerJoined(PlayerRef player)
@@ -22,11 +20,6 @@ public class ReadyManager : SimManager, IPlayerJoined, IPlayerLeft
 
     void IPlayerLeft.PlayerLeft(PlayerRef _player)
     {
-        for (int i = 0; i < playerList.Count; ++i)
-        {
-            playerList.Remove(_player);
-        }
-
         App.UI.Ready.SetPlayerCount();
     }
 }

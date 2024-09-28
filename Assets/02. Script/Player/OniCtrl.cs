@@ -30,6 +30,11 @@ public class OniCtrl : NetworkBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (!App.Manager.Game.IsGamePlay)
+        {
+            return;
+        } 
+
         if (collision.CompareTag("Human"))
         {
             if (collision.transform.parent.TryGetComponent<CharacterCtrl>(out var charCtrl))
@@ -58,7 +63,7 @@ public class OniCtrl : NetworkBehaviour
 
         if (CurrHP <= 0)
         {
-            ownerCtrl.SetCharacterDead();
+            ownerCtrl.SetCharacterDead(true);
         }
         else
         {

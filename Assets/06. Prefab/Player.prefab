@@ -242,9 +242,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   joystickSensitivity: 1
+  characterCollider: {fileID: 5958455807564152938}
   _IsBusted: 0
   _Escaped: 0
-  _Dead: 0
+  rb2d: {fileID: 6745093569589246052}
   oniCtrl: {fileID: 619841517553318270}
   humanCtrl: {fileID: 8414292356784627400}
   arrow: {fileID: 8715883189541085358}
@@ -382,7 +383,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8834954020503639879, guid: 7aad42f75a2286a4abf3105b7f079daa, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
