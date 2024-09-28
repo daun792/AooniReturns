@@ -1,19 +1,31 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Fusion;
 using DG.Tweening;
 
-public class ArrowCtrl : MonoBehaviour
+public class ArrowCtrl : NetworkBehaviour
 {
     [SerializeField] Animator animCtrl;
 
     private Vector3 startPosition = new(0, 0.7f, 0);
 
+    private void Start()
+    {
+        gameObject.SetActive(false);
+    }
+
     public void FireArrow()
+    {
+        RPC_FireArrow(App.Manager.Player.MyCtrl.CurrDir);
+    }
+
+    [Rpc]
+    private void RPC_FireArrow(Vector2 _dir)
     {
         gameObject.SetActive(true);
 
-        Vector2 normalizedDir = NormalizeDirection(App.Manager.Player.MyCtrl.currDir);
+        Vector2 normalizedDir = NormalizeDirection(_dir);
 
         Vector3 targetPosition = transform.position + new Vector3(normalizedDir.x, normalizedDir.y, 0) * 2;
 

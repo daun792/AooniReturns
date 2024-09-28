@@ -54,7 +54,10 @@ public class CharacterCtrl : NetworkBehaviour
     private float speedTarget;
     public ArrowCtrl arrow;
 
-    public Vector2 currDir;
+    [Networked, OnChangedRender(nameof(OnChangeDir))] 
+    public Vector2 CurrDir { get; private set; } = new Vector2(0, -1);
+    [Networked, OnChangedRender(nameof(OnChangeWalk))] 
+    public bool IsWalk { get; private set; } = false;
 
     public float Stamina { get; private set; } = 100;
 
@@ -139,24 +142,20 @@ public class CharacterCtrl : NetworkBehaviour
         var yDir = joystick.Vertical * joystickSensitivity;
 
         var dir = new Vector2(xDir, yDir);
+        IsWalk = dir != Vector2.zero;
 
         if (dir == Vector2.zero)
         {
-            currAnimator.SetBool("isWalk", false);
-
             Speed = 0f;
             rb2d.velocity = Vector2.zero;
             return;
         }
 
-        currAnimator.SetBool("isWalk", true);
-        currAnimator.SetFloat("MoveX", xDir);
-        currAnimator.SetFloat("MoveY", yDir);
+        CurrDir = dir.normalized;
 
         Speed = DefaultSpeed;
-        currDir = dir.normalized;
 
-        rb2d.velocity = Speed * currDir;
+        rb2d.velocity = Speed * CurrDir;
     }
     #endregion
 
@@ -173,5 +172,16 @@ public class CharacterCtrl : NetworkBehaviour
         }
 
         SaveCurrentInfo();
+    }
+
+    private void OnChangeDir()
+    {
+        currAnimator.SetFloat("MoveX", CurrDir.x);
+        currAnimator.SetFloat("MoveY", CurrDir.y);
+    }
+
+    private void OnChangeWalk()
+    {
+        currAnimator.SetBool("isWalk", IsWalk);
     }
 }
