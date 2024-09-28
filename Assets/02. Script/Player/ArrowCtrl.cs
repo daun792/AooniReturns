@@ -55,14 +55,17 @@ public class ArrowCtrl : NetworkBehaviour
     {
         if (collision.CompareTag("Oni"))
         {
-            if (collision.transform.parent.TryGetComponent<CharacterCtrl>(out var charCtrl))
+            if (collision.TryGetComponent<OniCtrl>(out var oniCtrl))
             {
-                transform.DOKill();
+                if (!oniCtrl.IsInvincible)
+                {
+                    oniCtrl.Attacked();
 
-                gameObject.SetActive(false);
-                transform.localPosition = startPosition;
+                    transform.DOKill();
 
-                //charCtrl
+                    gameObject.SetActive(false);
+                    transform.localPosition = startPosition;
+                }
             }
         }
     }

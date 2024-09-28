@@ -436,6 +436,7 @@ GameObject:
   - component: {fileID: 3978861846358590730}
   - component: {fileID: 8008565880654005604}
   - component: {fileID: 461337640643031317}
+  - component: {fileID: 4043261139103159101}
   m_Layer: 0
   m_Name: Oni
   m_TagString: Oni
@@ -567,3 +568,17 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: 0.64}
   m_Size: {x: 0.64, y: 1.28}
   m_Direction: 0
+--- !u!114 &4043261139103159101
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8834954020503639879}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e835f699ac5fc248934af2f3c1d39cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sprite: {fileID: 3978861846358590730}
+  _IsInvincible: 0
