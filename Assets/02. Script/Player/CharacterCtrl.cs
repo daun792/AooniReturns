@@ -26,7 +26,6 @@ public class CharacterCtrl : NetworkBehaviour
     [SerializeField] float DefaultSpeed = 4.5f;
 
     [Header("Joystick Settings")]
-    public JoystickPanel joystick;
     public float joystickSensitivity = 1f;
 
     [Header("CharacterState")]
@@ -47,6 +46,8 @@ public class CharacterCtrl : NetworkBehaviour
     public bool Dead { get; set; } = false;
 
     private Rigidbody2D rb2d;
+
+    [Networked]
     public CharacterType CurrState { get; private set; }
     private Animator currAnimator;
 
@@ -56,6 +57,7 @@ public class CharacterCtrl : NetworkBehaviour
 
     [Networked, OnChangedRender(nameof(OnChangeDir))] 
     public Vector2 CurrDir { get; private set; } = new Vector2(0, -1);
+
     [Networked, OnChangedRender(nameof(OnChangeWalk))] 
     public bool IsWalk { get; private set; } = false;
 
@@ -129,10 +131,8 @@ public class CharacterCtrl : NetworkBehaviour
     }
 
     #region Calculate Position
-    public override void FixedUpdateNetwork()
+    public void FixedUpdate()
     {
-        if (!HasStateAuthority || IsCaught || Escaped) return;
-
         CalculatePosition();
     }
 
@@ -153,9 +153,7 @@ public class CharacterCtrl : NetworkBehaviour
 
         CurrDir = dir.normalized;
 
-        Speed = DefaultSpeed;
-
-        rb2d.velocity = Speed * CurrDir;
+        rb2d.velocity = 6 * CurrDir;
     }
     #endregion
 

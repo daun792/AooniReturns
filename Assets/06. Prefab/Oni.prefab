@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 8184565298863288483}
   - component: {fileID: 211569066573002755}
   - component: {fileID: 2923680369532595031}
+  - component: {fileID: 315817954109459425}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -60,7 +61,7 @@ Canvas:
   m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
-  m_SortingLayerID: 0
+  m_SortingLayerID: 936672511
   m_SortingOrder: 0
   m_TargetDisplay: 0
 --- !u!114 &211569066573002755
@@ -103,6 +104,20 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &315817954109459425
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 919521336874312660}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58ebcb814493a654395791619212c5e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerInfoTMP: {fileID: 2508984310488622260}
+  hpFillImg: {fileID: 857251864343284495}
 --- !u!1 &4139379058700987167
 GameObject:
   m_ObjectHideFlags: 0
@@ -581,4 +596,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sprite: {fileID: 3978861846358590730}
+  uiCtrl: {fileID: 315817954109459425}
+  _CurrHP: 100
   _IsInvincible: 0

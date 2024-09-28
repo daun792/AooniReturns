@@ -1,18 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using Fusion;
+using TMPro;
 
-public class CharacterUICtrl : MonoBehaviour
+public class CharacterUICtrl : NetworkBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] TextMeshProUGUI playerInfoTMP;
+    [SerializeField] Image hpFillImg;
+
+    private const string infoString = "Lv.{0} {1}";
+
+    public override void Spawned()
     {
-        
+        playerInfoTMP.text = string.Format(infoString, 1, 2);
     }
 
-    // Update is called once per frame
-    void Update()
+    public void SetHP(float _value)
     {
-        
+        hpFillImg.fillAmount = _value / 100f;
     }
 }

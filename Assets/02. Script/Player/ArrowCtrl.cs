@@ -59,7 +59,7 @@ public class ArrowCtrl : NetworkBehaviour
             {
                 if (!oniCtrl.IsInvincible)
                 {
-                    oniCtrl.Attacked();
+                    oniCtrl.Attacked(10);
 
                     transform.DOKill();
 
