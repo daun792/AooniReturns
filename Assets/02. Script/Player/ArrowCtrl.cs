@@ -67,12 +67,12 @@ public class ArrowCtrl : NetworkBehaviour
             {
                 if (!oniCtrl.IsInvincible)
                 {
-                    oniCtrl.Attacked(10);
-
                     transform.DOKill();
 
                     gameObject.SetActive(false);
                     transform.localPosition = startPosition;
+
+                    oniCtrl.Attacked(10);
                 }
             }
         }

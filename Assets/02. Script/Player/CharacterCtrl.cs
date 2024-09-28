@@ -14,44 +14,26 @@ public enum CharacterType
 
 public class CharacterCtrl : NetworkBehaviour
 {
-    [Header("Joystick Settings")]
     private JoystickPanel joystick;
-    public float joystickSensitivity = 1f;
-
 
     public CircleCollider2D characterCollider;
-    // networked values
+
     [Networked] float speed { get; set; }
 
-    [Networked, OnChangedRender(nameof(SaveCurrentInfo))]
-    public bool IsBusted { get; private set; } = false;
-
-    [Networked, OnChangedRender(nameof(OnEscape))]
-    public bool Escaped { get; set; } = false;
-
-    [Networked, OnChangedRender(nameof(OnChangeDead))]
-    public bool Dead { get; set; } = false;
+    [Networked, OnChangedRender(nameof(OnChangeDead))] public bool Dead { get; set; } = false;
+    [Networked, OnChangedRender(nameof(OnChangeState))] public CharacterType CurrState { get; private set; } = CharacterType.Human;
+    [Networked, OnChangedRender(nameof(OnChangeDir))] public Vector2 CurrDir { get; private set; } = new Vector2(0, -1);
+    [Networked, OnChangedRender(nameof(OnChangeWalk))] public bool IsWalk { get; private set; } = false;
 
     public Rigidbody2D rb2d;
     public OniCtrl oniCtrl;
     public HumanCtrl humanCtrl;
-
-    [Networked, OnChangedRender(nameof(OnChangeState))]
-    public CharacterType CurrState { get; private set; }
 
     private Animator currAnimator;
 
     private TweenerCore<float, float, FloatOptions> speedTween;
     private float speedTarget;
     public ArrowCtrl arrow;
-
-    [Networked, OnChangedRender(nameof(OnChangeDir))] 
-    public Vector2 CurrDir { get; private set; } = new Vector2(0, -1);
-
-    [Networked, OnChangedRender(nameof(OnChangeWalk))] 
-    public bool IsWalk { get; private set; } = false;
-
-    public float Stamina { get; private set; } = 100;
 
     public float Speed
     {
@@ -125,26 +107,28 @@ public class CharacterCtrl : NetworkBehaviour
                 humanCtrl.gameObject.SetActive(true);
 
                 currAnimator = humanCtrl.GetComponent<Animator>();
-                currAnimator.SetFloat("MoveX", CurrDir.x);
-                currAnimator.SetFloat("MoveY", CurrDir.y);
-                currAnimator.SetBool("isWalk", IsWalk);
+                SetupAnimator();
 
                 oniCtrl.gameObject.SetActive(false);
                 break;
 
             case CharacterType.Oni:
                 oniCtrl.gameObject.SetActive(true);
-
                 oniCtrl.Setup();
 
                 currAnimator = oniCtrl.GetComponent<Animator>();
-                currAnimator.SetFloat("MoveX", CurrDir.x);
-                currAnimator.SetFloat("MoveY", CurrDir.y);
-                currAnimator.SetBool("isWalk", IsWalk);
+                SetupAnimator();
 
                 humanCtrl.gameObject.SetActive(false);
                 break;
         }
+    }
+
+    private void SetupAnimator()
+    {
+        currAnimator.SetFloat("MoveX", CurrDir.x);
+        currAnimator.SetFloat("MoveY", CurrDir.y);
+        currAnimator.SetBool("isWalk", IsWalk);
     }
 
     public void SetCharacterDead(bool _isDead)
@@ -174,8 +158,8 @@ public class CharacterCtrl : NetworkBehaviour
 
     private void CalculatePosition()
     {
-        var xDir = joystick.Horizontal * joystickSensitivity;
-        var yDir = joystick.Vertical * joystickSensitivity;
+        var xDir = joystick.Horizontal;
+        var yDir = joystick.Vertical;
 
         var dir = new Vector2(xDir, yDir);
         IsWalk = dir != Vector2.zero;
@@ -192,21 +176,6 @@ public class CharacterCtrl : NetworkBehaviour
         rb2d.velocity = 6 * CurrDir;
     }
     #endregion
-
-    private void SaveCurrentInfo()
-    {
-        // 네트워크 동기화 로직
-    }
-
-    private void OnEscape()
-    {
-        if (!HasStateAuthority)
-        {
-            return;
-        }
-
-        SaveCurrentInfo();
-    }
 
     private void OnChangeDir()
     {

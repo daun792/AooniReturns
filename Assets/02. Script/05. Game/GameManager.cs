@@ -187,6 +187,8 @@ public class GameManager : NetManager
 
             case GameState.Over:
                 IsGamePlay = false;
+
+                App.Manager.Network.ShowResult();
                 break;
         }
     }

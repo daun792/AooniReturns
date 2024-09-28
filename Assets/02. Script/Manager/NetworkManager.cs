@@ -13,7 +13,7 @@ public enum EScene : byte
     Lobby = 3,
     Ready = 4,
     Game = 5,
-    Result = 6,
+    Result = 9,
 }
 
 [RequireComponent(typeof(INetworkSceneManager), typeof(INetworkObjectProvider))]
@@ -75,7 +75,7 @@ public class NetworkManager : Manager
         //App.PlayerInfo.ElapsedMin = elapsed.Item1;
         //App.PlayerInfo.ElapsedSec = elapsed.Item2;
 
-        //StartCoroutine(ShowResultInternal(_onComplete));
+        StartCoroutine(ShowResultInternal(_onComplete));
     }
 
     private IEnumerator JoinLobbyInternal(Action _onComplete)
@@ -195,7 +195,9 @@ public class NetworkManager : Manager
     private IEnumerator StartGameInternal(Action _onComplete)
     {
         Runner.SessionInfo.IsOpen = false;
-        var loadTask = Runner.LoadScene(SceneRef.FromIndex((int)EScene.Game));
+        var modeIndex = (int)Runner.SessionInfo.Properties["GameMode"];
+        var sceneIndex = modeIndex + (int)EScene.Game;
+        var loadTask = Runner.LoadScene(SceneRef.FromIndex(sceneIndex));
 
         yield return new WaitUntil(() => loadTask.IsDone);
 

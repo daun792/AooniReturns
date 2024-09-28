@@ -8,12 +8,9 @@ public class OniCtrl : NetworkBehaviour
     [SerializeField] SpriteRenderer sprite;
     [SerializeField] CharacterUICtrl uiCtrl;
 
-    public CharacterType Type => CharacterType.Oni;
-
     public float CurrHP { get; private set; } = 100f;
 
-    [Networked]
-    public bool IsInvincible { get; private set; } = false;
+    [Networked] public bool IsInvincible { get; private set; } = false;
 
     private CharacterCtrl ownerCtrl;
 
@@ -25,7 +22,10 @@ public class OniCtrl : NetworkBehaviour
     public void Setup()
     {
         CurrHP = 100f;
+        uiCtrl.SetHP(CurrHP);
+
         IsInvincible = false;
+        sprite.color = Color.white;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
