@@ -22,9 +22,6 @@ public struct CharacterState
 
 public class CharacterCtrl : NetworkBehaviour
 {
-    [Header("Player Settings")]
-    [SerializeField] float DefaultSpeed = 4.5f;
-
     [Header("Joystick Settings")]
     private JoystickPanel joystick;
     public float joystickSensitivity = 1f;
@@ -34,8 +31,6 @@ public class CharacterCtrl : NetworkBehaviour
 
     // networked values
     [Networked] float speed { get; set; }
-    [Networked] bool IsCaught { get; set; }
-    [Networked] public bool Targetable { get; private set; } = true;
 
     [Networked, OnChangedRender(nameof(SaveCurrentInfo))]
     public bool IsBusted { get; private set; } = false;
@@ -47,8 +42,8 @@ public class CharacterCtrl : NetworkBehaviour
     public bool Dead { get; set; } = false;
 
     private Rigidbody2D rb2d;
+    [SerializeField] OniCtrl oniCtrl;
 
-    [Networked]
     public CharacterType CurrState { get; private set; }
     private Animator currAnimator;
 
@@ -123,6 +118,11 @@ public class CharacterCtrl : NetworkBehaviour
             {
                 characterStates[index].obj.SetActive(false);
             }
+        }
+
+        if ((CharacterType.Oni == (CharacterType)_index))
+        {
+            oniCtrl.Setup();
         }
     }
     

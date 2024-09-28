@@ -38,4 +38,12 @@ public class PlayerManager : NetManager
 
         App.Manager.UI.GetPanel<NoticePanel>().NoticeBecomeOni();
     }
+
+    public void SetAllHuman()
+    {
+        foreach (var charCtrl in AllPlayers)
+        {
+            charCtrl.SetCharacterState(0);
+        }
+    }
 }

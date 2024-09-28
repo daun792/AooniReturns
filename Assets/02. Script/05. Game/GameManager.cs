@@ -78,7 +78,6 @@ public class GameManager : NetManager
 
     private IEnumerator InternalGameLoop()
     {
-        Debug.LogError("InternalGameLoop");
         do
         {
             internalTime -= Time.deltaTime;
@@ -161,6 +160,7 @@ public class GameManager : NetManager
                 isGamePlay = false;
                 RoundCount++;
 
+                App.Manager.Player.SetAllHuman();
                 App.Manager.UI.GetPanel<RoundPanel>().OpenPanel();
                 App.Manager.UI.GetPanel<TimePanel>().ClosePanel();
                 App.Manager.UI.GetPanel<NoticePanel>().NoticeBeforeGameStart();
@@ -202,7 +202,7 @@ public class GameManager : NetManager
 
     public override void Render()
     {
-        if (!Runner.IsSceneAuthority || isGamePlay)
+        if (!Runner.IsSceneAuthority || !isGamePlay)
         {
             return;
         }
@@ -216,14 +216,21 @@ public class GameManager : NetManager
 
         if (App.Manager.Player.OniPlayers.Count == players.Count)
         {
-            Debug.Log("App.Manager.Player.OniPlayers.Count == players.Count");
+            isGamePlay = false;
             internalTime = 0;
             return;
         }
 
         if (GetOniAllDead())
         {
-            Debug.Log("GetOniAllDead()");
+            isGamePlay = false;
+            internalTime = 0;
+            return;
+        }
+
+        if (App.Manager.UI.GetPanel<TimePanel>().Remaining <= 0f)
+        {
+            isGamePlay = false;
             internalTime = 0;
             return;
         }

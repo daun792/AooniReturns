@@ -8,13 +8,12 @@ public class OniCtrl : NetworkBehaviour
     [SerializeField] SpriteRenderer sprite;
     [SerializeField] CharacterUICtrl uiCtrl;
 
-    [Networked, OnChangedRender(nameof(OnChangeCurrHP))]
     public float CurrHP { get; private set; } = 100f;
 
     [Networked]
     public bool IsInvincible { get; private set; } = false;
 
-    private void OnEnable()
+    public void Setup()
     {
         CurrHP = 100f;
         IsInvincible = false;
@@ -31,11 +30,6 @@ public class OniCtrl : NetworkBehaviour
         }
     }
 
-    private void OnChangeCurrHP()
-    {
-        //uiCtrl.SetHP(CurrHP);
-    }
-
     [Rpc]
     private void RPC_SetHumanToOni(CharacterCtrl _charCtrl)
     {
@@ -44,16 +38,15 @@ public class OniCtrl : NetworkBehaviour
 
     public void Attacked(float _damage)
     {
-        CurrHP -= _damage;
-
-        RPC_Attacked();
+        RPC_Attacked(_damage);
     }
 
     [Rpc]
-    private void RPC_Attacked()
+    private void RPC_Attacked(float _damage)
     {
-        StartCoroutine(AttackedAnimation());
+        CurrHP -= _damage;
         uiCtrl.SetHP(CurrHP);
+        StartCoroutine(AttackedAnimation());
     }
 
     private IEnumerator AttackedAnimation()
