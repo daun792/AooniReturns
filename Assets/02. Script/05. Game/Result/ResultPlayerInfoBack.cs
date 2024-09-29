@@ -12,7 +12,7 @@ public class ResultPlayerInfoBack : MonoBehaviour
     [SerializeField] TextMeshProUGUI expTMP;
     [SerializeField] TextMeshProUGUI goldTMP;
 
-    private const string nickNameString = "Lv.{0} {1} {2}";
+    private const string nickNameString = "Lv.{0} {1}";
     private const string scoreString = "{0}/{1}/{2}";
     private const string addString = "+{0}";
 

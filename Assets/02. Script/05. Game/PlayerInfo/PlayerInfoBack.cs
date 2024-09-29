@@ -41,6 +41,11 @@ public class PlayerInfoBack : MonoBehaviour
 
         var clientRole = _charCtrl.IsHost ? masterClient : string.Empty;
         nickTMP.text = string.Format(nickNameString, _charCtrl.Level, _charCtrl.NickName, clientRole);
+
+        if (_charCtrl.IsHost)
+        {
+            transform.SetAsFirstSibling();
+        }
     }
 
     public void SetNone()

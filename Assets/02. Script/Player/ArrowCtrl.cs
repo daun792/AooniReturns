@@ -61,6 +61,11 @@ public class ArrowCtrl : NetworkBehaviour
             return;
         }
 
+        if (!myCharCtrl.HasStateAuthority)
+        {
+            return;
+        }
+
         if (collision.CompareTag("Oni"))
         {
             if (collision.TryGetComponent<OniCtrl>(out var oniCtrl))

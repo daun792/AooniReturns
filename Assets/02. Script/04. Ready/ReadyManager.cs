@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 using Fusion;
 using System.Collections.Generic;
 
@@ -25,7 +26,17 @@ public class ReadyManager : SimManager, IPlayerJoined, IPlayerLeft
     {
         App.UI.Ready.SetPlayerCount();
 
+        StartCoroutine(WaitForCharCtrl(player));
+    }
+
+    private IEnumerator WaitForCharCtrl(PlayerRef player)
+    {
+        yield return new WaitUntil(() => Runner.GetPlayerObject(player) != null);
+
         var playerObj = Runner.GetPlayerObject(player);
+
+        yield return new WaitUntil(() => playerObj.GetComponent<CharacterCtrl>() != null);
+
         var charCtrl = playerObj.GetComponent<CharacterCtrl>();
         App.Manager.UI.Chat.SendNotice($"<color=#00FF00>{charCtrl.NickName}님이 게임에 입장하셨습니다.</color>");
     }

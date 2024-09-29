@@ -50,6 +50,11 @@ public abstract class OniCtrl : NetworkBehaviour
 
         if (collision.CompareTag("Human"))
         {
+            if (!ownerCtrl.HasStateAuthority)
+            {
+                return;
+            }
+
             if (collision.transform.parent.TryGetComponent<CharacterCtrl>(out var charCtrl))
             {
                 ownerCtrl.AddHumanKillScore();

@@ -3,6 +3,7 @@ using UnityEngine;
 using Fusion;
 using System.Linq;
 using UnityEngine.SceneManagement;
+using System.Collections;
 
 public class PlayerManager : NetManager, IPlayerJoined, IPlayerLeft
 {
@@ -88,6 +89,17 @@ public class PlayerManager : NetManager, IPlayerJoined, IPlayerLeft
 
     void IPlayerJoined.PlayerJoined(PlayerRef player)
     {
+        StartCoroutine(WaitForCharCtrl(player));
+    }
+
+    private IEnumerator WaitForCharCtrl(PlayerRef player)
+    {
+        yield return new WaitUntil(() => Runner.GetPlayerObject(player) != null);
+
+        var playerObj = Runner.GetPlayerObject(player);
+
+        yield return new WaitUntil(() => playerObj.GetComponent<CharacterCtrl>() != null);
+
         App.Manager.UI.GetPanel<PlayerInfoPanel>().Setup();
     }
 

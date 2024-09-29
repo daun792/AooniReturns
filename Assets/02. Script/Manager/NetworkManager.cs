@@ -3,9 +3,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Fusion;
-using Fusion.Photon.Realtime;
 using System.Collections.Generic;
-using System.Linq;
 
 public enum EScene : byte
 {
@@ -36,46 +34,10 @@ public class NetworkManager : Manager
         netObjectProvider = GetComponent<INetworkObjectProvider>();
     }
 
+    #region Join Lobby
     public void JoinLobby(Action _onComplete = null)
     {
         StartCoroutine(JoinLobbyInternal(_onComplete));
-    }
-
-    public void CreateMatch(string _roomName, string _password, ModeType _mode, Action _onComplete = null)
-    {
-        StartCoroutine(CreateMatchInternal(_roomName, _password, _mode, _onComplete));
-    }
-
-    public void JoinMatch(SessionInfo _info, Action _onComplete = null)
-    {
-        StartCoroutine(JoinMatchInternal(_info, _onComplete));
-    }
-
-    public void LeaveMatch(Action _onComplete = null)
-    {
-        Runner.Shutdown(true);
-        SceneManager.LoadScene((int)EScene.Lobby);
-
-        try { _onComplete?.Invoke(); }
-        catch (Exception error)
-        {
-            Debug.LogError("Exception was thrown while invoking OnComplete of LeaveMatch. " +
-                $"{error.Message}\n{error.StackTrace}");
-        }
-    }
-
-    public void StartGame(Action _onComplete = null)
-    {
-        StartCoroutine(StartGameInternal(_onComplete));
-    }
-
-    public void ShowResult(Action _onComplete = null)
-    {
-        //var elapsed = App.Manager.UI.GetPanel<Panel_Time>().Elapsed;
-        //App.PlayerInfo.ElapsedMin = elapsed.Item1;
-        //App.PlayerInfo.ElapsedSec = elapsed.Item2;
-
-        StartCoroutine(ShowResultInternal(_onComplete));
     }
 
     private IEnumerator JoinLobbyInternal(Action _onComplete)
@@ -87,7 +49,6 @@ public class NetworkManager : Manager
         var joinTaskResult = joinTask.Result;
         if (!joinTaskResult.Ok)
         {
-            // TODO: handle error case
             Debug.LogError("Failed to join lobby. Exiting...");
             LeaveMatch();
             yield break;
@@ -101,6 +62,13 @@ public class NetworkManager : Manager
             Debug.LogError("Exception was thrown while invoking OnComplete of JoinLobby. " +
                 $"{error.Message}\n{error.StackTrace}");
         }
+    }
+    #endregion
+
+    #region Create Match
+    public void CreateMatch(string _roomName, string _password, ModeType _mode, Action _onComplete = null)
+    {
+        StartCoroutine(CreateMatchInternal(_roomName, _password, _mode, _onComplete));
     }
 
     private IEnumerator CreateMatchInternal(string _roomName, string _password, ModeType _mode, Action _onComplete)
@@ -126,7 +94,6 @@ public class NetworkManager : Manager
         var joinTaskResult = joinTask.Result;
         if (!joinTaskResult.Ok)
         {
-            // TODO: handle error case
             Debug.LogError("Failed to join game. Exiting...");
             LeaveMatch();
             yield break;
@@ -150,6 +117,13 @@ public class NetworkManager : Manager
         ModeType.Dual => 2,
         _ => 8
     };
+    #endregion
+
+    #region Join Match
+    public void JoinMatch(SessionInfo _info, Action _onComplete = null)
+    {
+        StartCoroutine(JoinMatchInternal(_info, _onComplete));
+    }
 
     private IEnumerator JoinMatchInternal(SessionInfo _info, Action _onComplete)
     {
@@ -176,7 +150,6 @@ public class NetworkManager : Manager
         var joinTaskResult = joinTask.Result;
         if (!joinTaskResult.Ok)
         {
-            // TODO: handle error case
             Debug.LogError("Failed to join game. Exiting...");
             LeaveMatch();
             yield break;
@@ -190,6 +163,13 @@ public class NetworkManager : Manager
             Debug.LogError("Exception was thrown while invoking OnComplete of FindMatch. " +
                 $"{error.Message}\n{error.StackTrace}");
         }
+    }
+    #endregion
+
+    #region Start Game
+    public void StartGame(Action _onComplete = null)
+    {
+        StartCoroutine(StartGameInternal(_onComplete));
     }
 
     private IEnumerator StartGameInternal(Action _onComplete)
@@ -208,18 +188,20 @@ public class NetworkManager : Manager
                 $"{error.Message}\n{error.StackTrace}");
         }
     }
+    #endregion
 
-    private IEnumerator ShowResultInternal(Action _onComplete)
+    public void LeaveMatch(Action _onComplete = null)
     {
-        var loadTask = Runner.LoadScene(SceneRef.FromIndex((int)EScene.Result));
+        //Runner.Shutdown(true);
+        //SceneManager.LoadScene((int)EScene.Lobby);
 
-        yield return new WaitUntil(() => loadTask.IsDone);
+        //try { _onComplete?.Invoke(); }
+        //catch (Exception error)
+        //{
+        //    Debug.LogError("Exception was thrown while invoking OnComplete of LeaveMatch. " +
+        //        $"{error.Message}\n{error.StackTrace}");
+        //}
 
-        try { _onComplete?.Invoke(); }
-        catch (Exception error)
-        {
-            Debug.LogError("Exception was thrown while invoking OnComplete of ShowResult. " +
-                $"{error.Message}\n{error.StackTrace}");
-        }
+        StartCoroutine(JoinLobbyInternal(_onComplete));
     }
 }

@@ -14,8 +14,6 @@ public class ScorePanel : UIBase
     public override void Init()
     {
         StartCoroutine(WaitForMyChar());
-
-        UpdateScore();
     }
 
     private IEnumerator WaitForMyChar()
@@ -23,6 +21,8 @@ public class ScorePanel : UIBase
         yield return new WaitUntil(() => App.Manager.Player.MyCtrl != null);
 
         myCharCtrl = App.Manager.Player.MyCtrl;
+
+        UpdateScore();
     }
 
     public void UpdateScore()

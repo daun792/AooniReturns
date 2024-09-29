@@ -15,7 +15,7 @@ public class PlayerInfoPanel : UIBase
 
     private IEnumerator WaitForMyChar()
     {
-        yield return new WaitUntil(() => App.Manager.Player.MyCtrl != null);
+        yield return new WaitUntil(() => App.Manager.Player.AllPlayers.Count == App.Manager.Network.Runner.SessionInfo.PlayerCount);
 
         Setup();
     }

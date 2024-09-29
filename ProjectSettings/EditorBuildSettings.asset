@@ -32,7 +32,4 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/01. Scene/05_4. Dual.unity
     guid: 42894255b855c704b8b9a53f5230318d
-  - enabled: 1
-    path: Assets/01. Scene/06. Result.unity
-    guid: eacaf42da68ceda44ab844532f2ab712
   m_configObjects: {}
