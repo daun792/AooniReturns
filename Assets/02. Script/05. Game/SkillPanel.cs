@@ -28,12 +28,12 @@ public class SkillPanel : UIBase
     private void OnClickArrow()
     {
         StartCoroutine(WaitForCoolTime());
-        myCharCtrl.arrow.FireArrow();
+        myCharCtrl.Arrow.FireArrow();
     }
 
     private void OnClickBarrel()
     {
-
+        myCharCtrl.Human.Hide();
     }
 
     private IEnumerator WaitForCoolTime()

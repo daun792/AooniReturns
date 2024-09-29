@@ -7,8 +7,10 @@ public class OniBombCtrl : OniCtrl
 {
     LayerMask mask;
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+
         mask = LayerMask.GetMask("Map");
     }
 

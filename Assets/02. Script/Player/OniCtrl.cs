@@ -8,11 +8,17 @@ public abstract class OniCtrl : NetworkBehaviour
     [SerializeField] SpriteRenderer sprite;
     [SerializeField] CharacterUICtrl uiCtrl;
 
+    public Animator Anim { get; private set; }
     public float CurrHP { get; private set; } = 100f;
 
     [Networked] public bool IsInvincible { get; private set; } = false;
 
     protected CharacterCtrl ownerCtrl;
+
+    protected virtual void Awake()
+    {
+        Anim = GetComponent<Animator>();
+    }
 
     public override void Spawned()
     {
@@ -21,11 +27,18 @@ public abstract class OniCtrl : NetworkBehaviour
 
     public void Setup()
     {
+        gameObject.SetActive(true);
+
         CurrHP = 100f;
         uiCtrl.SetHP(CurrHP);
 
         IsInvincible = false;
         sprite.color = Color.white;
+    }
+
+    public void UnSetup()
+    {
+        gameObject.SetActive(false);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

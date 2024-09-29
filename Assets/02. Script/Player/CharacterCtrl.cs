@@ -19,28 +19,27 @@ public class CharacterCtrl : NetworkBehaviour
     [Networked, OnChangedRender(nameof(OnChangeDir))] public Vector2 CurrDir { get; private set; } = new Vector2(0, -1);
     [Networked, OnChangedRender(nameof(OnChangeWalk))] public bool IsWalk { get; private set; } = false;
 
-    private Rigidbody2D rb2d;
-    private CircleCollider2D characterCollider;
+    public OniCtrl Oni { get; private set; }
+    public HumanCtrl Human { get; private set; }
+    public ArrowCtrl Arrow { get; private set; }
 
-    private OniCtrl oniCtrl;
-    private HumanCtrl humanCtrl;
-
+    private Rigidbody2D rigid;
+    private CircleCollider2D charCollider;
     private JoystickPanel joystick;
     private Animator currAnimator;
 
-    private TweenerCore<float, float, FloatOptions> speedTween;
-    private float speedTarget;
-    public ArrowCtrl arrow;
+    private bool canMove = true;
 
     private void Awake()
     {
-        rb2d = GetComponent<Rigidbody2D>();
-        characterCollider = GetComponent<CircleCollider2D>();
+        rigid = GetComponent<Rigidbody2D>();
+        charCollider = GetComponent<CircleCollider2D>();
 
-        oniCtrl = GetComponentInChildren<OniCtrl>(true);
-        humanCtrl = GetComponentInChildren<HumanCtrl>(true);
+        Oni = GetComponentInChildren<OniCtrl>(true);
+        Human = GetComponentInChildren<HumanCtrl>(true);
+        Arrow = GetComponentInChildren<ArrowCtrl>(true);
 
-        currAnimator = humanCtrl.GetComponent<Animator>();
+        currAnimator = Human.GetComponent<Animator>();
     }
 
     public override void Spawned()
@@ -74,22 +73,21 @@ public class CharacterCtrl : NetworkBehaviour
         switch (CurrState)
         {
             case CharacterType.Human:
-                humanCtrl.gameObject.SetActive(true);
+                Human.Setup();
 
-                currAnimator = humanCtrl.GetComponent<Animator>();
+                currAnimator = Human.Anim;
                 SetupAnimator();
 
-                oniCtrl.gameObject.SetActive(false);
+                Oni.UnSetup();
                 break;
 
             case CharacterType.Oni:
-                oniCtrl.gameObject.SetActive(true);
-                oniCtrl.Setup();
+                Oni.Setup();
 
-                currAnimator = oniCtrl.GetComponent<Animator>();
+                currAnimator = Oni.Anim;
                 SetupAnimator();
 
-                humanCtrl.gameObject.SetActive(false);
+                Human.UnSetup();
                 break;
         }
     }
@@ -113,12 +111,12 @@ public class CharacterCtrl : NetworkBehaviour
 
     private void OnChangeDead()
     {
-        characterCollider.enabled = !Dead;
+        charCollider.enabled = !Dead;
 
         if (Dead)
         {
-            oniCtrl.gameObject.SetActive(false);
-            humanCtrl.gameObject.SetActive(false);
+            Oni.gameObject.SetActive(false);
+            Human.gameObject.SetActive(false);
         }
     }
 
@@ -126,6 +124,11 @@ public class CharacterCtrl : NetworkBehaviour
     public override void FixedUpdateNetwork()
     {
         if (!HasStateAuthority)
+        {
+            return;
+        }
+
+        if (!canMove)
         {
             return;
         }
@@ -143,13 +146,13 @@ public class CharacterCtrl : NetworkBehaviour
 
         if (dir == Vector2.zero)
         {
-            rb2d.velocity = Vector2.zero;
+            rigid.velocity = Vector2.zero;
             return;
         }
 
         CurrDir = dir.normalized;
 
-        rb2d.velocity = 4.5f * CurrDir;
+        rigid.velocity = 4.5f * CurrDir;
     }
     #endregion
 
@@ -172,5 +175,10 @@ public class CharacterCtrl : NetworkBehaviour
         }
 
         transform.position = _randomPosition;
+    }
+
+    public void SetAbleToMove(bool _isAble)
+    {
+        canMove = _isAble;
     }
 }
