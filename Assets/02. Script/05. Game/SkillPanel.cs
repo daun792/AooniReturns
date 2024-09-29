@@ -27,12 +27,22 @@ public class SkillPanel : UIBase
 
     private void OnClickArrow()
     {
+        if (App.Manager.Player.MyCtrl.CurrState == CharacterType.Oni)
+        {
+            return;
+        }
+
         StartCoroutine(WaitForCoolTime());
         myCharCtrl.Arrow.FireArrow();
     }
 
     private void OnClickBarrel()
     {
+        if (App.Manager.Player.MyCtrl.CurrState == CharacterType.Oni)
+        {
+            return;
+        }
+
         myCharCtrl.Human.Hide();
     }
 
