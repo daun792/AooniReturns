@@ -7,6 +7,7 @@ public class HumanCtrl : NetworkBehaviour
 {
     [SerializeField] SpriteRenderer sprite;
     [SerializeField] GameObject canvas;
+    [SerializeField] GameObject lightObj;
 
     public Animator Anim { get; private set; }
 
@@ -25,6 +26,8 @@ public class HumanCtrl : NetworkBehaviour
     public override void Spawned()
     {
         ownerCtrl = transform.parent.GetComponent<CharacterCtrl>();
+
+        lightObj.SetActive(ownerCtrl.HasStateAuthority);
     }
 
     public void Setup()

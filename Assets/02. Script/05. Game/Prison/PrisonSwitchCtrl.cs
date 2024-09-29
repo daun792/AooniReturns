@@ -11,7 +11,7 @@ public class PrisonSwitchCtrl : NetworkBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Player"))
+        if (collision.CompareTag("Human"))
         {
             RPC_ManageDoor(true);
         }
@@ -19,7 +19,7 @@ public class PrisonSwitchCtrl : NetworkBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.CompareTag("Player"))
+        if (collision.CompareTag("Human"))
         {
             RPC_ManageDoor(false);
         }
