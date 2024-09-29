@@ -21,7 +21,7 @@ public class CharacterCtrl : NetworkBehaviour
     [Networked] public bool IsBusted { get; private set; } = false;
 
     [Networked] public string NickName { get; private set; }
-    [Networked] public float Level { get; private set; }
+    [Networked] public int Level { get; private set; }
 
     public OniCtrl Oni { get; private set; }
     public HumanCtrl Human { get; private set; }

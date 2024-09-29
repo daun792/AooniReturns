@@ -75,7 +75,7 @@ public class RankPlayerBack : MonoBehaviour
         var result = CalculateLevel(_exp);
 
         Sprite[] sprites = Resources.LoadAll<Sprite>("Medal");
-        medalImg.sprite = sprites[result.level];
+        medalImg.sprite = sprites[result];
 
         levelTMP.text = string.Format("Lv.{0}", result.ToString());
     }
