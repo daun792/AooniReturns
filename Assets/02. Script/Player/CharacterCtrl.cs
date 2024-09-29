@@ -20,6 +20,9 @@ public class CharacterCtrl : NetworkBehaviour
     [Networked, OnChangedRender(nameof(OnChangeDead))] public bool IsDead { get; set; } = false;
     [Networked] public bool IsBusted { get; private set; } = false;
 
+    [Networked] public string NickName { get; private set; }
+    [Networked] public float Level { get; private set; }
+
     public OniCtrl Oni { get; private set; }
     public HumanCtrl Human { get; private set; }
     public ArrowCtrl Arrow { get; private set; }
@@ -55,7 +58,25 @@ public class CharacterCtrl : NetworkBehaviour
 
         Object.RequestStateAuthority();
 
+        NickName = App.Data.Player.NickName;
+        Level = CalculateLevel(App.Data.Player.ExperiencePoints);
+
         joystick = App.Manager.UI.GetPanel<JoystickPanel>();
+    }
+
+    private int CalculateLevel(int _totalExp)
+    {
+        int currLevel = 1;
+        int requiredExp = 50;
+
+        while (_totalExp >= requiredExp)
+        {
+            _totalExp -= requiredExp;
+            currLevel++;
+            requiredExp += 100;
+        }
+
+        return currLevel;
     }
 
     #region Move

@@ -12,6 +12,13 @@ public class InfectionManager : GameManager
         GameTime = 120;
     }
 
+    protected override void SetRandomOni()
+    {
+        base.SetRandomOni();
+
+        App.Manager.UI.GetPanel<NoticePanel>().NoticeBecomeOni();
+    }
+
     protected override bool CheckVictoryCondition()
     {
         if (App.Manager.Player.OniPlayers.Count == App.Manager.Player.AllPlayers.Count)

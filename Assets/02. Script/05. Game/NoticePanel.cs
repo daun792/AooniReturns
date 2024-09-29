@@ -80,11 +80,11 @@ public class NoticePanel : UIBase
     private IEnumerator CountDown()
     {
         int time = 10;
+
         while (time > 0)
         {
             noticeTMP.text = string.Format(countDown, time--);
             ShowTMP();
-            //PlayTMPAnim();
 
             yield return new WaitForSeconds(1);
         }
@@ -96,8 +96,7 @@ public class NoticePanel : UIBase
     {
         base.OpenPanel();
 
-        noticeTMP.text = string.Format(becomeOni, 1);
+        noticeTMP.text = string.Format(becomeOni, App.Manager.Player.OniPlayers[0].NickName);
         ShowTMP();
-        //PlayTMPAnim();
     }
 }

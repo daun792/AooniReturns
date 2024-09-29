@@ -14,7 +14,9 @@ public class CharacterUICtrl : NetworkBehaviour
 
     public override void Spawned()
     {
-        playerInfoTMP.text = string.Format(infoString, 1, 2);
+        var charCtrl = GetComponentInParent<CharacterCtrl>();
+
+        playerInfoTMP.text = string.Format(infoString, charCtrl.Level, charCtrl.NickName);
     }
 
     public void SetHP(float _value)

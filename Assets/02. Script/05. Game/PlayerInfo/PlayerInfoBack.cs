@@ -12,6 +12,9 @@ public class PlayerInfoBack : MonoBehaviour
     private CharacterCtrl targetCtrl;
     private CharacterType currState = CharacterType.Human;
 
+    private const string nickNameString = "Lv.{0} {1} {2}";
+    private const string masterClient = "(πÊ¿Â)";
+
     private void Update()
     {
         if (targetCtrl == null) 
@@ -34,7 +37,8 @@ public class PlayerInfoBack : MonoBehaviour
         gameObject.SetActive(true);
 
         //medalImg.sprite = 
-        //nickTMP.text = 
+        var clientRole = _charCtrl.Object.StateAuthority.IsMasterClient ? masterClient : string.Empty;
+        nickTMP.text = string.Format(nickNameString, _charCtrl.Level, _charCtrl.NickName, clientRole);
     }
 
     public void SetNone()
