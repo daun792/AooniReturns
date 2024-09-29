@@ -24,6 +24,8 @@ public class PoliceManager : GameManager
 
     protected override void SetRandomOni()
     {
+        ResetSwitchs();
+
         if (!Runner.IsSceneAuthority)
         {
             return;
@@ -33,6 +35,14 @@ public class PoliceManager : GameManager
         App.Manager.Player.SetRandomOni(num);
 
         RPC_TeleportPlayers();
+    }
+
+    private void ResetSwitchs()
+    {
+        foreach (var item in switchs) 
+        {
+            item.Setup();
+        }
     }
 
     [Rpc]
