@@ -156,6 +156,9 @@ public class ClanMemberBack : MonoBehaviour
     {
         var result = CalculateLevel(_exp);
 
+        Sprite[] sprites = Resources.LoadAll<Sprite>("Medal");
+        medalImg.sprite = sprites[result.level];
+
         levelTMP.text = string.Format("Lv.{0}", result.ToString());
     }
 

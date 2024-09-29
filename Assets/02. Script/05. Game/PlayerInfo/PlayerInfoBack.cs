@@ -36,7 +36,9 @@ public class PlayerInfoBack : MonoBehaviour
 
         gameObject.SetActive(true);
 
-        //medalImg.sprite = 
+        Sprite[] sprites = Resources.LoadAll<Sprite>("Medal");
+        medalImg.sprite = sprites[result.level];
+
         var clientRole = _charCtrl.Object.StateAuthority.IsMasterClient ? masterClient : string.Empty;
         nickTMP.text = string.Format(nickNameString, _charCtrl.Level, _charCtrl.NickName, clientRole);
     }

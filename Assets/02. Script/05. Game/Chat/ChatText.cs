@@ -8,9 +8,17 @@ public class ChatText : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI content;
 
+    private const string humanString = "[인간]";
+    private const string oniString = "[오니]";
+
+    private const string chatString = "{0}{1}: {2}";
+
     public void Setup(string _content, PlayerRef _sender)
     {
-        // TODO: Customize message layout or sender nick
-        content.text = $"Player{_sender.PlayerId} : {_content}";
+        var playerObj = App.Manager.Network.Runner.GetPlayerObject(_sender);
+        var charCtrl = playerObj.GetComponent<CharacterCtrl>();
+
+        var charState = charCtrl.CurrState == CharacterType.Human ? humanString : oniString;
+        content.text = string.Format(chatString, charState, charCtrl.NickName, _content);
     }
 }

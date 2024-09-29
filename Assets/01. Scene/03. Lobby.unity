@@ -50209,6 +50209,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c24c74fa1c804844bc463fafc826ff8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  medalImg: {fileID: 633681105}
   nickTMP: {fileID: 1905277844}
   recordTMP: {fileID: 147054737}
   clanTMP: {fileID: 347615362}

@@ -4,6 +4,7 @@ using TMPro;
 
 public class PlayerPanel : UIBase
 {
+    [SerializeField] Image medalImg;
     [SerializeField] TextMeshProUGUI nickTMP;
 
     [SerializeField] TextMeshProUGUI recordTMP;
@@ -35,6 +36,9 @@ public class PlayerPanel : UIBase
     private void SetPlayerLevel()
     {
         var result = CalculateLevel(App.Data.Player.ExperiencePoints);
+
+        Sprite[] sprites = Resources.LoadAll<Sprite>("Medal");
+        medalImg.sprite = sprites[result.level];
 
         levelTMP.text = string.Format("Lv. {0}", result.level.ToString());
 
