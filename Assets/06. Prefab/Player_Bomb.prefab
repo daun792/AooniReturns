@@ -177,7 +177,7 @@ GameObject:
   - component: {fileID: 6691005710876919154}
   - component: {fileID: 6409362478292922955}
   - component: {fileID: 4526739762427506985}
-  - component: {fileID: 9194704116235038489}
+  - component: {fileID: 7268665469277507493}
   - component: {fileID: 6745093569589246052}
   - component: {fileID: 5958455807564152938}
   m_Layer: 0
@@ -223,7 +223,7 @@ MonoBehaviour:
   NestedObjects: []
   NetworkedBehaviours:
   - {fileID: 4526739762427506985}
-  - {fileID: 9194704116235038489}
+  - {fileID: 7268665469277507493}
   - {fileID: 9198842781867841766}
   - {fileID: 3811330371397476770}
   - {fileID: 8414292356784627400}
@@ -241,14 +241,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9458022f074eb44cbe247152b998d8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mapMinBounds: {x: -9.4, y: -57.6}
-  mapMaxBounds: {x: 53.2, y: 1.3}
   _Dead: 0
   _CurrState: 0
   _CurrDir: {x: 0, y: -1}
   _IsWalk: 0
   arrow: {fileID: 8715883189541085358}
---- !u!114 &9194704116235038489
+--- !u!114 &7268665469277507493
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -257,13 +255,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 8290601803686028534}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 158639473, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Script: {fileID: 11500000, guid: c5e690b5fb1084f5ab1c86457af401d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   SyncScale: 0
-  SyncParent: 0
-  _autoAOIOverride: 1
-  DisableSharedModeInterpolation: 0
+  SyncParent: 1
+  _interpolationTarget: {fileID: 0}
+  UsePreciseRotation: 0
+  UseRenderSleepThresholds: 1
+  RenderThresholds:
+    UseEnergy: 1
+    Position: 0.01
+    Rotation: 0.01
+    Scale: 0.01
 --- !u!50 &6745093569589246052
 Rigidbody2D:
   serializedVersion: 4

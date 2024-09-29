@@ -14,11 +14,6 @@ public enum CharacterType
 
 public class CharacterCtrl : NetworkBehaviour
 {
-    [SerializeField] Vector2 mapMinBounds;
-    [SerializeField] Vector2 mapMaxBounds;
-
-    [Networked] float speed { get; set; }
-
     [Networked, OnChangedRender(nameof(OnChangeDead))] public bool Dead { get; set; } = false;
     [Networked, OnChangedRender(nameof(OnChangeState))] public CharacterType CurrState { get; private set; } = CharacterType.Human;
     [Networked, OnChangedRender(nameof(OnChangeDir))] public Vector2 CurrDir { get; private set; } = new Vector2(0, -1);
@@ -36,34 +31,6 @@ public class CharacterCtrl : NetworkBehaviour
     private TweenerCore<float, float, FloatOptions> speedTween;
     private float speedTarget;
     public ArrowCtrl arrow;
-
-    public float Speed
-    {
-        get => speed;
-        set
-        {
-            if (value == 0f)
-            {
-                speedTween?.Kill();
-                speed = 0f;
-                speedTarget = 0f;
-                return;
-            }
-
-            if (speedTarget == value)
-            {
-                return;
-            }
-
-            speedTween?.Kill();
-            speedTarget = value;
-            speedTween = DOTween.To(() => speed, v =>
-            {
-                speed = v;
-            },
-            value, 0.5f).SetEase(Ease.OutCubic);
-        }
-    }
 
     private void Awake()
     {
@@ -169,14 +136,13 @@ public class CharacterCtrl : NetworkBehaviour
 
         if (dir == Vector2.zero)
         {
-            Speed = 0f;
             rb2d.velocity = Vector2.zero;
             return;
         }
 
         CurrDir = dir.normalized;
 
-        rb2d.velocity = 6 * CurrDir;
+        rb2d.velocity = 4.5f * CurrDir;
     }
     #endregion
 
@@ -194,18 +160,5 @@ public class CharacterCtrl : NetworkBehaviour
     public void MoveToRandomPosition(Vector2 _randomPosition)
     {
         transform.position = _randomPosition;
-    }
-
-    private Vector2 GetRandomPosition()
-    {
-        float randomX = UnityEngine.Random.Range(mapMinBounds.x, mapMaxBounds.x);
-        float randomY = UnityEngine.Random.Range(mapMinBounds.y, mapMaxBounds.y);
-        return new Vector2(randomX, randomY);
-    }
-
-    private bool IsPositionColliding(Vector2 position)
-    {
-        Collider2D hitCollider = Physics2D.OverlapCircle(position, 0.5f);
-        return hitCollider != null; 
     }
 }
