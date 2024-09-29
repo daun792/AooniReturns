@@ -178,7 +178,7 @@ public abstract class GameManager : NetManager
             case GameState.Over:
                 IsGamePlay = false;
 
-                App.Manager.Network.ShowResult();
+                App.Manager.UI.GetPanel<ResultPanel>().OpenPanel();
                 break;
         }
     }
