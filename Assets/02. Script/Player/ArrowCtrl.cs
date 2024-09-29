@@ -76,5 +76,17 @@ public class ArrowCtrl : NetworkBehaviour
                 }
             }
         }
+        else if (collision.CompareTag("Switch"))
+        {
+            if (collision.TryGetComponent<SwitchCtrl>(out var switchCtrl))
+            {
+                transform.DOKill();
+
+                gameObject.SetActive(false);
+                transform.localPosition = startPosition;
+
+                switchCtrl.Attacked(10);
+            }
+        }
     }
 }
