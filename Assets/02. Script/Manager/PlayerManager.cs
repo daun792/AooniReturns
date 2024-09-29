@@ -3,7 +3,7 @@ using UnityEngine;
 using Fusion;
 using System.Linq;
 
-public class PlayerManager : NetManager
+public class PlayerManager : NetManager, IPlayerJoined, IPlayerLeft
 {
     public List<NetworkObject> networkObjList = new(8);
     public List<CharacterCtrl> characterList = new(8);
@@ -83,5 +83,28 @@ public class PlayerManager : NetManager
         {
             character.SetCharacterState(0);
         }
+    }
+
+    void IPlayerJoined.PlayerJoined(PlayerRef player)
+    {
+        App.Manager.UI.GetPanel<PlayerInfoPanel>().Setup();
+    }
+
+    void IPlayerLeft.PlayerLeft(PlayerRef player)
+    {
+        var playerObj = Runner.GetPlayerObject(player);
+
+        for (int i = 0; i < networkObjList.Count; i++)
+        {
+            int index = i;
+
+            if (networkObjList[index].Id == playerObj.Id)
+            {
+                networkObjList.RemoveAt(index);
+                characterList.RemoveAt(index);
+            }
+        }
+
+        App.Manager.UI.GetPanel<PlayerInfoPanel>().Setup();
     }
 }

@@ -241,10 +241,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9458022f074eb44cbe247152b998d8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _Dead: 0
   _CurrState: 0
   _CurrDir: {x: 0, y: -1}
   _IsWalk: 0
+  _IsDead: 0
+  _IsBusted: 0
 --- !u!114 &-1411367520961357412
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -293,7 +294,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!58 &7884478523714578544
 CircleCollider2D:
   m_ObjectHideFlags: 0
