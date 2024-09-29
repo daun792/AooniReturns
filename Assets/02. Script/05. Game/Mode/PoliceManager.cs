@@ -88,6 +88,7 @@ public class PoliceManager : GameManager
         if (CheckSwitchAllDestroyed())
         {
             App.Manager.UI.Chat.SendNotice($"<color=#00FF00>ÀÎ°£ÀÇ ½Â¸®!</color>", true);
+            RPC_AddHumanSurviveScore();
             return true;
         }
 
@@ -165,5 +166,14 @@ public class PoliceManager : GameManager
         }
 
         return true;
+    }
+
+    [Rpc]
+    private void RPC_AddHumanSurviveScore()
+    {
+        foreach (var player in App.Manager.Player.HumanPlayers)
+        {
+            player.AddSurviveScore();
+        }
     }
 }

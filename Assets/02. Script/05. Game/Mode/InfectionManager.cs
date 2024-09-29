@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Fusion;
 
 public class InfectionManager : GameManager
 {
@@ -36,6 +37,7 @@ public class InfectionManager : GameManager
         if (App.Manager.UI.GetPanel<TimePanel>().Remaining <= 0f)
         {
             App.Manager.UI.Chat.SendNotice($"<color=#00FF00>ÀÎ°£ÀÇ ½Â¸®!</color>", true);
+            RPC_AddHumanSurviveScore();
             return true;
         }
 
@@ -62,5 +64,14 @@ public class InfectionManager : GameManager
         }
 
         return true;
+    }
+
+    [Rpc]
+    private void RPC_AddHumanSurviveScore()
+    {
+        foreach (var player in App.Manager.Player.HumanPlayers)
+        {
+            player.AddSurviveScore();
+        }
     }
 }

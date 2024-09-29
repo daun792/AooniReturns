@@ -14,14 +14,19 @@ public enum CharacterType
 
 public class CharacterCtrl : NetworkBehaviour
 {
+    [Networked] public string NickName { get; private set; }
+    [Networked] public int Level { get; private set; }
+    [Networked] public bool IsHost { get; private set; }
+
     [Networked, OnChangedRender(nameof(OnChangeState))] public CharacterType CurrState { get; private set; } = CharacterType.Human;
     [Networked, OnChangedRender(nameof(OnChangeDir))] public Vector2 CurrDir { get; private set; } = new Vector2(0, -1);
     [Networked, OnChangedRender(nameof(OnChangeWalk))] public bool IsWalk { get; private set; } = false;
     [Networked, OnChangedRender(nameof(OnChangeDead))] public bool IsDead { get; set; } = false;
     [Networked] public bool IsBusted { get; private set; } = false;
 
-    [Networked] public string NickName { get; private set; }
-    [Networked] public int Level { get; private set; }
+    [Networked] public int OniKill { get; private set; } = 0;
+    [Networked] public int HumanKill { get; private set; } = 0;
+    [Networked] public int Survive { get; private set; } = 0;
 
     public OniCtrl Oni { get; private set; }
     public HumanCtrl Human { get; private set; }
@@ -60,6 +65,8 @@ public class CharacterCtrl : NetworkBehaviour
 
         NickName = App.Data.Player.NickName;
         Level = CalculateLevel(App.Data.Player.ExperiencePoints);
+
+        IsHost = Runner.IsSceneAuthority;
 
         joystick = App.Manager.UI.GetPanel<JoystickPanel>();
     }
@@ -115,6 +122,7 @@ public class CharacterCtrl : NetworkBehaviour
     }
     #endregion
 
+    #region Networked Variables
     public void SetCharacterState(int _index)
     {
         if (!HasStateAuthority)
@@ -198,6 +206,42 @@ public class CharacterCtrl : NetworkBehaviour
     {
         currAnimator.SetBool("isWalk", IsWalk);
     }
+    #endregion
+
+    #region Score
+    public void AddOniKillScore()
+    {
+        if (!HasStateAuthority)
+        {
+            return;
+        }
+
+        OniKill++;
+        App.Manager.UI.GetPanel<ScorePanel>().UpdateScore();
+    }
+
+    public void AddHumanKillScore()
+    {
+        if (!HasStateAuthority)
+        {
+            return;
+        }
+
+        HumanKill++;
+        App.Manager.UI.GetPanel<ScorePanel>().UpdateScore();
+    }
+
+    public void AddSurviveScore()
+    {
+        if (!HasStateAuthority)
+        {
+            return;
+        }
+
+        Survive++;
+        App.Manager.UI.GetPanel<ScorePanel>().UpdateScore();
+    }
+    #endregion
 
     public void MoveToPosition(Vector2 _randomPosition)
     {

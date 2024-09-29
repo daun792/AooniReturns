@@ -18,9 +18,9 @@ public class OniDualCtrl : OniCtrl
         _charCtrl.MoveToPosition(manager.Respawn);
     }
 
-    protected override void Dead()
+    protected override void Dead(PlayerRef _sender)
     {
-        base.Dead();
+        base.Dead(_sender);
 
         Respawn();
     }
