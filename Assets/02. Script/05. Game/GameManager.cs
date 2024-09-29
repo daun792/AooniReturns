@@ -49,6 +49,8 @@ public abstract class GameManager : NetManager
             yield break;
         }
 
+        Runner.SetPlayerObject(spawnTask.Object.StateAuthority, spawnTask.Object);
+
         if (Runner.IsSceneAuthority)
         {
             // 뱌로 보내면 안감. 실패 이유 구글링해도 안나옴.

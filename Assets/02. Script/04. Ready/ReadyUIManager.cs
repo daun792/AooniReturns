@@ -33,6 +33,11 @@ public class ReadyUIManager : UIManager
         startBtn.gameObject.SetActive(App.Manager.Network.Runner.IsSharedModeMasterClient);
     }
 
+    public void SetChatPanel(ChatPanel _chat)
+    {
+        Chat = _chat;
+    }
+
     private void OnClickStart()
     {
         if (App.Manager.Network.Runner.SessionInfo.PlayerCount <= 1)

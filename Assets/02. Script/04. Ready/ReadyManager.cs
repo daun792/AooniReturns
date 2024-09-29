@@ -6,16 +6,28 @@ public class ReadyManager : SimManager, IPlayerJoined, IPlayerLeft
 {
     [Header("Network Objects")]
     [SerializeField] NetworkObject playerPrefab;
+    [SerializeField] NetworkObject chatPrefab;
 
     private void Start()
     {
-        Runner.SpawnAsync(playerPrefab, Vector3.zero, Quaternion.identity,
+        var playerObject = Runner.SpawnAsync(playerPrefab, Vector3.zero, Quaternion.identity,
             Runner.LocalPlayer, null, NetworkSpawnFlags.SharedModeStateAuthLocalPlayer);
+
+        Runner.SetPlayerObject(playerObject.Object.StateAuthority, playerObject.Object);
+
+        var chatObj = App.Manager.Network.Runner.Spawn(chatPrefab);
+        chatObj.transform.SetParent(App.Manager.UI.transform);
+        chatObj.GetComponent<RectTransform>().anchoredPosition = new(0, 100);
+        App.UI.Ready.SetChatPanel(chatObj.GetComponent<ChatPanel>());
     }
 
     void IPlayerJoined.PlayerJoined(PlayerRef player)
     {
         App.UI.Ready.SetPlayerCount();
+
+        var playerObj = Runner.GetPlayerObject(player);
+        var charCtrl = playerObj.GetComponent<CharacterCtrl>();
+        App.Manager.UI.Chat.SendNotice($"<color=#00FF00>{charCtrl.NickName}님이 게임에 입장하셨습니다.</color>");
     }
 
     void IPlayerLeft.PlayerLeft(PlayerRef _player)

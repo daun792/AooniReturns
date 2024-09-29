@@ -89,13 +89,6 @@ public class PlayerManager : NetManager, IPlayerJoined, IPlayerLeft
     void IPlayerJoined.PlayerJoined(PlayerRef player)
     {
         App.Manager.UI.GetPanel<PlayerInfoPanel>().Setup();
-
-        if (SceneManager.GetActiveScene().buildIndex == (int)EScene.Ready)
-        {
-            var playerObj = Runner.GetPlayerObject(player);
-            var charCtrl = playerObj.GetComponent<CharacterCtrl>();
-            App.Manager.UI.Chat.SendNotice($"<color=#00FF00>{charCtrl.NickName}님이 게임에 입장하셨습니다.</color>");
-        }
     }
 
     void IPlayerLeft.PlayerLeft(PlayerRef player)

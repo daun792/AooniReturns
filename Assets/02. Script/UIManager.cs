@@ -18,7 +18,7 @@ public enum UIState
 
 public class UIManager : Fusion.Behaviour
 {
-    public ChatPanel Chat { get; private set; }
+    public ChatPanel Chat { get; protected set; }
 
     public UIState CurrState
         => UIStack.Count == 0 ? UIState.Normal : UIStack.Peek();

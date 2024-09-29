@@ -87,7 +87,6 @@ public class ChatPanel : NetworkBehaviour
             _msg = _msg[0..^1];
         }
 
-        Debug.Log("RPC_SendChat »£√‚");
         RPC_SendChat(_msg);
 
         chatInput.text = string.Empty;
