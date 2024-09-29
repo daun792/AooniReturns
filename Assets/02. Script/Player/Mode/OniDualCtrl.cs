@@ -15,7 +15,7 @@ public class OniDualCtrl : OniCtrl
     {
         var manager = App.Manager.Game as DualManager;
 
-        _charCtrl.MoveToPosition(manager.Respawn.position);
+        _charCtrl.MoveToPosition(manager.Respawn);
     }
 
     protected override void Dead()
@@ -33,7 +33,7 @@ public class OniDualCtrl : OniCtrl
 
         var manager = App.Manager.Game as DualManager;
 
-        ownerCtrl.MoveToPosition(manager.Respawn.position);
+        ownerCtrl.MoveToPosition(manager.Respawn);
         ownerCtrl.SetCharacterDead(false);
     }
 }

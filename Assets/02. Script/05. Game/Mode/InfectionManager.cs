@@ -19,7 +19,7 @@ public class InfectionManager : GameManager
             return true;
         }
 
-        if (GetOniAllDead())
+        if (CheckOniAllDead())
         {
             return true;
         }
@@ -32,7 +32,7 @@ public class InfectionManager : GameManager
         return false;
     }
 
-    private bool GetOniAllDead()
+    private bool CheckOniAllDead()
     {
         if (App.Manager.Player.OniPlayers.Count == 0)
         {
@@ -41,7 +41,7 @@ public class InfectionManager : GameManager
 
         foreach (var charCtrl in App.Manager.Player.OniPlayers)
         {
-            if (charCtrl.Dead == true)
+            if (charCtrl.IsDead == true)
             {
                 continue;
             }

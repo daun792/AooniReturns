@@ -31,22 +31,42 @@ public class PlayerManager : NetManager
         }
     }
 
-    public void SetRandomOni()
+    public void SetRandomOni(int _num)
     {
-        var randomIndex = Random.Range(0, AllPlayers.Count);
+        var availablePlayers = networkObjList.ToList();
 
-        RPC_SetOni(networkObjList[randomIndex].Id);
+        List<NetworkId> oniIds = new();
+
+        for (int i = 0; i < _num; i++)
+        {
+            if (availablePlayers.Count == 0)
+            {
+                break;
+            }
+
+            int randomIndex = Random.Range(0, availablePlayers.Count);
+            var playerIndex = availablePlayers[randomIndex];
+
+            availablePlayers.RemoveAt(randomIndex);
+
+            oniIds.Add(playerIndex.Id);
+        }
+
+        RPC_SetOni(oniIds.ToArray());
     }
 
     [Rpc]
-    private void RPC_SetOni(NetworkId characterNetworkId)
+    private void RPC_SetOni(NetworkId[] characterNetworkIds)
     {
-        for (int i = 0; i < networkObjList.Count; i++)
+        foreach (var characterNetworkId in characterNetworkIds)
         {
-            if (networkObjList[i].Id == characterNetworkId)
+            for (int i = 0; i < networkObjList.Count; i++)
             {
-                characterList[i].SetCharacterState(1);
-                App.Manager.UI.GetPanel<NoticePanel>().NoticeBecomeOni();
+                if (networkObjList[i].Id == characterNetworkId)
+                {
+                    characterList[i].SetCharacterState(1);
+                    break; 
+                }
             }
         }
     }

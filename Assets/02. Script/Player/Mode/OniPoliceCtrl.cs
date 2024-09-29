@@ -13,6 +13,8 @@ public class OniPoliceCtrl : OniCtrl
     [Rpc]
     private void RPC_ArrestHuman(CharacterCtrl _charCtrl)
     {
+        var manager = App.Manager.Game as PoliceManager;
 
+        _charCtrl.MoveToPosition(manager.Prision);
     }
 }

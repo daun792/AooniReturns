@@ -1,9 +1,19 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using Fusion;
 
 public class PoliceManager : GameManager
 {
+    [SerializeField] Transform prisonPosition;
+
+    [Header("Start Position")]
+    [SerializeField] Transform humanStartPosition;
+    [SerializeField] Transform oniStartPosition;
+
+    [Header("Switch")]
+    [SerializeField] SwitchCtrl[] switchs;
+
+    public Vector3 Prision => prisonPosition.position;
+
     protected override void Awake()
     {
         base.Awake();
@@ -12,14 +22,48 @@ public class PoliceManager : GameManager
         GameTime = 180;
     }
 
+    protected override void SetRandomOni()
+    {
+        if (!Runner.IsSceneAuthority)
+        {
+            return;
+        }
+
+        var num = App.Manager.Player.AllPlayers.Count / 2;
+        App.Manager.Player.SetRandomOni(num);
+
+        RPC_TeleportPlayers();
+    }
+
+    [Rpc]
+    private void RPC_TeleportPlayers()
+    {
+        foreach (var player in App.Manager.Player.AllPlayers)
+        {
+            if (player.CurrState == CharacterType.Human)
+            {
+                player.MoveToPosition(humanStartPosition.position);
+            }
+            else
+            {
+                player.MoveToPosition(oniStartPosition.position);
+            }
+        }
+    }
+
     protected override bool CheckVictoryCondition()
     {
-        if (App.Manager.Player.OniPlayers.Count == App.Manager.Player.AllPlayers.Count)
+        if (CheckOniAllDead())
         {
             return true;
         }
 
-        if (GetOniAllDead())
+        if (CheckSwitchAllDestroyed())
+        {
+            return true;
+        }
+
+        if (CheckHumanAllBusted())
         {
             return true;
         }
@@ -32,7 +76,7 @@ public class PoliceManager : GameManager
         return false;
     }
 
-    private bool GetOniAllDead()
+    private bool CheckOniAllDead()
     {
         if (App.Manager.Player.OniPlayers.Count == 0)
         {
@@ -41,7 +85,46 @@ public class PoliceManager : GameManager
 
         foreach (var charCtrl in App.Manager.Player.OniPlayers)
         {
-            if (charCtrl.Dead == true)
+            if (charCtrl.IsDead == true)
+            {
+                continue;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private bool CheckSwitchAllDestroyed()
+    {
+        foreach (var item in switchs)
+        {
+            if (item.IsDestroyed == true)
+            {
+                continue;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private bool CheckHumanAllBusted()
+    {
+        if (App.Manager.Player.HumanPlayers.Count == 0)
+        {
+            return false;
+        }
+
+        foreach (var charCtrl in App.Manager.Player.HumanPlayers)
+        {
+            if (charCtrl.IsBusted == true)
             {
                 continue;
             }

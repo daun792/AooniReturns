@@ -14,10 +14,11 @@ public enum CharacterType
 
 public class CharacterCtrl : NetworkBehaviour
 {
-    [Networked, OnChangedRender(nameof(OnChangeDead))] public bool Dead { get; set; } = false;
     [Networked, OnChangedRender(nameof(OnChangeState))] public CharacterType CurrState { get; private set; } = CharacterType.Human;
     [Networked, OnChangedRender(nameof(OnChangeDir))] public Vector2 CurrDir { get; private set; } = new Vector2(0, -1);
     [Networked, OnChangedRender(nameof(OnChangeWalk))] public bool IsWalk { get; private set; } = false;
+    [Networked, OnChangedRender(nameof(OnChangeDead))] public bool IsDead { get; set; } = false;
+    [Networked] public bool IsBusted { get; private set; } = false;
 
     public OniCtrl Oni { get; private set; }
     public HumanCtrl Human { get; private set; }
@@ -56,6 +57,42 @@ public class CharacterCtrl : NetworkBehaviour
 
         joystick = App.Manager.UI.GetPanel<JoystickPanel>();
     }
+
+    #region Move
+    public override void FixedUpdateNetwork()
+    {
+        if (!HasStateAuthority)
+        {
+            return;
+        }
+
+        if (!canMove)
+        {
+            return;
+        }
+
+        CalculatePosition();
+    }
+
+    private void CalculatePosition()
+    {
+        var xDir = joystick.Horizontal;
+        var yDir = joystick.Vertical;
+
+        var dir = new Vector2(xDir, yDir);
+        IsWalk = dir != Vector2.zero;
+
+        if (dir == Vector2.zero)
+        {
+            rigid.velocity = Vector2.zero;
+            return;
+        }
+
+        CurrDir = dir.normalized;
+
+        rigid.velocity = 4.5f * CurrDir;
+    }
+    #endregion
 
     public void SetCharacterState(int _index)
     {
@@ -106,55 +143,29 @@ public class CharacterCtrl : NetworkBehaviour
             return;
         }
 
-        Dead = _isDead;
+        IsDead = _isDead;
     }
 
     private void OnChangeDead()
     {
-        charCollider.enabled = !Dead;
+        charCollider.enabled = !IsDead;
 
-        if (Dead)
+        if (IsDead)
         {
             Oni.gameObject.SetActive(false);
             Human.gameObject.SetActive(false);
         }
     }
 
-    #region Calculate Position
-    public override void FixedUpdateNetwork()
+    public void SetCharacterBusted(bool _isBusted)
     {
         if (!HasStateAuthority)
         {
             return;
         }
 
-        if (!canMove)
-        {
-            return;
-        }
-
-        CalculatePosition();
+        IsBusted = _isBusted;
     }
-
-    private void CalculatePosition()
-    {
-        var xDir = joystick.Horizontal;
-        var yDir = joystick.Vertical;
-
-        var dir = new Vector2(xDir, yDir);
-        IsWalk = dir != Vector2.zero;
-
-        if (dir == Vector2.zero)
-        {
-            rigid.velocity = Vector2.zero;
-            return;
-        }
-
-        CurrDir = dir.normalized;
-
-        rigid.velocity = 4.5f * CurrDir;
-    }
-    #endregion
 
     private void OnChangeDir()
     {
@@ -179,6 +190,11 @@ public class CharacterCtrl : NetworkBehaviour
 
     public void SetAbleToMove(bool _isAble)
     {
+        if (!HasStateAuthority)
+        {
+            return;
+        }
+
         canMove = _isAble;
     }
 }

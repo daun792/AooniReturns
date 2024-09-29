@@ -14,11 +14,6 @@ public class BombManager : GameManager
 
     protected override bool CheckVictoryCondition()
     {
-        if (App.Manager.UI.GetPanel<TimePanel>().Remaining <= 0f)
-        {
-            return true;
-        }
-
         return false;
     }
 }

@@ -177,14 +177,14 @@ public abstract class GameManager : NetManager
         }
     }
 
-    private void SetRandomOni()
+    protected virtual void SetRandomOni()
     {
         if (!Runner.IsSceneAuthority)
         {
             return;
         }
 
-        App.Manager.Player.SetRandomOni();
+        App.Manager.Player.SetRandomOni(1);
     }
 
     public override void Render()
