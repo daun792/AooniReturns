@@ -5,7 +5,7 @@ using System.Linq;
 using UnityEngine.SceneManagement;
 using System.Collections;
 
-public class PlayerManager : NetManager, IPlayerJoined, IPlayerLeft
+public class PlayerManager : NetManager
 {
     public List<NetworkObject> networkObjList = new(8);
     public List<CharacterCtrl> characterList = new(8);
@@ -30,6 +30,11 @@ public class PlayerManager : NetManager, IPlayerJoined, IPlayerLeft
         if (_char.Object.StateAuthority.PlayerId == App.Manager.Network.Runner.LocalPlayer.PlayerId)
         {
             MyCtrl = _char;
+            Debug.LogError(_char.Object.Id + "(MyChar)");
+        }
+        else
+        {
+            Debug.LogError(_char.Object.Id);
         }
     }
 
@@ -87,25 +92,9 @@ public class PlayerManager : NetManager, IPlayerJoined, IPlayerLeft
         }
     }
 
-    void IPlayerJoined.PlayerJoined(PlayerRef player)
+    public void OnPlayerLeft(PlayerRef _player)
     {
-        StartCoroutine(WaitForCharCtrl(player));
-    }
-
-    private IEnumerator WaitForCharCtrl(PlayerRef player)
-    {
-        yield return new WaitUntil(() => Runner.GetPlayerObject(player) != null);
-
-        var playerObj = Runner.GetPlayerObject(player);
-
-        yield return new WaitUntil(() => playerObj.GetComponent<CharacterCtrl>() != null);
-
-        App.Manager.UI.GetPanel<PlayerInfoPanel>().Setup();
-    }
-
-    void IPlayerLeft.PlayerLeft(PlayerRef player)
-    {
-        var playerObj = Runner.GetPlayerObject(player);
+        var playerObj = Runner.GetPlayerObject(_player);
 
         for (int i = 0; i < networkObjList.Count; i++)
         {

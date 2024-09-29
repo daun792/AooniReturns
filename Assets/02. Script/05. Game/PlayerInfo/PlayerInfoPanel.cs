@@ -9,15 +9,6 @@ public class PlayerInfoPanel : UIBase
     public override void Init()
     {
         playerInfos = GetComponentsInChildren<PlayerInfoBack>(true);
-
-        StartCoroutine(WaitForMyChar());
-    }
-
-    private IEnumerator WaitForMyChar()
-    {
-        yield return new WaitUntil(() => App.Manager.Player.AllPlayers.Count == App.Manager.Network.Runner.SessionInfo.PlayerCount);
-
-        Setup();
     }
 
     public void Setup()

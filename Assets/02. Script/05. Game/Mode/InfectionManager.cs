@@ -17,7 +17,7 @@ public class InfectionManager : GameManager
     {
         base.SetRandomOni();
 
-        App.Manager.UI.GetPanel<NoticePanel>().NoticeBecomeOni();
+        //App.Manager.UI.GetPanel<NoticePanel>().NoticeBecomeOni();
     }
 
     protected override bool CheckVictoryCondition()

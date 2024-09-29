@@ -39,10 +39,13 @@ public class ReadyManager : SimManager, IPlayerJoined, IPlayerLeft
 
         var charCtrl = playerObj.GetComponent<CharacterCtrl>();
         App.Manager.UI.Chat.SendNotice($"<color=#00FF00>{charCtrl.NickName}님이 게임에 입장하셨습니다.</color>");
+        App.Manager.UI.GetPanel<PlayerInfoPanel>().Setup();
     }
 
     void IPlayerLeft.PlayerLeft(PlayerRef _player)
     {
         App.UI.Ready.SetPlayerCount();
+
+        App.Manager.Player.OnPlayerLeft(_player);
     }
 }

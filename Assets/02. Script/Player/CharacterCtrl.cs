@@ -18,10 +18,10 @@ public class CharacterCtrl : NetworkBehaviour
     [Networked] public int Level { get; private set; }
     [Networked] public bool IsHost { get; private set; }
 
-    [Networked, OnChangedRender(nameof(OnChangeState))] public CharacterType CurrState { get; private set; } = CharacterType.Human;
-    [Networked, OnChangedRender(nameof(OnChangeDir))] public Vector2 CurrDir { get; private set; } = new Vector2(0, -1);
-    [Networked, OnChangedRender(nameof(OnChangeWalk))] public bool IsWalk { get; private set; } = false;
-    [Networked, OnChangedRender(nameof(OnChangeDead))] public bool IsDead { get; set; } = false;
+    [Networked, OnChangedRender(nameof(OnChangeState))] public CharacterType CurrState { get; private set; }
+    [Networked, OnChangedRender(nameof(OnChangeDir))] public Vector2 CurrDir { get; private set; }
+    [Networked, OnChangedRender(nameof(OnChangeWalk))] public bool IsWalk { get; private set; }
+    [Networked, OnChangedRender(nameof(OnChangeDead))] public bool IsDead { get; set; }
     [Networked] public bool IsBusted { get; private set; } = false;
 
     [Networked] public int OniKill { get; private set; } = 0;
@@ -53,7 +53,6 @@ public class CharacterCtrl : NetworkBehaviour
 
     public override void Spawned()
     {
-        Debug.LogError(Object.Id);
         App.Manager.Player.SubmitPlayer(this);
 
         if (!HasStateAuthority)
@@ -65,8 +64,17 @@ public class CharacterCtrl : NetworkBehaviour
 
         NickName = App.Data.Player.NickName;
         Level = CalculateLevel(App.Data.Player.ExperiencePoints);
-
         IsHost = Runner.IsSceneAuthority;
+
+        CurrState = CharacterType.Human;
+        CurrDir = new Vector2(0, -1);
+        IsWalk = false;
+        IsDead = false;
+        IsBusted = false;
+
+        OniKill = 0;
+        HumanKill = 0;
+        Survive = 0;
 
         joystick = App.Manager.UI.GetPanel<JoystickPanel>();
     }
