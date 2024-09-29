@@ -22,7 +22,7 @@ public class OniBombCtrl : OniCtrl
     {
         ownerCtrl.SetCharacterState(0);
 
-        _charCtrl.MoveToRandomPosition(_randomPosition);
+        _charCtrl.MoveToPosition(_randomPosition);
         _charCtrl.SetCharacterState(1);
     }
 
@@ -60,7 +60,7 @@ public class OniBombCtrl : OniCtrl
 
     private bool IsPositionColliding(Vector2 position)
     {
-        Collider2D hitCollider = Physics2D.OverlapCircle(position, 0.1f, mask);
+        Collider2D hitCollider = Physics2D.OverlapCircle(position, 0.5f, mask);
         return hitCollider != null;
     }
 }

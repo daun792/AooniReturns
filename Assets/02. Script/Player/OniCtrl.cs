@@ -59,12 +59,17 @@ public abstract class OniCtrl : NetworkBehaviour
 
         if (CurrHP <= 0)
         {
-            ownerCtrl.SetCharacterDead(true);
+            Dead();
         }
         else
         {
             StartCoroutine(AttackedAnimation());
         }
+    }
+
+    protected virtual void Dead()
+    {
+        ownerCtrl.SetCharacterDead(true);
     }
 
     private IEnumerator AttackedAnimation()

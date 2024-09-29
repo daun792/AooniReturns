@@ -17,7 +17,7 @@ public abstract class GameManager : NetManager
 {
     [Header("Network")]
     [SerializeField] NetworkObject netPlayerObject;
-    [SerializeField] Transform respawnPos;
+    [SerializeField] protected Transform respawnPos;
 
     public bool IsGamePlay { get; protected set; } = false;
     public int GameTime { get; protected set; }

@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class DualManager : GameManager
 {
+    public Transform Respawn => respawnPos;
+
     protected override void Awake()
     {
         base.Awake();

@@ -103,6 +103,11 @@ public class CharacterCtrl : NetworkBehaviour
 
     public void SetCharacterDead(bool _isDead)
     {
+        if (!HasStateAuthority)
+        {
+            return;
+        }
+
         Dead = _isDead;
     }
 
@@ -120,10 +125,12 @@ public class CharacterCtrl : NetworkBehaviour
     #region Calculate Position
     public override void FixedUpdateNetwork()
     {
-        if (HasStateAuthority)
+        if (!HasStateAuthority)
         {
-            CalculatePosition();
+            return;
         }
+
+        CalculatePosition();
     }
 
     private void CalculatePosition()
@@ -157,8 +164,13 @@ public class CharacterCtrl : NetworkBehaviour
         currAnimator.SetBool("isWalk", IsWalk);
     }
 
-    public void MoveToRandomPosition(Vector2 _randomPosition)
+    public void MoveToPosition(Vector2 _randomPosition)
     {
+        if (!HasStateAuthority)
+        {
+            return;
+        }
+
         transform.position = _randomPosition;
     }
 }
