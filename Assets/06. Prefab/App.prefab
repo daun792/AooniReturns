@@ -55,7 +55,21 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: f3378bd3503ac5e459e8252b7a930b54, type: 3}
   - name: BGM_Game_Horor
     clip: {fileID: 8300000, guid: bb4b70617c32f1e478ee0b7ee7b22fc7, type: 3}
-  SFX: []
+  SFX:
+  - name: SFX_Door
+    clip: {fileID: 8300000, guid: beb981ca4a8659f4aad2f7790a17cdf3, type: 3}
+  - name: SFX_CountDown
+    clip: {fileID: 8300000, guid: 3711c3dc8bb084741adef0a6504a465f, type: 3}
+  - name: SFX_
+    clip: {fileID: 8300000, guid: e826ff2d0e3dd5348b654f688b4c096d, type: 3}
+  - name: SFX_Miss
+    clip: {fileID: 8300000, guid: 8e5d221f44ddc54459e0553521c852c5, type: 3}
+  - name: SFX_Bow
+    clip: {fileID: 8300000, guid: 36cf0b5738da433428d9687d0acef067, type: 3}
+  - name: SFX_Slash
+    clip: {fileID: 8300000, guid: da5d16d83e4d84a4fbd118c7fb727a65, type: 3}
+  - name: SFX_Victory
+    clip: {fileID: 8300000, guid: 98378058350f49549a3599ab123b89ca, type: 3}
   bgmPlayer: {fileID: 534742487641631985}
   sfxPlayer: {fileID: 3476820470611672230}
 --- !u!1 &932288685164607278
