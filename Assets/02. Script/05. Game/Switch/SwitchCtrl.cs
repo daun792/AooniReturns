@@ -43,5 +43,9 @@ public class SwitchCtrl : NetworkBehaviour
     {
         IsDestroyed = true;
         gameObject.SetActive(false);
+
+        var manager = App.Manager.Game as PoliceManager;
+
+        App.Manager.UI.Chat.SendNotice($"<color=#FFFF00>스위치 {manager.RemainSwitchCount}개 남았습니다!</color>");
     }
 }

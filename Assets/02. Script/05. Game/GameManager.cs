@@ -151,6 +151,8 @@ public abstract class GameManager : NetManager
                     App.Manager.Player.SetAllHuman();
                 }
 
+                App.Manager.UI.Chat.SendNotice($"<color=#00FF00>잠시 후, {RoundCount} 라운드가 진행됩니다.</color>");
+
                 App.Manager.UI.GetPanel<RoundPanel>().OpenPanel();
                 App.Manager.UI.GetPanel<TimePanel>().ClosePanel();
                 App.Manager.UI.GetPanel<NoticePanel>().NoticeBeforeGameStart();
@@ -162,6 +164,8 @@ public abstract class GameManager : NetManager
                 break;
 
             case GameState.Play:
+                App.Manager.UI.Chat.SendNotice($"<color=#00FF00>[#] {RoundCount} 라운드 시작!</color>");
+
                 App.Manager.UI.GetPanel<RoundPanel>().ClosePanel();
                 App.Manager.UI.GetPanel<TimePanel>().OpenPanel();
                 SetRandomOni();

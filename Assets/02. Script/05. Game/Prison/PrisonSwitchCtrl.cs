@@ -26,7 +26,7 @@ public class PrisonSwitchCtrl : NetworkBehaviour
     }
 
     [Rpc]
-    private void RPC_ManageDoor(bool _isPlayerEnter)
+    private void RPC_ManageDoor(bool _isPlayerEnter, RpcInfo _info = default)
     {
         playerCount += _isPlayerEnter ? 1 : -1;
 
@@ -35,6 +35,11 @@ public class PrisonSwitchCtrl : NetworkBehaviour
         if (playerCount >= 1)
         {
             prisonDoor.SetActive(false);
+
+            var playerObj = App.Manager.Network.Runner.GetPlayerObject(_info.Source);
+            var charCtrl = playerObj.GetComponent<CharacterCtrl>();
+
+            App.Manager.UI.Chat.SendNotice($"<color=#FFFF00>{charCtrl.NickName}´ÔÀÌ ¼ö°¨ÀÚµéÀ» Å»¿Á½ÃÄ×½À´Ï´Ù.</color>");
         }
         else
         {

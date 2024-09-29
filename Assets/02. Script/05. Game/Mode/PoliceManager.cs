@@ -13,6 +13,7 @@ public class PoliceManager : GameManager
     [SerializeField] SwitchCtrl[] switchs;
 
     public Vector3 Prision => prisonPosition.position;
+    public int RemainSwitchCount => GetRemainSwitchCount();
 
     protected override void Awake()
     {
@@ -20,6 +21,21 @@ public class PoliceManager : GameManager
 
         MaxRoundCount = 6;
         GameTime = 180;
+    }
+
+    private int GetRemainSwitchCount()
+    {
+        int count = 0;
+
+        foreach (var item in switchs)
+        {
+            if (!item.IsDestroyed)
+            {
+                count++;
+            }
+        }
+
+        return count;
     }
 
     protected override void SetRandomOni()
@@ -65,21 +81,25 @@ public class PoliceManager : GameManager
     {
         if (CheckOniAllDead())
         {
+            App.Manager.UI.Chat.SendNotice($"<color=#00FF00>인간의 승리!</color>", true);
             return true;
         }
 
         if (CheckSwitchAllDestroyed())
         {
+            App.Manager.UI.Chat.SendNotice($"<color=#00FF00>인간의 승리!</color>", true);
             return true;
         }
 
         if (CheckHumanAllBusted())
         {
+            App.Manager.UI.Chat.SendNotice($"<color=#00FF00>아오오니의 승리!</color>", true);
             return true;
         }
 
         if (App.Manager.UI.GetPanel<TimePanel>().Remaining <= 0f)
         {
+            App.Manager.UI.Chat.SendNotice($"<color=#00FF00>아오오니의 승리!</color>", true);
             return true;
         }
 

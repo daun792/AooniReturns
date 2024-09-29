@@ -18,7 +18,8 @@ public enum UIState
 
 public class UIManager : Fusion.Behaviour
 {
-    [HideInInspector]
+    public ChatPanel Chat { get; private set; }
+
     public UIState CurrState
         => UIStack.Count == 0 ? UIState.Normal : UIStack.Peek();
 
@@ -38,6 +39,8 @@ public class UIManager : Fusion.Behaviour
         {
             UIDic.Add(UI.GetPanelType(), UI);
         }
+
+        Chat = GetComponentInChildren<ChatPanel>(true);
     }
 
     protected virtual void Start()

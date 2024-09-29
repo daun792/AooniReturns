@@ -35,6 +35,12 @@ public class ReadyUIManager : UIManager
 
     private void OnClickStart()
     {
+        if (App.Manager.Network.Runner.SessionInfo.PlayerCount <= 1)
+        {
+            Chat.SendNotice("<color=#00FF00>최소 시작인원: 2명");
+            return;
+        }
+
         App.Manager.Network.StartGame();
     }
 

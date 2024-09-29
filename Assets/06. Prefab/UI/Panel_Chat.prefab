@@ -861,6 +861,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   chatObjectPrefab: {fileID: 6994422025144202848, guid: 509141ed6aac842458d8fbc77053fde8, type: 3}
   chatParent: {fileID: 3749941239407145605}
+  scroll: {fileID: 6219055049971272074}
   chatInput: {fileID: 2239525397653337609}
   MessageQueueLength: 128
   MessageBufferLength: 4

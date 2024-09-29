@@ -16,5 +16,7 @@ public class OniPoliceCtrl : OniCtrl
         var manager = App.Manager.Game as PoliceManager;
 
         _charCtrl.MoveToPosition(manager.Prision);
+
+        App.Manager.UI.Chat.SendNotice($"<color=#FFFF00>{_charCtrl.NickName}´ÔÀÌ {ownerCtrl.NickName}¿¡ ÀÇÇØ °¨¿Á¿¡ °¤Çû½À´Ï´Ù.</color>");
     }
 }

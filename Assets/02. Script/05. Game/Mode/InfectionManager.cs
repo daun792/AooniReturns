@@ -23,16 +23,19 @@ public class InfectionManager : GameManager
     {
         if (App.Manager.Player.OniPlayers.Count == App.Manager.Player.AllPlayers.Count)
         {
+            App.Manager.UI.Chat.SendNotice($"<color=#00FF00>아오오니의 승리!</color>", true);
             return true;
         }
 
         if (CheckOniAllDead())
         {
+            App.Manager.UI.Chat.SendNotice($"<color=#00FF00>인간의 승리!</color>", true);
             return true;
         }
 
         if (App.Manager.UI.GetPanel<TimePanel>().Remaining <= 0f)
         {
+            App.Manager.UI.Chat.SendNotice($"<color=#00FF00>인간의 승리!</color>", true);
             return true;
         }
 

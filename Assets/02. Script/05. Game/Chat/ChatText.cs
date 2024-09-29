@@ -15,10 +15,17 @@ public class ChatText : MonoBehaviour
 
     public void Setup(string _content, PlayerRef _sender)
     {
-        var playerObj = App.Manager.Network.Runner.GetPlayerObject(_sender);
-        var charCtrl = playerObj.GetComponent<CharacterCtrl>();
+        if (_sender == PlayerRef.None)
+        {
+            content.text = _content;
+        }
+        else
+        {
+            var playerObj = App.Manager.Network.Runner.GetPlayerObject(_sender);
+            var charCtrl = playerObj.GetComponent<CharacterCtrl>();
 
-        var charState = charCtrl.CurrState == CharacterType.Human ? humanString : oniString;
-        content.text = string.Format(chatString, charState, charCtrl.NickName, _content);
+            var charState = charCtrl.CurrState == CharacterType.Human ? humanString : oniString;
+            content.text = string.Format(chatString, charState, charCtrl.NickName, _content);
+        }
     }
 }

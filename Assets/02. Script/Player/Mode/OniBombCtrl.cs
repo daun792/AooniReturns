@@ -26,6 +26,8 @@ public class OniBombCtrl : OniCtrl
 
         _charCtrl.MoveToPosition(_randomPosition);
         _charCtrl.SetCharacterState(1);
+
+        App.Manager.UI.Chat.SendNotice($"<color=#FFFF00>{_charCtrl.NickName}¥‘ø°∞‘ ∆¯≈∫¿Ã ø≈∞‹¡≥Ω¿¥œ¥Ÿ.</color>");
     }
 
     private Vector2 GetPosition()

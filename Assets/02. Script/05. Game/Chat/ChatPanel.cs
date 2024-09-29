@@ -14,6 +14,7 @@ public class ChatPanel : NetworkBehaviour
 
     [SerializeField] GameObject chatObjectPrefab;
     [SerializeField] Transform chatParent;
+    [SerializeField] ScrollRect scroll;
 
     [Header("UI")]
     [SerializeField] TMP_InputField chatInput;
@@ -64,6 +65,8 @@ public class ChatPanel : NetworkBehaviour
             chatObj.transform.SetAsLastSibling();
             chatComp.Setup(msg.Content, msg.Sender);
             messageQueue.Enqueue(chatObj);
+
+            scroll.verticalNormalizedPosition = 0f;
         }
     }
 
@@ -100,6 +103,49 @@ public class ChatPanel : NetworkBehaviour
         {
             Content = _msg,
             Sender = _info.Source
+        });
+    }
+
+    public void SendNotice(string _msg, bool _isUseRPC = false)
+    {
+        if (string.IsNullOrWhiteSpace(_msg))
+        {
+            return;
+        }
+
+        if (_msg.StartsWith('\n'))
+        {
+            _msg = _msg[1..];
+        }
+
+        if (_msg.EndsWith('\n'))
+        {
+            _msg = _msg[0..^1];
+        }
+
+        if (_isUseRPC)
+        {
+            RPC_SendNotice(_msg);
+        }
+        else
+        {
+            messageBuffer.Enqueue(new()
+            {
+                Content = _msg,
+                Sender = PlayerRef.None
+            });
+        }
+    }
+
+    [Rpc]
+    private void RPC_SendNotice(string _msg)
+    {
+        Debug.Log($"RPC_SendChat »£√‚µ : {_msg}");
+
+        messageBuffer.Enqueue(new()
+        {
+            Content = _msg,
+            Sender = PlayerRef.None
         });
     }
 }
