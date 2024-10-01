@@ -35,6 +35,7 @@ public class PrisonSwitchCtrl : NetworkBehaviour
         }
     }
 
+    [Rpc]
     private void RPC_ManageDoor(bool _isPlayerEnter, PlayerRef _player)
     {
         if (_isPlayerEnter)
