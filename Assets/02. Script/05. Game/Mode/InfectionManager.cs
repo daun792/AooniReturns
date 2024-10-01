@@ -5,12 +5,28 @@ using Fusion;
 
 public class InfectionManager : GameManager
 {
+    [SerializeField] GameObject lessPlayerMap;
+
     protected override void Awake()
     {
         base.Awake();
 
         MaxRoundCount = 8;
         GameTime = 120;
+    }
+
+    public override void Spawned()
+    {
+        base.Spawned();
+
+        if (Runner.SessionInfo.PlayerCount <= 4)
+        {
+            lessPlayerMap.SetActive(true);
+        }
+        else
+        {
+            lessPlayerMap.SetActive(false);
+        }
     }
 
     protected override void SetRandomOni()
