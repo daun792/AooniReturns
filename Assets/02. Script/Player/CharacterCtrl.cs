@@ -27,6 +27,7 @@ public class CharacterCtrl : NetworkBehaviour
     [Networked] public int OniKill { get; private set; } = 0;
     [Networked] public int HumanKill { get; private set; } = 0;
     [Networked] public int Survive { get; private set; } = 0;
+    [Networked] public int Score { get; private set; } = 0;
 
     public OniCtrl Oni { get; private set; }
     public HumanCtrl Human { get; private set; }
@@ -248,6 +249,21 @@ public class CharacterCtrl : NetworkBehaviour
 
         Survive++;
         App.Manager.UI.GetPanel<ScorePanel>().UpdateScore();
+    }
+
+    public void ResetScore()
+    {
+        Score = 0;
+    }
+
+    public void AddScore(int _value)
+    {
+        if (!HasStateAuthority)
+        {
+            return;
+        }
+
+        Score += _value;
     }
     #endregion
 

@@ -19,6 +19,7 @@ public abstract class GameManager : NetManager
     [SerializeField] NetworkObject netPlayerObject;
     [SerializeField] protected Transform respawnPos;
 
+    public ModeType GameMode { get; private set; }
     public bool IsGamePlay { get; protected set; } = false;
     public int GameTime { get; protected set; }
 
@@ -52,6 +53,8 @@ public abstract class GameManager : NetManager
         }
 
         Runner.SetPlayerObject(spawnTask.Object.StateAuthority, spawnTask.Object);
+        var modeIndex = (int)Runner.SessionInfo.Properties["GameMode"];
+        GameMode = (ModeType)modeIndex;
 
         if (Runner.IsSceneAuthority)
         {

@@ -9,7 +9,7 @@ public class InfectionManager : GameManager
     {
         base.Awake();
 
-        MaxRoundCount = 8;
+        MaxRoundCount = 2;
         GameTime = 120;
     }
 

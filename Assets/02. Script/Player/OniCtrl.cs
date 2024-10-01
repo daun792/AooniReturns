@@ -58,6 +58,7 @@ public abstract class OniCtrl : NetworkBehaviour
             if (collision.transform.parent.TryGetComponent<CharacterCtrl>(out var charCtrl))
             {
                 ownerCtrl.AddHumanKillScore();
+                ownerCtrl.AddScore(25);
 
                 InteractHuman(charCtrl);
             }
@@ -72,14 +73,18 @@ public abstract class OniCtrl : NetworkBehaviour
     }
 
     [Rpc]
-    private void RPC_Attacked(float _damage, RpcInfo _info = default)
+    protected virtual void RPC_Attacked(float _damage, RpcInfo _info = default)
     {
         CurrHP -= _damage;
         uiCtrl.SetHP(CurrHP);
 
+        var playerObj = App.Manager.Network.Runner.GetPlayerObject(_info.Source);
+        var charCtrl = playerObj.GetComponent<CharacterCtrl>();
+        charCtrl.AddScore(5);
+
         if (CurrHP <= 0)
         {
-            Dead(_info.Source);
+            Dead(charCtrl);
         }
         else
         {
@@ -87,13 +92,11 @@ public abstract class OniCtrl : NetworkBehaviour
         }
     }
 
-    protected virtual void Dead(PlayerRef _sender)
+    protected virtual void Dead(CharacterCtrl _charCtrl)
     {
         ownerCtrl.SetCharacterDead(true);
 
-        var playerObj = App.Manager.Network.Runner.GetPlayerObject(_sender);
-        var charCtrl = playerObj.GetComponent<CharacterCtrl>();
-        charCtrl.AddOniKillScore();
+        _charCtrl.AddOniKillScore();
     }
 
     private IEnumerator AttackedAnimation()

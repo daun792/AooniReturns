@@ -18,9 +18,17 @@ public class OniDualCtrl : OniCtrl
         _charCtrl.MoveToPosition(manager.Respawn);
     }
 
-    protected override void Dead(PlayerRef _sender)
+    [Rpc]
+    protected override void RPC_Attacked(float _damage, RpcInfo _info = default)
     {
-        base.Dead(_sender);
+        base.RPC_Attacked(_damage, _info);
+
+ 
+    }
+
+    protected override void Dead(CharacterCtrl _charCtrl)
+    {
+        base.Dead(_charCtrl);
 
         Respawn();
     }
