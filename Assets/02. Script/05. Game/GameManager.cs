@@ -37,6 +37,8 @@ public abstract class GameManager : NetManager
 
     private IEnumerator Initialize()
     {
+        yield return null;
+
         var spawnTask = Runner.SpawnAsync(netPlayerObject, respawnPos.position, respawnPos.rotation,
             Runner.LocalPlayer, null, NetworkSpawnFlags.SharedModeStateAuthLocalPlayer);
 

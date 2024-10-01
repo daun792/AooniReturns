@@ -36,6 +36,9 @@ public class PlayerManager : NetManager
         {
             Debug.LogError(_char.Object.Id);
         }
+
+        characterList.RemoveAll(x => x == null);
+        networkObjList.RemoveAll(x => x == null);
     }
 
     public void SetRandomOni(int _num)

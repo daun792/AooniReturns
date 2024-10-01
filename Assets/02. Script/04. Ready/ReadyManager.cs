@@ -11,10 +11,7 @@ public class ReadyManager : SimManager, IPlayerJoined, IPlayerLeft
 
     private void Start()
     {
-        var playerObject = Runner.SpawnAsync(playerPrefab, Vector3.zero, Quaternion.identity,
-            Runner.LocalPlayer, null, NetworkSpawnFlags.SharedModeStateAuthLocalPlayer);
-
-        Runner.SetPlayerObject(playerObject.Object.StateAuthority, playerObject.Object);
+        var playerObject = Runner.SpawnAsync(playerPrefab);
 
         var chatObj = App.Manager.Network.Runner.Spawn(chatPrefab);
         chatObj.transform.SetParent(App.Manager.UI.transform);
