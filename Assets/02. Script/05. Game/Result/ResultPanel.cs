@@ -1,14 +1,19 @@
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ResultPanel : UIBase
 {
+    [SerializeField] Button continueBtn;
+
     private ResultPlayerInfoBack[] playerInfos;
 
     public override void Init()
     {
         playerInfos = GetComponentsInChildren<ResultPlayerInfoBack>(true);
+
+        continueBtn.onClick.AddListener(() => App.Manager.Network.JoinLobby());
     }
 
     public override void OpenPanel()
@@ -23,7 +28,6 @@ public class ResultPanel : UIBase
         {
             playerInfos[i].Setup(resultRankList[i]);
         }
-
 
         for (; i < playerInfos.Length; i++)
         {
