@@ -17,6 +17,8 @@ public class CharacterCtrl : NetworkBehaviour
     [Networked] public string NickName { get; private set; }
     [Networked] public int Level { get; private set; }
     [Networked] public bool IsHost { get; private set; }
+    [Networked] public int HumanSkinIndex { get; private set; }
+    [Networked] public int OniSkinIndex { get; private set; }
 
     [Networked, OnChangedRender(nameof(OnChangeState))] public CharacterType CurrState { get; private set; }
     [Networked, OnChangedRender(nameof(OnChangeDir))] public Vector2 CurrDir { get; private set; }
@@ -66,6 +68,8 @@ public class CharacterCtrl : NetworkBehaviour
         NickName = App.Data.Player.NickName;
         Level = CalculateLevel(App.Data.Player.ExperiencePoints);
         IsHost = Runner.IsSceneAuthority;
+        HumanSkinIndex = App.Data.Player.HumanSkinIndex;
+        OniSkinIndex = App.Data.Player.OniSkinIndex;
 
         CurrState = CharacterType.Human;
         CurrDir = new Vector2(0, -1);

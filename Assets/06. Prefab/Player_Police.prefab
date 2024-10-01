@@ -241,10 +241,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9458022f074eb44cbe247152b998d8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _Dead: 0
+  _NickName: 
+  _Level: 0
+  _IsHost: 0
+  _HumanSkinIndex: 0
+  _OniSkinIndex: 0
   _CurrState: 0
   _CurrDir: {x: 0, y: -1}
   _IsWalk: 0
+  _IsDead: 0
+  _IsBusted: 0
+  _OniKill: 0
+  _HumanKill: 0
+  _Survive: 0
+  _Score: 0
 --- !u!114 &4365379417068166308
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -434,7 +444,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sprite: {fileID: 554316324887621449}
   uiCtrl: {fileID: 3811330371397476770}
+  spriteLibrary: {fileID: 7831809773083552769}
+  spriteAssets:
+  - {fileID: 7108339969198208228, guid: ca52df1cdaa88554eb45917171fdc139, type: 3}
+  - {fileID: 7108339969198208228, guid: 1254b9a34ec1d5e45a6d60a29ba272c0, type: 3}
+  - {fileID: 7108339969198208228, guid: 3694c1a9160642844be268c3cdd3a0ec, type: 3}
+  - {fileID: 7108339969198208228, guid: 39cdb157f225427439f1318ef8befdc6, type: 3}
+  - {fileID: 7108339969198208228, guid: dcb55da40b0c33448a6f31fc2f05e4c9, type: 3}
+  - {fileID: 7108339969198208228, guid: 070920250b320fd4ab183ab1f3842812, type: 3}
+  - {fileID: 7108339969198208228, guid: 503fca2c0bd15d545b0aef3205d8188b, type: 3}
   _IsInvincible: 0
+--- !u!114 &7831809773083552769 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6644708824324015682, guid: 7aad42f75a2286a4abf3105b7f079daa, type: 3}
+  m_PrefabInstance: {fileID: 3496642715245832771}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5339753864535489796}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c29cff538c195c249b69c6f2236de67b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &6215474716503793001
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -443,6 +473,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 6691005710876919154}
     m_Modifications:
+    - target: {fileID: 390358471372224326, guid: a7cdead2fa7626042ace5c71d2b4d723, type: 3}
+      propertyPath: m_CategoryHash
+      value: 0.000000058687675
+      objectReference: {fileID: 0}
     - target: {fileID: 4908274265018316735, guid: a7cdead2fa7626042ace5c71d2b4d723, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

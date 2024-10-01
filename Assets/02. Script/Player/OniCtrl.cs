@@ -2,11 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Fusion;
+using UnityEngine.U2D.Animation;
 
 public abstract class OniCtrl : NetworkBehaviour
 {
     [SerializeField] SpriteRenderer sprite;
     [SerializeField] CharacterUICtrl uiCtrl;
+
+    [SerializeField] SpriteLibrary spriteLibrary;
+    [SerializeField] SpriteLibraryAsset[] spriteAssets;
 
     public Animator Anim { get; private set; }
     public float CurrHP { get; private set; } = 100f;
@@ -23,6 +27,8 @@ public abstract class OniCtrl : NetworkBehaviour
     public override void Spawned()
     {
         ownerCtrl = transform.parent.GetComponent<CharacterCtrl>();
+
+        spriteLibrary.spriteLibraryAsset = spriteAssets[ownerCtrl.OniSkinIndex];
     }
 
     public void Setup()

@@ -534,6 +534,8 @@ GameObject:
   - component: {fileID: 7401099072856430914}
   - component: {fileID: 3433429355386959364}
   - component: {fileID: 2487217363016991649}
+  - component: {fileID: 8101315884528052795}
+  - component: {fileID: 390358471372224326}
   m_Layer: 0
   m_Name: Human
   m_TagString: Human
@@ -681,3 +683,40 @@ MonoBehaviour:
   sprite: {fileID: 808567885886280388}
   canvas: {fileID: 6934669095053320103}
   lightObj: {fileID: 2840753180420772607}
+  spriteLibrary: {fileID: 8101315884528052795}
+  spriteAssets:
+  - {fileID: 7108339969198208228, guid: 48689b034d47f2f4e9ac61d561749561, type: 3}
+  - {fileID: 7108339969198208228, guid: 75f484bc2e022ac418a8315093bdf026, type: 3}
+  - {fileID: 7108339969198208228, guid: 3e0cdf71b6ee5a1439b6370cbb3b2ba2, type: 3}
+  - {fileID: 7108339969198208228, guid: 172bf2766b3f5214a9530ff71f5ecc62, type: 3}
+  - {fileID: 7108339969198208228, guid: e61e4afdcd833b441a3c127c662cdc45, type: 3}
+--- !u!114 &8101315884528052795
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7000294263355068863}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c29cff538c195c249b69c6f2236de67b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Library: []
+  m_SpriteLibraryAsset: {fileID: 7108339969198208228, guid: 48689b034d47f2f4e9ac61d561749561, type: 3}
+--- !u!114 &390358471372224326
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7000294263355068863}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed8b1ae4e4e52b34ea557c1c11e076fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_CategoryHash: 1.0746542
+  m_labelHash: 1.2985474e-36
+  m_SpriteKey: 0
+  m_SpriteHash: 1052303605

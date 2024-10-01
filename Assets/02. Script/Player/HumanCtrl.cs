@@ -2,12 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Fusion;
+using UnityEngine.U2D.Animation;
 
 public class HumanCtrl : NetworkBehaviour
 {
     [SerializeField] SpriteRenderer sprite;
     [SerializeField] GameObject canvas;
     [SerializeField] GameObject lightObj;
+
+    [SerializeField] SpriteLibrary spriteLibrary;
+    [SerializeField] SpriteLibraryAsset[] spriteAssets;
 
     public Animator Anim { get; private set; }
 
@@ -26,6 +30,8 @@ public class HumanCtrl : NetworkBehaviour
     public override void Spawned()
     {
         ownerCtrl = transform.parent.GetComponent<CharacterCtrl>();
+
+        spriteLibrary.spriteLibraryAsset = spriteAssets[ownerCtrl.HumanSkinIndex];
 
         lightObj.SetActive(ownerCtrl.HasStateAuthority);
     }
